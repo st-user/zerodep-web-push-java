@@ -8,7 +8,9 @@ import java.util.Objects;
  * <p>
  * The values for the fields in this class are intended to be set
  * from the push subscription JSON objects retrieved from browsers.
+ * </p>
  *
+ * <p>
  * The following is an implementation example of javascript on the browser side
  * to get the JSON object of push subscription.
  *
@@ -31,16 +33,14 @@ import java.util.Objects;
  *     });
  *
  * </pre>
- *
  * </p>
+ *
+ * <p>
  * Since setters corresponding to the field names of push subscription are defined in this class,
  * it can be deserialized using a library that handles JSON such as <a href="https://github.com/FasterXML/jackson">jackson</a>.
- * <p>
- *
  * </p>
  *
  * @author Tomoki Sato
- *
  * @see UserAgentMessageEncryptionKeys
  */
 public class PushSubscription {
@@ -76,7 +76,6 @@ public class PushSubscription {
         }
 
 
-
         @Override
         public boolean equals(Object o) {
             if (this == o) {
@@ -86,8 +85,8 @@ public class PushSubscription {
                 return false;
             }
             Keys keys = (Keys) o;
-            return Objects.equals(getP256dh(), keys.getP256dh()) &&
-                Objects.equals(getAuth(), keys.getAuth());
+            return Objects.equals(getP256dh(), keys.getP256dh())
+                && Objects.equals(getAuth(), keys.getAuth());
         }
 
         @Override
@@ -137,9 +136,9 @@ public class PushSubscription {
             return false;
         }
         PushSubscription that = (PushSubscription) o;
-        return Objects.equals(getEndpoint(), that.getEndpoint()) &&
-            Objects.equals(getExpirationTime(), that.getExpirationTime()) &&
-            Objects.equals(getKeys(), that.getKeys());
+        return Objects.equals(getEndpoint(), that.getEndpoint())
+            && Objects.equals(getExpirationTime(), that.getExpirationTime())
+            && Objects.equals(getKeys(), that.getKeys());
     }
 
     @Override

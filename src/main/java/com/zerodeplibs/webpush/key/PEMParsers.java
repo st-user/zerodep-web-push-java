@@ -56,8 +56,8 @@ public class PEMParsers {
         for (int i = 0; i < labelChars.length; i++) {
             char current = labelChars[i];
             if (!isValidLabelChar(current)) {
-                if (!isCharBeforeSpOrMinus && isSpaceOrMinus(current) && i != 0 &&
-                    i != labelChars.length - 1) {
+                if (!isCharBeforeSpOrMinus && isSpaceOrMinus(current) && i != 0
+                    && i != labelChars.length - 1) {
                     isCharBeforeSpOrMinus = true;
                     continue;
                 }

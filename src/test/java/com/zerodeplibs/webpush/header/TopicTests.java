@@ -33,7 +33,8 @@ public class TopicTests {
             equalTo(expectedMessage));
 
         assertThat(
-            assertThrows(IllegalArgumentException.class, () -> Topic.ensure(repeatChar("a", 33))).getMessage(),
+            assertThrows(IllegalArgumentException.class,
+                () -> Topic.ensure(repeatChar("a", 33))).getMessage(),
             equalTo(expectedMessage));
     }
 

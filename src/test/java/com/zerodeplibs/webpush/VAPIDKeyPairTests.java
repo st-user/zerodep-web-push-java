@@ -107,7 +107,8 @@ public class VAPIDKeyPairTests {
             Base64.getUrlEncoder().withoutPadding().encodeToString(uncompressedBytes);
         String expectedString =
             String.format("vapid t=%s, k=%s", expectedTokenString, expectedPublicKeyString);
-        assertThat(vapidKeyPair.generateAuthorizationHeaderValue(jwtParam), equalTo(expectedString));
+        assertThat(vapidKeyPair.generateAuthorizationHeaderValue(jwtParam),
+            equalTo(expectedString));
     }
 
     private KeyPair generateKeyPair() throws NoSuchAlgorithmException {

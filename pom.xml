@@ -146,16 +146,16 @@
                     <configLocation>checkstyle.xml</configLocation>
                     <encoding>UTF-8</encoding>
                     <consoleOutput>true</consoleOutput>
-                    <failsOnError>false</failsOnError>
-                    <failOnViolation>false</failOnViolation>
+                    <failsOnError>true</failsOnError>
+                    <failOnViolation>true</failOnViolation>
                     <violationSeverity>warning</violationSeverity>
                     <linkXRef>false</linkXRef>
                 </configuration>
                 <executions>
                     <execution>
                         <id>validate</id>
-                        <!--<phase>validate</phase>-->
-                        <phase>verify</phase>
+                        <phase>validate</phase>
+                        <!--<phase>verify</phase>-->
                         <goals>
                             <goal>check</goal>
                         </goals>

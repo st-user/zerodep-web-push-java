@@ -21,13 +21,16 @@ class BytesPublicKeySource implements PublicKeySource {
     private final byte[] x509Bytes;
     private final Consumer<ECPublicKey> publicKeyPostProcessor;
 
+    private static final String MSG_INVALID_UNCOMPRESSED_BYTES =
+        "An uncompressed byte array for a public key "
+            + "must start with 0x4 and its length must be 65 bytes.";
+
     static BytesPublicKeySource ofUncompressed(byte[] uncompressedBytes,
                                                Consumer<ECPublicKey> publicKeyPostProcessor) {
-        WebPushPreConditions.checkNotNull(uncompressedBytes, "uncompressed bytes for public key");
+        WebPushPreConditions.checkNotNull(uncompressedBytes, "uncompressedBytes");
 
         if (uncompressedBytes[0] != 0x04 || uncompressedBytes.length != 65) {
-            throw new IllegalArgumentException(
-                "uncompressed bytes for public key must start with 0x04 and its length must be 65 bytes.");
+            throw new IllegalArgumentException(MSG_INVALID_UNCOMPRESSED_BYTES);
         }
         return new BytesPublicKeySource(
             ECPublicKeyUtil.uncompressedBytesToX509Bytes(uncompressedBytes),

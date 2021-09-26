@@ -8,7 +8,6 @@ import java.util.Base64;
  * for <a href="https://datatracker.ietf.org/doc/html/rfc7468#section-3">the standard format described in RFC7468</a>.
  *
  * @author Tomoki Sato
- *
  */
 class StandardPEMParser implements PEMParser {
 
@@ -188,20 +187,20 @@ class StandardPEMParser implements PEMParser {
     }
 
     private InvalidPEMFormatException constructInvalidBase64TextException(int lineNo) {
-        return new InvalidPEMFormatException(
-            String.format("The base64 text is malformed or contains an illegal character(line: %d).",
-                lineNo));
+        String fmt = "The base64 text is malformed or contains an illegal character(line: %d).";
+        return new InvalidPEMFormatException(String.format(fmt, lineNo));
     }
 
     private boolean containsPostEb(char[] contentArray, char[] endBoundaryArray, int currentIndex) {
         char beforeChar = contentArray[currentIndex - 1];
-        return isLf(beforeChar) && containsAnotherSequence(contentArray, endBoundaryArray, currentIndex) >= 0;
+        return isLf(beforeChar)
+            && containsAnotherSequence(contentArray, endBoundaryArray, currentIndex) >= 0;
     }
 
     private int containsAnotherSequence(char[] contentArray, char[] another, int currentIndex) {
 
         int endIndex = -1;
-        for(int i = 0; i < another.length; i++) {
+        for (int i = 0; i < another.length; i++) {
             int contentIndex = i + currentIndex;
             if (contentArray.length <= contentIndex) {
                 return -1;

@@ -53,18 +53,33 @@ class Aes128GcmMessageEncryption implements MessageEncryption {
     @Override
     public EncryptedPushMessage encrypt(
         UserAgentMessageEncryptionKeys userAgentMessageEncryptionKeys, PushMessage pushMessage) {
+
         try {
             return encryptInternal(userAgentMessageEncryptionKeys, pushMessage);
-        } catch (InvalidAlgorithmParameterException | NoSuchAlgorithmException | InvalidKeyException | IllegalBlockSizeException | NoSuchPaddingException | BadPaddingException e) {
+        } catch (InvalidAlgorithmParameterException
+            | NoSuchAlgorithmException
+            | InvalidKeyException
+            | IllegalBlockSizeException
+            | NoSuchPaddingException
+            | BadPaddingException e) {
+
             throw new WebPushRuntimeWrapperException(e);
         }
     }
 
-    byte[] decrypt(UserAgentMessageEncryptionKeys userAgentMessageEncryptionKeys, Aes128GcmEncryptedMessage encrypted,
-                   ECPrivateKey uaPrivate) {
+    byte[] decrypt(
+        UserAgentMessageEncryptionKeys userAgentMessageEncryptionKeys,
+        Aes128GcmEncryptedMessage encrypted,
+        ECPrivateKey uaPrivate) {
+
         try {
             return decryptInternal(userAgentMessageEncryptionKeys, encrypted, uaPrivate);
-        } catch (NoSuchAlgorithmException | InvalidKeyException | InvalidAlgorithmParameterException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException e) {
+        } catch (NoSuchAlgorithmException
+            | InvalidKeyException
+            | InvalidAlgorithmParameterException
+            | NoSuchPaddingException
+            | IllegalBlockSizeException
+            | BadPaddingException e) {
             throw new WebPushRuntimeWrapperException(e);
         }
     }
@@ -141,8 +156,7 @@ class Aes128GcmMessageEncryption implements MessageEncryption {
 
         byte[] decrypted = decryptByAesGcm(nonce, cek, content);
 
-        byte[] decryptedBytesWithoutPadding = stripPadding(decrypted);
-        return decryptedBytesWithoutPadding;
+        return stripPadding(decrypted);
     }
 
 

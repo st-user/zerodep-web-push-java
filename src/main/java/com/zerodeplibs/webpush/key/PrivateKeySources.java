@@ -42,14 +42,14 @@ import java.util.Base64;
  * </p>
  *
  * @author Tomoki Sato
- *
  * @see PrivateKeySource
  * @see PublicKeySource
  * @see PublicKeySources
  */
 public class PrivateKeySources {
 
-    private PrivateKeySources() {}
+    private PrivateKeySources() {
+    }
 
     /**
      * Creates a PrivateKeySource with the byte array
@@ -57,10 +57,10 @@ public class PrivateKeySources {
      *
      * @param pkcs8Bytes the byte array representing a private key.
      * @return a new PrivateKeySource.
-     *
      * @see java.security.spec.PKCS8EncodedKeySpec
      */
-    public static PrivateKeySource ofPKCS8Bytes(byte[] pkcs8Bytes) {
+    // BEGIN CHECK STYLE OFF
+    public static PrivateKeySource ofPKCS8Bytes(byte[] pkcs8Bytes) { // END CHECK STYLE OFF
         return new BytesPrivateKeySource(pkcs8Bytes);
     }
 
@@ -75,7 +75,6 @@ public class PrivateKeySources {
      *
      * @param pemString the PEM string representing a private key.
      * @return a new PrivateKeySource.
-     *
      * @see java.security.spec.PKCS8EncodedKeySpec
      */
     public static PrivateKeySource ofPEMString(String pemString) {
@@ -91,9 +90,8 @@ public class PrivateKeySources {
      * </p>
      *
      * @param pemString the PEM string representing a private key.
-     * @param parser the parser for parsing the PEM string.
+     * @param parser    the parser for parsing the PEM string.
      * @return a new PrivateKeySource.
-     *
      * @see java.security.spec.PKCS8EncodedKeySpec
      */
     public static PrivateKeySource ofPEMString(String pemString, PEMParser parser) {
@@ -107,10 +105,11 @@ public class PrivateKeySources {
      *
      * @param pkcs8Base64String the base64-encoded private key.
      * @return a new PrivateKeySource.
-     *
      * @see java.security.spec.PKCS8EncodedKeySpec
      */
-    public static PrivateKeySource ofPKCS8Baser64String(String pkcs8Base64String) {
+    // BEGIN CHECK STYLE OFF
+    public static PrivateKeySource ofPKCS8Base64String(
+        String pkcs8Base64String) { // END CHECK STYLE OFF
         return ofPKCS8Bytes(Base64.getDecoder().decode(pkcs8Base64String));
     }
 
@@ -138,7 +137,7 @@ public class PrivateKeySources {
      * The contents of the PEM file are parsed by the given {@link PEMParser}.
      * </p>
      *
-     * @param path the path to the PEM formatted file.
+     * @param path   the path to the PEM formatted file.
      * @param parser the parser for parsing the contents of the PEM file.
      * @return a new PrivateKeySource.
      */

@@ -7,7 +7,6 @@ import java.util.Arrays;
  * An implementation class of {@link EncryptedPushMessage}.
  *
  * @author Tomoki Sato
- *
  * @see Aes128GcmMessageEncryption
  */
 class Aes128GcmEncryptedMessage implements EncryptedPushMessage {

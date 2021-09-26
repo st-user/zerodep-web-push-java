@@ -60,7 +60,7 @@ public class VAPIDJWTParam {
      * Gets an additional claim specified at the time of the instantiation
      * by specifying the name and type.
      *
-     * <P>
+     * <p>
      * <b>Example:</b>
      *
      * <pre class="code">
@@ -107,6 +107,13 @@ public class VAPIDJWTParam {
 
         private final Map<String, Object> additionalClaims = new LinkedHashMap<>();
 
+        private static final String MSG_RESOURCE_URL_NO_MORE_THAN_ONCE =
+            "The methods for specifying "
+                + "an origin(resourceURLString/resourceURL) must not be called more than once.";
+
+        private static final String MSG_EXPIRES_AT_NO_MORE_THAN_ONCE = "The methods for specifying "
+            + "an expiresAt(expiresAfterSeconds/expiresAt) must not be called more than once.";
+
         Builder() {
             // Should be accessed internally.
         }
@@ -151,7 +158,7 @@ public class VAPIDJWTParam {
         public Builder resourceURL(URL resourceURL) {
             WebPushPreConditions.checkNotNull(resourceURL, "resourceURL");
             WebPushPreConditions.checkState(this._resourceURL == null,
-                "The methods for specifying an origin(resourceURLString/resourceURL) must not be called more than once.");
+                MSG_RESOURCE_URL_NO_MORE_THAN_ONCE);
             this._resourceURL = resourceURL;
             return this;
         }
@@ -185,7 +192,7 @@ public class VAPIDJWTParam {
         public Builder expiresAt(Date expiresAt) {
             WebPushPreConditions.checkNotNull(expiresAt, "resourceURL");
             WebPushPreConditions.checkState(this._expiresAt == null,
-                "The methods for specifying an expiresAt(expiresAfterSeconds/expiresAt) must not be called more than once.");
+                MSG_EXPIRES_AT_NO_MORE_THAN_ONCE);
             this._expiresAt = expiresAt;
             return this;
         }
@@ -209,9 +216,9 @@ public class VAPIDJWTParam {
         /**
          * Specifies an additional claim.
          *
-         * @param name the name of an additional claim.
+         * @param name  the name of an additional claim.
          * @param value the value of an additional claim.
-         * @return
+         * @return this object.
          */
         public Builder additionalClaim(String name, Object value) {
             WebPushPreConditions.checkNotNull(name, "name");
@@ -220,6 +227,11 @@ public class VAPIDJWTParam {
             return this;
         }
 
+        /**
+         * Creates a new VAPIDJWTParam.
+         *
+         * @return a new VAPIDJWTParam,
+         */
         public VAPIDJWTParam build() {
             WebPushPreConditions.checkNotNull(this._resourceURL, "resourceURL");
             WebPushPreConditions.checkNotNull(this._expiresAt, "expiresAt");

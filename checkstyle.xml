@@ -251,7 +251,7 @@
         <module name="AbbreviationAsWordInName">
             <property name="ignoreFinal" value="false"/>
             <property name="allowedAbbreviationLength" value="0"/>
-            <property name="allowedAbbreviations" value="VAPID,VAPIDJWT,TTL,JWT,ECDSA,EC,URL,PEM,DER,X509,PKCS8"/>
+            <property name="allowedAbbreviations" value="VAPID,VAPIDJWT,TTL,JWT,ECDSA,EC,ECDH,URL,PEM,DER,X509,PKCS,UTF"/>
             <property name="tokens"
                       value="CLASS_DEF, INTERFACE_DEF, ENUM_DEF, ANNOTATION_DEF, ANNOTATION_FIELD_DEF,
                     PARAMETER_DEF, VARIABLE_DEF, METHOD_DEF, PATTERN_VARIABLE_DEF, RECORD_DEF,
@@ -355,6 +355,11 @@
             <property name="file" value="${org.checkstyle.google.suppressionxpathfilter.config}"
                       default="checkstyle-xpath-suppressions.xml"/>
             <property name="optional" value="true"/>
+        </module>
+
+        <module name="SuppressionCommentFilter">
+            <property name="offCommentFormat" value="BEGIN CHECK STYLE OFF"/>
+            <property name="onCommentFormat" value="END CHECK STYLE OFF"/>
         </module>
     </module>
 </module>

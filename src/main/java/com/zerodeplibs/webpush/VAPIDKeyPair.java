@@ -38,7 +38,6 @@ import java.util.function.BiFunction;
  * </p>
  *
  * @author Tomoki Sato
- *
  * @see PrivateKeySource
  * @see PublicKeySource
  * @see VAPIDJWTGenerator
@@ -54,12 +53,14 @@ public class VAPIDKeyPair {
      * Constructs a new VAPIDKeyPair with the private key source,
      * the public key source and the factory for {@link VAPIDJWTGenerator}.
      *
-     * @param privateKeySource the private key source.
-     * @param publicKeySource the public key source.
+     * @param privateKeySource    the private key source.
+     * @param publicKeySource     the public key source.
      * @param jwtGeneratorFactory the factory for {@link VAPIDJWTGenerator}.
      */
-    public VAPIDKeyPair(PrivateKeySource privateKeySource, PublicKeySource publicKeySource,
-                        BiFunction<ECPrivateKey, ECPublicKey, VAPIDJWTGenerator> jwtGeneratorFactory) {
+    public VAPIDKeyPair(PrivateKeySource privateKeySource,
+                        PublicKeySource publicKeySource,
+                        BiFunction<ECPrivateKey, ECPublicKey, VAPIDJWTGenerator>
+                            jwtGeneratorFactory) {
 
         ECPrivateKey privateKey = privateKeySource.extract();
         ECPublicKey publicKey = publicKeySource.extract();

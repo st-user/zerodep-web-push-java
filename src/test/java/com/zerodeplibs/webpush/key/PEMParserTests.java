@@ -99,7 +99,8 @@ public class PEMParserTests {
         assertParseWithInvalidBase64Text(parser, 2, concat(
             "-----BEGIN PRIVATE KEY-----", "\r\n",
             base64Text,
-            "-----END PRIVATE KEY-----" // This line is NOT posteb because preceding eol doesn't exist.
+            "-----END PRIVATE KEY-----"
+            // This line is NOT posteb because preceding eol doesn't exist.
         ));
     }
 

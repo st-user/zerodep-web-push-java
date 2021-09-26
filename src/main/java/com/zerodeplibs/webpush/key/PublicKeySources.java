@@ -97,7 +97,8 @@ public class PublicKeySources {
      * @see java.security.spec.X509EncodedKeySpec
      */
     public static PublicKeySource ofPEMString(String pemString) {
-        return ofPEMString(pemString, PEMParsers.ofStandard(PEMParser.SUBJECT_PUBLIC_KEY_INFO_LABEL));
+        return ofPEMString(pemString,
+            PEMParsers.ofStandard(PEMParser.SUBJECT_PUBLIC_KEY_INFO_LABEL));
     }
 
     /**

@@ -8,7 +8,6 @@ import java.util.Arrays;
  * This class represents a push message to be encrypted.
  *
  * @author Tomoki Sato
- *
  * @see MessageEncryption
  */
 public class PushMessage {
@@ -39,7 +38,8 @@ public class PushMessage {
      * @param messageString the string representing a push message.
      * @return a new PushMessage.
      */
-    public static PushMessage ofUTF8(String messageString) {
+    // BEGIN CHECK STYLE OFF
+    public static PushMessage ofUTF8(String messageString) { // END CHECK STYLE OFF
         WebPushPreConditions.checkArgument(messageString != null && messageString.length() > 0,
             "messageString should not be noll or empty.");
 

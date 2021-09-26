@@ -9,7 +9,6 @@ package com.zerodeplibs.webpush;
  * </p>
  *
  * @author Tomoki Sato
- *
  * @see MessageEncryptions
  */
 public interface MessageEncryption {
@@ -18,10 +17,12 @@ public interface MessageEncryption {
      * Encrypts the given pushMessage with the given subscriptionKeys.
      *
      * @param userAgentMessageEncryptionKeys push subscription keys for the user agent
-     *                         to which the push message is sent.
-     * @param pushMessage the push message to be encrypted.
+     *                                       to which the push message is sent.
+     * @param pushMessage                    the push message to be encrypted.
      * @return the encrypted push message.
      */
-    EncryptedPushMessage encrypt(UserAgentMessageEncryptionKeys userAgentMessageEncryptionKeys, PushMessage pushMessage);
+    EncryptedPushMessage encrypt(
+        UserAgentMessageEncryptionKeys userAgentMessageEncryptionKeys,
+        PushMessage pushMessage);
 
 }

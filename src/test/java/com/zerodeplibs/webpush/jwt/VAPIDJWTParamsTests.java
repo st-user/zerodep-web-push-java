@@ -19,7 +19,7 @@ public class VAPIDJWTParamsTests {
 
         VAPIDJWTParam param = new TestingBuilder(mockForNow)
             .resourceURLString("https://example.com/resource")
-            .expiresAfterSeconds((int)TimeUnit.HOURS.toSeconds(24))
+            .expiresAfterSeconds((int) TimeUnit.HOURS.toSeconds(24))
             .subject("mailto:example@example.com")
             .additionalClaim("hoge", "fuga")
             .build();
