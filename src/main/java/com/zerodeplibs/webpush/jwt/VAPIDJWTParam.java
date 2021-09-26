@@ -1,6 +1,6 @@
 package com.zerodeplibs.webpush.jwt;
 
-import com.zerodeplibs.webpush.WebPushRuntimeWrapperException;
+import com.zerodeplibs.webpush.exception.MalformedURLRuntimeException;
 import com.zerodeplibs.webpush.internal.WebPushPreConditions;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -109,10 +109,10 @@ public class VAPIDJWTParam {
 
         private static final String MSG_RESOURCE_URL_NO_MORE_THAN_ONCE =
             "The methods for specifying "
-                + "an origin(resourceURLString/resourceURL) must not be called more than once.";
+                + "a resource URL(resourceURLString/resourceURL) cannot be called more than once.";
 
         private static final String MSG_EXPIRES_AT_NO_MORE_THAN_ONCE = "The methods for specifying "
-            + "an expiresAt(expiresAfterSeconds/expiresAt) must not be called more than once.";
+            + "expiration time(expiresAfterSeconds/expiresAt) cannot be called more than once.";
 
         Builder() {
             // Should be accessed internally.
@@ -130,13 +130,17 @@ public class VAPIDJWTParam {
          *
          * @param resourceURLString the string representation of a push resource URL.
          * @return this object.
+         * @throws MalformedURLRuntimeException if the underlying {@link URL#URL(String)}
+         *                                      throws {@link MalformedURLException}.
+         * @throws IllegalStateException        if the methods for specifying a resource URL
+         *                                      is called more than once.
          */
         public Builder resourceURLString(String resourceURLString) {
             WebPushPreConditions.checkNotNull(resourceURLString, "resourceURLString");
             try {
                 this.resourceURL(new URL(resourceURLString));
             } catch (MalformedURLException e) {
-                throw new WebPushRuntimeWrapperException(e);
+                throw new MalformedURLRuntimeException(e);
             }
             return this;
         }
@@ -154,6 +158,8 @@ public class VAPIDJWTParam {
          *
          * @param resourceURL a push resource URL.
          * @return this object.
+         * @throws IllegalStateException if the methods for specifying a resource URL
+         *                               is called more than once.
          */
         public Builder resourceURL(URL resourceURL) {
             WebPushPreConditions.checkNotNull(resourceURL, "resourceURL");
@@ -172,6 +178,8 @@ public class VAPIDJWTParam {
          *
          * @param seconds the time in seconds after which a JWT expires.
          * @return this object.
+         * @throws IllegalStateException if the methods for specifying expiration time
+         *                               is called more than once.
          */
         public Builder expiresAfterSeconds(int seconds) {
             // TODO check if no more than 24 hours
@@ -188,6 +196,8 @@ public class VAPIDJWTParam {
          *
          * @param expiresAt the time at which a JWT expires.
          * @return this object.
+         * @throws IllegalStateException if the methods for specifying expiration time
+         *                               is called more than once.
          */
         public Builder expiresAt(Date expiresAt) {
             WebPushPreConditions.checkNotNull(expiresAt, "resourceURL");
@@ -230,11 +240,15 @@ public class VAPIDJWTParam {
         /**
          * Creates a new VAPIDJWTParam.
          *
-         * @return a new VAPIDJWTParam,
+         * @return a new VAPIDJWTParam.
+         * @throws IllegalStateException if the resource URL and
+         *                               the expiration time aren't specified.
          */
         public VAPIDJWTParam build() {
-            WebPushPreConditions.checkNotNull(this._resourceURL, "resourceURL");
-            WebPushPreConditions.checkNotNull(this._expiresAt, "expiresAt");
+            WebPushPreConditions.checkState(this._resourceURL != null,
+                "The resource URL isn't specified.");
+            WebPushPreConditions.checkState(this._expiresAt != null,
+                "The expiration time isn't specified.");
 
             String origin = this._resourceURL.getProtocol() + "://" + this._resourceURL.getHost();
             // https://datatracker.ietf.org/doc/html/rfc6454#section-6.1

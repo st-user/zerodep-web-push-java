@@ -3,6 +3,7 @@ package com.zerodeplibs.webpush.key;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
 import java.security.interfaces.ECPublicKey;
@@ -48,7 +49,7 @@ public class PublicKeySourcesTests {
     @Test
     public void publicKeySourceCanExtractPublicKeyFromPEMString() {
 
-        ECPublicKey publicKey = PublicKeySources.ofPEMString(PUBLIC_KEY_PEM_STRING)
+        ECPublicKey publicKey = PublicKeySources.ofPEMText(PUBLIC_KEY_PEM_STRING)
             .extract();
 
         assertThat(publicKey.getAlgorithm(), equalTo("EC"));
@@ -58,7 +59,7 @@ public class PublicKeySourcesTests {
     public void publicKeySourceCanExtractPublicKeyFromUncompressedBase64String() {
 
         ECPublicKey publicKey =
-            PublicKeySources.ofUncompressedBase64String(PUBLIC_KEY_UNCOMPRESSED_BYTES_BASE64)
+            PublicKeySources.ofUncompressedBase64Text(PUBLIC_KEY_UNCOMPRESSED_BYTES_BASE64)
                 .extract();
 
         assertThat(publicKey.getAlgorithm(), equalTo("EC"));
@@ -67,14 +68,15 @@ public class PublicKeySourcesTests {
     @Test
     public void publicKeySourceCanExtractPublicKeyFromX509Base64String() {
 
-        ECPublicKey publicKey = PublicKeySources.ofX509Base64String(PUBLIC_KEY_X509_BYTES_BASE64)
+        ECPublicKey publicKey = PublicKeySources.ofX509Base64Text(PUBLIC_KEY_X509_BYTES_BASE64)
             .extract();
 
         assertThat(publicKey.getAlgorithm(), equalTo("EC"));
     }
 
     @Test
-    public void publicKeySourceCanExtractPublicKeyFromPEMFile() throws URISyntaxException {
+    public void publicKeySourceCanExtractPublicKeyFromPEMFile()
+        throws URISyntaxException, IOException {
         ECPublicKey publicKey = PublicKeySources.ofPEMFile(
                 Paths.get(this.getClass().getResource(PUBLIC_KEY_PEM_FILE_NAME).toURI()))
             .extract();
@@ -83,7 +85,8 @@ public class PublicKeySourcesTests {
     }
 
     @Test
-    public void publicKeySourceCanExtractPublicKeyFromDERFile() throws URISyntaxException {
+    public void publicKeySourceCanExtractPublicKeyFromDERFile()
+        throws URISyntaxException, IOException {
         ECPublicKey publicKey = PublicKeySources.ofDERFile(
                 Paths.get(this.getClass().getResource(PUBLIC_KEY_DER_FILE_NAME).toURI()))
             .extract();

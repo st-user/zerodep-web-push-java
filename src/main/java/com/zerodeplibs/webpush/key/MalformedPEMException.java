@@ -2,18 +2,18 @@ package com.zerodeplibs.webpush.key;
 
 /**
  * This Exception is thrown by {@link PEMParser} during parsing
- * to indicate that the text being processed is malformed.
+ * to indicate that the input text cannot be parsed as a valid PEM format.
  *
  * @author Tomoki Sato
  * @see PEMParser#parse(String)
  */
-public class InvalidPEMFormatException extends RuntimeException {
+public class MalformedPEMException extends RuntimeException {
 
-    InvalidPEMFormatException(String message) {
+    MalformedPEMException(String message) {
         super(message);
     }
 
-    InvalidPEMFormatException(Throwable cause) {
+    MalformedPEMException(Throwable cause) {
         super(cause);
     }
 }

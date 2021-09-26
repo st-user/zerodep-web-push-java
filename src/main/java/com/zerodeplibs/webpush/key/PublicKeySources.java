@@ -1,6 +1,7 @@
 package com.zerodeplibs.webpush.key;
 
 import com.zerodeplibs.webpush.internal.WebPushPreConditions;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
@@ -66,6 +67,8 @@ public class PublicKeySources {
      *
      * @param uncompressedBytes the byte array representing a public key.
      * @return a new PublicKeySource.
+     * @throws MalformedUncompressedBytesException if the given array doesn't start with 0x4
+     *                                             or the length isn't 65 bytes.
      */
     public static PublicKeySource ofUncompressedBytes(byte[] uncompressedBytes) {
         return withValidation().fromUncompressedBytes(uncompressedBytes);
@@ -84,38 +87,42 @@ public class PublicKeySources {
     }
 
     /**
-     * Creates a PublicKeySource with the PEM string.
+     * Creates a PublicKeySource with the PEM-encoded text.
      * The underlying binary data is assumed to be encoded according to the X.509 standard.
      *
      * <p>
-     * The PEM string is assumed to start with '-----BEGIN PUBLIC KEY-----'
+     * the PEM-encoded text is assumed to start with '-----BEGIN PUBLIC KEY-----'
      * and end with '-----END PUBLIC KEY-----'.
      * </p>
      *
-     * @param pemString the PEM string representing a public key.
+     * @param pemText the PEM-encoded text representing a public key.
      * @return a new PublicKeySource.
+     * @throws MalformedPEMException if the given text
+     *                               cannot be parsed as a valid PEM format.
      * @see java.security.spec.X509EncodedKeySpec
      */
-    public static PublicKeySource ofPEMString(String pemString) {
-        return ofPEMString(pemString,
+    public static PublicKeySource ofPEMText(String pemText) {
+        return ofPEMText(pemText,
             PEMParsers.ofStandard(PEMParser.SUBJECT_PUBLIC_KEY_INFO_LABEL));
     }
 
     /**
-     * Creates a PublicKeySource with the PEM string and the {@link PEMParser}.
+     * Creates a PublicKeySource with the PEM-encoded text and the {@link PEMParser}.
      * The underlying binary data is assumed to be encoded according to the X.509 standard.
      *
      * <p>
-     * The PEM string are parsed by the given {@link PEMParser}.
+     * the PEM-encoded text are parsed by the given {@link PEMParser}.
      * </p>
      *
-     * @param pemString the PEM string representing a public key.
-     * @param parser    the parser for parsing the PEM string.
+     * @param pemText the PEM-encoded text representing a public key.
+     * @param parser  the parser for parsing the PEM-encoded text.
      * @return a new PublicKeySource.
+     * @throws MalformedPEMException if the given text
+     *                               cannot be parsed as a valid PEM format.
      * @see java.security.spec.X509EncodedKeySpec
      */
-    public static PublicKeySource ofPEMString(String pemString, PEMParser parser) {
-        return ofX509Bytes(parser.parse(pemString));
+    public static PublicKeySource ofPEMText(String pemText, PEMParser parser) {
+        return ofX509Bytes(parser.parse(pemText));
     }
 
     /**
@@ -126,8 +133,11 @@ public class PublicKeySources {
      *
      * @param uncompressedBytesBase64 the base64-encoded public key.
      * @return a new PublicKeySource.
+     * @throws MalformedUncompressedBytesException if the given array doesn't start with 0x4
+     *                                             or the length isn't 65 bytes.
+     * @throws IllegalArgumentException            if the given text is not in valid Base64 scheme.
      */
-    public static PublicKeySource ofUncompressedBase64String(String uncompressedBytesBase64) {
+    public static PublicKeySource ofUncompressedBase64Text(String uncompressedBytesBase64) {
         return ofUncompressedBytes(Base64.getDecoder().decode(uncompressedBytesBase64));
     }
 
@@ -136,12 +146,13 @@ public class PublicKeySources {
      * (<b>NOT</b> base64<b>url</b>-encoded).
      * The binary data is assumed to be encoded according to the X.509 standard.
      *
-     * @param x509Base64String the base64-encoded public key.
+     * @param x509Base64Text the base64-encoded public key.
      * @return a new PublicKeySource.
+     * @throws IllegalArgumentException if the given text is not in valid Base64 scheme.
      * @see java.security.spec.X509EncodedKeySpec
      */
-    public static PublicKeySource ofX509Base64String(String x509Base64String) {
-        return ofX509Bytes(Base64.getDecoder().decode(x509Base64String));
+    public static PublicKeySource ofX509Base64Text(String x509Base64Text) {
+        return ofX509Bytes(Base64.getDecoder().decode(x509Base64Text));
     }
 
     /**
@@ -155,8 +166,11 @@ public class PublicKeySources {
      *
      * @param path the path to the PEM formatted file.
      * @return a new PublicKeySource.
+     * @throws IOException           if an I/O error occurs.
+     * @throws MalformedPEMException if the given text
+     *                               cannot be parsed as a valid PEM format.
      */
-    public static PublicKeySource ofPEMFile(Path path) {
+    public static PublicKeySource ofPEMFile(Path path) throws IOException {
         return getPEMFileSourceBuilder(path).build();
     }
 
@@ -171,8 +185,11 @@ public class PublicKeySources {
      * @param path   the path to the PEM formatted file.
      * @param parser the parser for parsing the contents of the PEM file.
      * @return a new PublicKeySource.
+     * @throws IOException           if an I/O error occurs.
+     * @throws MalformedPEMException if the given text
+     *                               cannot be parsed as a valid PEM format.
      */
-    public static PublicKeySource ofPEMFile(Path path, PEMParser parser) {
+    public static PublicKeySource ofPEMFile(Path path, PEMParser parser) throws IOException {
         return getPEMFileSourceBuilder(path).parser(parser).build();
     }
 
@@ -182,8 +199,9 @@ public class PublicKeySources {
      *
      * @param path the path to the DER file.
      * @return a new PublicKeySource.
+     * @throws IOException if an I/O error occurs.
      */
-    public static PublicKeySource ofDERFile(Path path) {
+    public static PublicKeySource ofDERFile(Path path) throws IOException {
         return ofX509Bytes(FileUtil.readAllBytes(path));
     }
 
@@ -262,8 +280,11 @@ public class PublicKeySources {
          * Creates a new PublicKeySource.
          *
          * @return a new PublicKeySource.
+         * @throws IOException           if an I/O error occurs.
+         * @throws MalformedPEMException if the given text
+         *                               cannot be parsed as a valid PEM format.
          */
-        public PublicKeySource build() {
+        public PublicKeySource build() throws IOException {
             byte[] parsed = this.parser.parse(FileUtil.readAsString(pemFilePath, charset));
             return this.factory.fromX509Bytes(parsed);
         }

@@ -65,7 +65,7 @@ public class PEMParserTests {
             "-----END PRIVATE KEY-----"
         );
 
-        assertThat(assertThrows(InvalidPEMFormatException.class,
+        assertThat(assertThrows(MalformedPEMException.class,
             () -> parser.parse(pemString1)).getMessage(), equalTo(
             "A '-----BEGIN' encapsulation boundary doesn't exist or the format is invalid."));
 
@@ -75,7 +75,7 @@ public class PEMParserTests {
             "-----END PRIVATE KEY-----"
         );
 
-        assertThat(assertThrows(InvalidPEMFormatException.class,
+        assertThat(assertThrows(MalformedPEMException.class,
             () -> parser.parse(pemString2)).getMessage(), equalTo(
             "The line of the '-----BEGIN' encapsulation boundary contains an illegal character after '-----BEGIN PRIVATE KEY-----': X"));
     }
@@ -92,7 +92,7 @@ public class PEMParserTests {
             "-----END Private KEY-----"
         );
 
-        assertThat(assertThrows(InvalidPEMFormatException.class,
+        assertThat(assertThrows(MalformedPEMException.class,
             () -> parser.parse(pemString1)).getMessage(), equalTo(
             "A '-----END' encapsulation boundary doesn't exist or the format is invalid."));
 
@@ -177,7 +177,7 @@ public class PEMParserTests {
         String expectedMessage =
             "The base64 text is malformed or contains an illegal character(line: %d).";
 
-        assertThat(assertThrows(InvalidPEMFormatException.class,
+        assertThat(assertThrows(MalformedPEMException.class,
                 () -> parser.parse(pemString)).getMessage(),
             equalTo(String.format(expectedMessage, illegalLineNo)));
     }
@@ -186,8 +186,8 @@ public class PEMParserTests {
                                                   Class<? extends Throwable> cause,
                                                   String pemString) {
 
-        InvalidPEMFormatException exception =
-            assertThrows(InvalidPEMFormatException.class, () -> parser.parse(pemString));
+        MalformedPEMException exception =
+            assertThrows(MalformedPEMException.class, () -> parser.parse(pemString));
 
         assertNotNull(exception.getCause(), exception.getMessage());
         assertThat(exception.getCause().getClass(), equalTo(cause));

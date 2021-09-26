@@ -21,6 +21,8 @@ public interface PublicKeySourceFactory {
      *
      * @param uncompressedBytes the byte array representing a public key.
      * @return a new PublicKeySource.
+     * @throws MalformedUncompressedBytesException if the given array doesn't start with 0x4
+     *                                             or the length isn't 65 bytes.
      */
     PublicKeySource fromUncompressedBytes(byte[] uncompressedBytes);
 

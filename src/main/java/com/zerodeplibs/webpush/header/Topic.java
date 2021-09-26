@@ -35,7 +35,7 @@ public abstract class Topic {
      *
      * @param topic a topic.
      * @return the same value as the given topic.
-     * @throws IllegalArgumentException when the given topic doesn't meet the constraints.
+     * @throws IllegalArgumentException if the given topic doesn't meet the constraints.
      */
     public static String ensure(String topic) {
         WebPushPreConditions.checkNotNull(topic, "topic");

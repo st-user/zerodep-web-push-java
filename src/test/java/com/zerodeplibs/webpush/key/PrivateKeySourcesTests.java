@@ -3,6 +3,7 @@ package com.zerodeplibs.webpush.key;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
 import java.security.interfaces.ECPrivateKey;
@@ -28,7 +29,7 @@ public class PrivateKeySourcesTests {
     public void privateKeySourceCanExtractPrivateKeyFromPKCS8Bytes() {
 
         ECPrivateKey privateKey =
-            PrivateKeySources.ofPKCS8Bytes(decodeBase64(PRIVATE_KEY_PKCS8_BYTES_BASE64))
+            PrivateKeySources.ofPKCS8Bytes(decodeBase64())
                 .extract();
 
         assertThat(privateKey.getAlgorithm(), equalTo("EC"));
@@ -37,7 +38,7 @@ public class PrivateKeySourcesTests {
     @Test
     public void privateKeySourceCanExtractPrivateKeyFromPEMString() {
 
-        ECPrivateKey privateKey = PrivateKeySources.ofPEMString(PRIVATE_KEY_PEM_STRING)
+        ECPrivateKey privateKey = PrivateKeySources.ofPEMText(PRIVATE_KEY_PEM_STRING)
             .extract();
 
         assertThat(privateKey.getAlgorithm(), equalTo("EC"));
@@ -47,14 +48,15 @@ public class PrivateKeySourcesTests {
     public void privateKeySourceCanExtractPrivateKeyFromPKCS8Base64String() {
 
         ECPrivateKey privateKey =
-            PrivateKeySources.ofPKCS8Base64String(PRIVATE_KEY_PKCS8_BYTES_BASE64)
+            PrivateKeySources.ofPKCS8Base64Text(PRIVATE_KEY_PKCS8_BYTES_BASE64)
                 .extract();
 
         assertThat(privateKey.getAlgorithm(), equalTo("EC"));
     }
 
     @Test
-    public void privateKeySourceCanExtractPrivateKeyFromPEMFile() throws URISyntaxException {
+    public void privateKeySourceCanExtractPrivateKeyFromPEMFile()
+        throws URISyntaxException, IOException {
 
         ECPrivateKey privateKey = PrivateKeySources.ofPEMFile(
                 Paths.get(this.getClass().getResource(PRIVATE_KEY_PEM_FILE_NAME).toURI()))
@@ -64,7 +66,8 @@ public class PrivateKeySourcesTests {
     }
 
     @Test
-    public void privateKeySourceCanExtractPrivateKeyFromDERFile() throws URISyntaxException {
+    public void privateKeySourceCanExtractPrivateKeyFromDERFile()
+        throws URISyntaxException, IOException {
 
         ECPrivateKey privateKey = PrivateKeySources.ofDERFile(
                 Paths.get(this.getClass().getResource(PRIVATE_KEY_DER_FILE_NAME).toURI()))
@@ -73,7 +76,7 @@ public class PrivateKeySourcesTests {
         assertThat(privateKey.getAlgorithm(), equalTo("EC"));
     }
 
-    private byte[] decodeBase64(String base64String) {
-        return Base64.getDecoder().decode(base64String);
+    private byte[] decodeBase64() {
+        return Base64.getDecoder().decode(PrivateKeySourcesTests.PRIVATE_KEY_PKCS8_BYTES_BASE64);
     }
 }

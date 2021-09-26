@@ -1,5 +1,6 @@
 package com.zerodeplibs.webpush;
 
+import com.zerodeplibs.webpush.internal.WebPushPreConditions;
 import com.zerodeplibs.webpush.key.PublicKeySources;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
@@ -55,6 +56,10 @@ class Aes128GcmMessageEncryption implements MessageEncryption {
         UserAgentMessageEncryptionKeyInfo userAgentMessageEncryptionKeyInfo,
         PushMessage pushMessage) {
 
+        WebPushPreConditions.checkNotNull(userAgentMessageEncryptionKeyInfo,
+            "userAgentMessageEncryptionKeyInfo");
+        WebPushPreConditions.checkNotNull(pushMessage, "pushMessage");
+
         try {
             return encryptInternal(userAgentMessageEncryptionKeyInfo, pushMessage);
         } catch (InvalidAlgorithmParameterException
@@ -64,7 +69,7 @@ class Aes128GcmMessageEncryption implements MessageEncryption {
             | NoSuchPaddingException
             | BadPaddingException e) {
 
-            throw new WebPushRuntimeWrapperException(e);
+            throw new MessageEncryptionException(e);
         }
     }
 
@@ -81,7 +86,7 @@ class Aes128GcmMessageEncryption implements MessageEncryption {
             | NoSuchPaddingException
             | IllegalBlockSizeException
             | BadPaddingException e) {
-            throw new WebPushRuntimeWrapperException(e);
+            throw new MessageEncryptionException(e);
         }
     }
 

@@ -1,6 +1,7 @@
 package com.zerodeplibs.webpush.key;
 
 import com.zerodeplibs.webpush.internal.WebPushPreConditions;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
@@ -65,37 +66,41 @@ public class PrivateKeySources {
     }
 
     /**
-     * Creates a PrivateKeySource with the PEM string.
+     * Creates a PrivateKeySource with the PEM-encoded text.
      * The underlying binary data is assumed to be encoded according to the PKCS#8 standard.
      *
      * <p>
-     * The PEM string is assumed to start with '-----BEGIN PRIVATE KEY-----'
+     * the PEM-encoded text is assumed to start with '-----BEGIN PRIVATE KEY-----'
      * and end with '-----END PRIVATE KEY-----'.
      * </p>
      *
-     * @param pemString the PEM string representing a private key.
+     * @param pemText the PEM-encoded text representing a private key.
      * @return a new PrivateKeySource.
+     * @throws MalformedPEMException if the given text
+     *                               cannot be parsed as a valid PEM format.
      * @see java.security.spec.PKCS8EncodedKeySpec
      */
-    public static PrivateKeySource ofPEMString(String pemString) {
-        return ofPEMString(pemString, PEMParsers.ofStandard(PEMParser.PKCS8_PRIVATE_KEY_LABEL));
+    public static PrivateKeySource ofPEMText(String pemText) {
+        return ofPEMText(pemText, PEMParsers.ofStandard(PEMParser.PKCS8_PRIVATE_KEY_LABEL));
     }
 
     /**
-     * Creates a PrivateKeySource with the PEM string and the {@link PEMParser}.
+     * Creates a PrivateKeySource with the PEM-encoded text and the {@link PEMParser}.
      * The underlying binary data is assumed to be encoded according to the PKCS#8 standard.
      *
      * <p>
-     * The PEM string are parsed by the given {@link PEMParser}.
+     * the PEM-encoded text are parsed by the given {@link PEMParser}.
      * </p>
      *
-     * @param pemString the PEM string representing a private key.
-     * @param parser    the parser for parsing the PEM string.
+     * @param pemText the PEM-encoded text representing a private key.
+     * @param parser  the parser for parsing the PEM-encoded text.
      * @return a new PrivateKeySource.
+     * @throws MalformedPEMException if the given text
+     *                               cannot be parsed as a valid PEM format.
      * @see java.security.spec.PKCS8EncodedKeySpec
      */
-    public static PrivateKeySource ofPEMString(String pemString, PEMParser parser) {
-        return ofPKCS8Bytes(parser.parse(pemString));
+    public static PrivateKeySource ofPEMText(String pemText, PEMParser parser) {
+        return ofPKCS8Bytes(parser.parse(pemText));
     }
 
     /**
@@ -103,14 +108,15 @@ public class PrivateKeySources {
      * (<b>NOT</b> base64<b>url</b>-encoded).
      * The binary data is assumed to be encoded according to the PKCS#8 standard.
      *
-     * @param pkcs8Base64String the base64-encoded private key.
+     * @param pkcs8Base64Text the base64-encoded private key.
      * @return a new PrivateKeySource.
+     * @throws IllegalArgumentException if the given text is not in valid Base64 scheme.
      * @see java.security.spec.PKCS8EncodedKeySpec
      */
     // BEGIN CHECK STYLE OFF
-    public static PrivateKeySource ofPKCS8Base64String(
-        String pkcs8Base64String) { // END CHECK STYLE OFF
-        return ofPKCS8Bytes(Base64.getDecoder().decode(pkcs8Base64String));
+    public static PrivateKeySource ofPKCS8Base64Text(
+        String pkcs8Base64Text) { // END CHECK STYLE OFF
+        return ofPKCS8Bytes(Base64.getDecoder().decode(pkcs8Base64Text));
     }
 
     /**
@@ -124,8 +130,11 @@ public class PrivateKeySources {
      *
      * @param path the path to the PEM formatted file.
      * @return a new PrivateKeySource.
+     * @throws IOException           if an I/O error occurs.
+     * @throws MalformedPEMException if the given text
+     *                               cannot be parsed as a valid PEM format.
      */
-    public static PrivateKeySource ofPEMFile(Path path) {
+    public static PrivateKeySource ofPEMFile(Path path) throws IOException {
         return getPEMFileSourceBuilder(path).build();
     }
 
@@ -140,8 +149,11 @@ public class PrivateKeySources {
      * @param path   the path to the PEM formatted file.
      * @param parser the parser for parsing the contents of the PEM file.
      * @return a new PrivateKeySource.
+     * @throws IOException           if an I/O error occurs.
+     * @throws MalformedPEMException if the given text
+     *                               cannot be parsed as a valid PEM format.
      */
-    public static PrivateKeySource ofPEMFile(Path path, PEMParser parser) {
+    public static PrivateKeySource ofPEMFile(Path path, PEMParser parser) throws IOException {
         return getPEMFileSourceBuilder(path).parser(parser).build();
     }
 
@@ -151,8 +163,9 @@ public class PrivateKeySources {
      *
      * @param path the path to the DER file.
      * @return a new PrivateKeySource.
+     * @throws IOException if an I/O error occurs.
      */
-    public static PrivateKeySource ofDERFile(Path path) {
+    public static PrivateKeySource ofDERFile(Path path) throws IOException {
         return ofPKCS8Bytes(FileUtil.readAllBytes(path));
     }
 
@@ -218,9 +231,12 @@ public class PrivateKeySources {
          * Creates a new PrivateKeySource.
          *
          * @return a new PrivateKeySource.
+         * @throws IOException           if an I/O error occurs.
+         * @throws MalformedPEMException if the given text
+         *                               cannot be parsed as a valid PEM format.
          */
-        public PrivateKeySource build() {
-            return PrivateKeySources.ofPEMString(
+        public PrivateKeySource build() throws IOException {
+            return PrivateKeySources.ofPEMText(
                 FileUtil.readAsString(pemFilePath, charset),
                 parser
             );

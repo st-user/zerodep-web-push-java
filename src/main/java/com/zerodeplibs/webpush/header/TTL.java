@@ -23,6 +23,7 @@ public abstract class TTL {
      *
      * @param days how many days a push message is retained by the push service.
      * @return the value converted from days to seconds.
+     * @throws IllegalArgumentException if the number of days is negative.
      */
     public static Long days(long days) {
         return seconds(TimeUnit.DAYS.toSeconds(days));
@@ -33,6 +34,7 @@ public abstract class TTL {
      *
      * @param hours how many hours a push message is retained by the push service.
      * @return the value converted from hours to seconds.
+     * @throws IllegalArgumentException if the number of seconds is negative.
      */
     public static Long hours(long hours) {
         return seconds(TimeUnit.HOURS.toSeconds(hours));
@@ -44,6 +46,7 @@ public abstract class TTL {
      *
      * @param minutes how many minutes a push message is retained by the push service.
      * @return the value converted from minutes to seconds.
+     * @throws IllegalArgumentException if the number of minutes is negative.
      */
     public static Long minutes(long minutes) {
         return seconds(TimeUnit.MINUTES.toSeconds(minutes));
@@ -54,6 +57,7 @@ public abstract class TTL {
      *
      * @param seconds how many seconds a push message is retained by the push service.
      * @return the given seconds.
+     * @throws IllegalArgumentException if the number of seconds is negative.
      */
     public static Long seconds(long seconds) {
         WebPushPreConditions.checkArgument(seconds >= 0,

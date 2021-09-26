@@ -23,6 +23,6 @@ public interface MessageEncryption {
      */
     EncryptedPushMessage encrypt(
         UserAgentMessageEncryptionKeyInfo userAgentMessageEncryptionKeyInfo,
-        PushMessage pushMessage);
+        PushMessage pushMessage) throws MessageEncryptionException;
 
 }

@@ -11,15 +11,15 @@ public class MessageEncryptions {
 
 
     /**
-     * Creates an instance of the {@link MessageEncryption} implementation.
+     * Creates a new MessageEncryption.
      *
-     * @return an instance of the {@link MessageEncryption} implementation.
+     * @return s new MessageEncryption.
      */
     public static MessageEncryption of() {
         try {
             return new Aes128GcmMessageEncryption();
         } catch (NoSuchAlgorithmException e) {
-            throw new WebPushRuntimeWrapperException(e);
+            throw new MessageEncryptionException(e);
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.zerodeplibs.webpush;
 
 import com.zerodeplibs.webpush.jwt.VAPIDJWTGenerator;
+import com.zerodeplibs.webpush.key.InvalidECPublicKeyException;
 import com.zerodeplibs.webpush.key.PrivateKeySource;
 import com.zerodeplibs.webpush.key.PublicKeySource;
 import java.security.interfaces.ECPrivateKey;
@@ -22,6 +23,8 @@ public class VAPIDKeyPairs {
      * @param publicKeySource     the public key source.
      * @param jwtGeneratorFactory the factory for {@link VAPIDJWTGenerator}.
      * @return a new VAPIDKeyPair
+     * @throws InvalidECPublicKeyException if the public key extracted
+     *                                     from the public key source is invalid.
      */
     public static VAPIDKeyPair of(PrivateKeySource privateKeySource,
                                   PublicKeySource publicKeySource,

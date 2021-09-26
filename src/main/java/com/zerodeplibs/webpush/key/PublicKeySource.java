@@ -28,12 +28,14 @@ public interface PublicKeySource {
      * @throws InvalidECPublicKeyException when the extracted
      *                                     public key is invalid(Depending on the implementation).
      */
-    ECPublicKey extract();
+    ECPublicKey extract() throws InvalidECPublicKeyException;
 
     /**
      * Extracts the byte array of the elliptic curve (EC) public key in uncompressed form.
      *
      * @return the byte array of the public key in uncompressed form.
+     * @throws InvalidECPublicKeyException when the extracted
+     *                                     public key is invalid(Depending on the implementation).
      */
-    byte[] extractUncompressedBytes();
+    byte[] extractUncompressedBytes() throws InvalidECPublicKeyException;
 }

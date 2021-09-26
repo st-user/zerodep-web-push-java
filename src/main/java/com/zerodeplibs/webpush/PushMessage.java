@@ -23,6 +23,7 @@ public class PushMessage {
      *
      * @param messageBytes the byte array representing a push message.
      * @return a new PushMessage
+     * @throws IllegalArgumentException if the array is null or empty.
      */
     public static PushMessage of(byte[] messageBytes) {
         WebPushPreConditions.checkArgument(messageBytes != null && messageBytes.length > 0,
@@ -32,18 +33,19 @@ public class PushMessage {
     }
 
     /**
-     * Creates a PushMessage with the given string.
-     * The given string is encoded by using UTF-8.
+     * Creates a PushMessage with the given text.
+     * The given text is encoded by using UTF-8.
      *
-     * @param messageString the string representing a push message.
+     * @param messageText the text representing a push message.
      * @return a new PushMessage.
+     * @throws IllegalArgumentException if the text is null or empty.
      */
     // BEGIN CHECK STYLE OFF
-    public static PushMessage ofUTF8(String messageString) { // END CHECK STYLE OFF
-        WebPushPreConditions.checkArgument(messageString != null && messageString.length() > 0,
-            "messageString should not be noll or empty.");
+    public static PushMessage ofUTF8(String messageText) { // END CHECK STYLE OFF
+        WebPushPreConditions.checkArgument(messageText != null && messageText.length() > 0,
+            "a push message should not be noll or empty.");
 
-        return new PushMessage(messageString.getBytes(StandardCharsets.UTF_8));
+        return new PushMessage(messageText.getBytes(StandardCharsets.UTF_8));
     }
 
     // Should not change returned byte arrays.

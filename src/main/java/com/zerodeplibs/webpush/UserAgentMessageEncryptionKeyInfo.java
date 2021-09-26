@@ -1,5 +1,8 @@
 package com.zerodeplibs.webpush;
 
+import com.zerodeplibs.webpush.internal.WebPushPreConditions;
+import com.zerodeplibs.webpush.key.InvalidECPublicKeyException;
+import com.zerodeplibs.webpush.key.MalformedUncompressedBytesException;
 import com.zerodeplibs.webpush.key.PublicKeySource;
 import com.zerodeplibs.webpush.key.PublicKeySources;
 import java.security.interfaces.ECPublicKey;
@@ -32,11 +35,17 @@ public class UserAgentMessageEncryptionKeyInfo {
     /**
      * Creates a new UserAgentMessageEncryptionKeyInfo from the PushSubscription.
      *
-     * @param subscription a PushSubscription.
+     * @param subscriptionKeys a PushSubscription 'Keys' field.
      * @return a new UserAgentMessageEncryptionKeyInfo.
+     * @throws IllegalArgumentException            if the given keys' text are not
+     *                                             in valid Base64 scheme.
+     * @throws MalformedUncompressedBytesException if the given p256dh doesn't start with 0x4
+     *                                             or the length isn't 65 bytes.
+     * @throws InvalidECPublicKeyException         if the public key extracted
+     *                                             from the give p256dh is invalid.
      */
-    public static UserAgentMessageEncryptionKeyInfo from(PushSubscription subscription) {
-        return of(subscription.getKeys().getP256dh(), subscription.getKeys().getAuth());
+    public static UserAgentMessageEncryptionKeyInfo from(PushSubscription.Keys subscriptionKeys) {
+        return of(subscriptionKeys.getP256dh(), subscriptionKeys.getAuth());
     }
 
     /**
@@ -51,6 +60,12 @@ public class UserAgentMessageEncryptionKeyInfo {
      * @param p256dh a p256dh.
      * @param auth   an auth.
      * @return a new UserAgentMessageEncryptionKeyInfo.
+     * @throws IllegalArgumentException            if the given texts are not
+     *                                             in valid Base64 scheme.
+     * @throws MalformedUncompressedBytesException if the given p256dh doesn't start with 0x4
+     *                                             or the length isn't 65 bytes.
+     * @throws InvalidECPublicKeyException         if the public key extracted
+     *                                             from the give p256dh is invalid.
      */
     public static UserAgentMessageEncryptionKeyInfo of(String p256dh,
                                                        String auth) {
@@ -69,9 +84,16 @@ public class UserAgentMessageEncryptionKeyInfo {
      * @param p256dh a p256dh.
      * @param auth   an auth.
      * @return a new UserAgentMessageEncryptionKeyInfo.
+     * @throws MalformedUncompressedBytesException if the given p256dh doesn't start with 0x4
+     *                                             or the length isn't 65 bytes.
+     * @throws InvalidECPublicKeyException         if the public key extracted
+     *                                             from the give p256dh is invalid.
      */
     public static UserAgentMessageEncryptionKeyInfo of(byte[] p256dh,
                                                        byte[] auth) {
+
+        WebPushPreConditions.checkNotNull(p256dh, "p256dh");
+        WebPushPreConditions.checkNotNull(auth, "auth");
 
         PublicKeySource publicKeySource =
             PublicKeySources.ofUncompressedBytes(p256dh);

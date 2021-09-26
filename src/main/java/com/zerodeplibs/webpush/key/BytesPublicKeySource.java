@@ -1,6 +1,5 @@
 package com.zerodeplibs.webpush.key;
 
-import com.zerodeplibs.webpush.WebPushRuntimeWrapperException;
 import com.zerodeplibs.webpush.internal.WebPushPreConditions;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
@@ -30,7 +29,7 @@ class BytesPublicKeySource implements PublicKeySource {
         WebPushPreConditions.checkNotNull(uncompressedBytes, "uncompressedBytes");
 
         if (uncompressedBytes[0] != 0x04 || uncompressedBytes.length != 65) {
-            throw new IllegalArgumentException(MSG_INVALID_UNCOMPRESSED_BYTES);
+            throw new MalformedUncompressedBytesException(MSG_INVALID_UNCOMPRESSED_BYTES);
         }
         return new BytesPublicKeySource(
             ECPublicKeyUtil.uncompressedBytesToX509Bytes(uncompressedBytes),
@@ -43,6 +42,9 @@ class BytesPublicKeySource implements PublicKeySource {
     }
 
     private BytesPublicKeySource(byte[] x509Bytes, Consumer<ECPublicKey> publicKeyPostProcessor) {
+        WebPushPreConditions.checkNotNull(x509Bytes, "x509Bytes");
+        WebPushPreConditions.checkNotNull(publicKeyPostProcessor, "publicKeyPostProcessor");
+
         this.x509Bytes = Arrays.copyOf(x509Bytes, x509Bytes.length);
         this.publicKeyPostProcessor = publicKeyPostProcessor;
     }
@@ -58,7 +60,7 @@ class BytesPublicKeySource implements PublicKeySource {
             this.publicKeyPostProcessor.accept(ecPublicKey);
             this.publicKey = ecPublicKey;
         } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
-            throw new WebPushRuntimeWrapperException(e);
+            throw new KeyExtractionException(e);
         }
     }
 

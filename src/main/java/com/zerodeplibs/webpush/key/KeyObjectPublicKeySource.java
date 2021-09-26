@@ -1,5 +1,6 @@
 package com.zerodeplibs.webpush.key;
 
+import com.zerodeplibs.webpush.internal.WebPushPreConditions;
 import java.security.interfaces.ECPublicKey;
 import java.util.function.Consumer;
 
@@ -15,6 +16,9 @@ class KeyObjectPublicKeySource implements PublicKeySource {
     private boolean processed = false;
 
     KeyObjectPublicKeySource(ECPublicKey publicKey, Consumer<ECPublicKey> publicKeyPostProcessor) {
+        WebPushPreConditions.checkNotNull(publicKey, "publicKey");
+        WebPushPreConditions.checkNotNull(publicKeyPostProcessor, "publicKeyPostProcessor");
+
         this.publicKey = publicKey;
         this.publicKeyPostProcessor = publicKeyPostProcessor;
     }

@@ -1,5 +1,6 @@
 package com.zerodeplibs.webpush.key;
 
+import com.zerodeplibs.webpush.internal.WebPushPreConditions;
 import java.security.interfaces.ECPrivateKey;
 
 /**
@@ -12,6 +13,8 @@ class KeyObjectPrivateKeySource implements PrivateKeySource {
     private final ECPrivateKey privateKey;
 
     KeyObjectPrivateKeySource(ECPrivateKey privateKey) {
+        WebPushPreConditions.checkNotNull(privateKey, "privateKey");
+
         this.privateKey = privateKey;
     }
 

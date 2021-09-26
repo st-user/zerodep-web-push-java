@@ -41,6 +41,7 @@ public class PEMParsers {
      *
      * @param label a label for encapsulation boundaries.
      * @return an instance of the {@link PEMParser} implementation.
+     * @throws IllegalArgumentException if the format of the given label is invalid.
      */
     public static PEMParser ofStandard(String label) {
         checkLabel(label);

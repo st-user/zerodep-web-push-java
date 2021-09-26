@@ -1,6 +1,6 @@
 package com.zerodeplibs.webpush.key;
 
-import com.zerodeplibs.webpush.WebPushRuntimeWrapperException;
+import com.zerodeplibs.webpush.internal.WebPushPreConditions;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.interfaces.ECPrivateKey;
@@ -18,6 +18,7 @@ class BytesPrivateKeySource implements PrivateKeySource {
     private final byte[] pkcs8Bytes;
 
     BytesPrivateKeySource(byte[] pkcs8Bytes) {
+        WebPushPreConditions.checkNotNull(pkcs8Bytes, "pkcs8Bytes");
         this.pkcs8Bytes = Arrays.copyOf(pkcs8Bytes, pkcs8Bytes.length);
     }
 
@@ -27,7 +28,7 @@ class BytesPrivateKeySource implements PrivateKeySource {
             KeyFactory keyFactory = KeyFactory.getInstance("EC");
             return (ECPrivateKey) keyFactory.generatePrivate(new PKCS8EncodedKeySpec(pkcs8Bytes));
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            throw new WebPushRuntimeWrapperException(e);
+            throw new KeyExtractionException(e);
         }
     }
 }

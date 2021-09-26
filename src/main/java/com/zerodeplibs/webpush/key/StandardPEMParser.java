@@ -21,8 +21,8 @@ class StandardPEMParser implements PEMParser {
     }
 
     @Override
-    public byte[] parse(String pemText) throws InvalidPEMFormatException {
-        WebPushPreConditions.checkNotNull(pemText, "text");
+    public byte[] parse(String pemText) throws MalformedPEMException {
+        WebPushPreConditions.checkNotNull(pemText, "pemText");
 
         String contentLf = pemText.replace("\r\n", "\n");
         contentLf = contentLf.replace("\r", "\n");
@@ -69,7 +69,7 @@ class StandardPEMParser implements PEMParser {
                 if (isWsp(current)) {
                     continue;
                 }
-                throw new InvalidPEMFormatException(
+                throw new MalformedPEMException(
                     String.format("The line of the '-----BEGIN' encapsulation boundary "
                             + "contains an illegal character after '%s': %s", beginBoundary,
                         current)
@@ -170,25 +170,25 @@ class StandardPEMParser implements PEMParser {
         }
 
         if (!preebMatches) {
-            throw new InvalidPEMFormatException(
+            throw new MalformedPEMException(
                 "A '-----BEGIN' encapsulation boundary doesn't exist or the format is invalid.");
         }
 
         if (!postebMatches) {
-            throw new InvalidPEMFormatException(
+            throw new MalformedPEMException(
                 "A '-----END' encapsulation boundary doesn't exist or the format is invalid.");
         }
 
         try {
             return Base64.getDecoder().decode(base64Content.toString());
         } catch (IllegalArgumentException e) {
-            throw new InvalidPEMFormatException(e);
+            throw new MalformedPEMException(e);
         }
     }
 
-    private InvalidPEMFormatException constructInvalidBase64TextException(int lineNo) {
+    private MalformedPEMException constructInvalidBase64TextException(int lineNo) {
         String fmt = "The base64 text is malformed or contains an illegal character(line: %d).";
-        return new InvalidPEMFormatException(String.format(fmt, lineNo));
+        return new MalformedPEMException(String.format(fmt, lineNo));
     }
 
     private boolean containsPostEb(char[] contentArray, char[] endBoundaryArray, int currentIndex) {

@@ -24,7 +24,8 @@ public interface PEMParser {
      *
      * @param pemText a PEM-encoded text
      * @return the contents extracted from the given PEM-encoded text.
-     * @throws InvalidPEMFormatException when the text is malformed.
+     * @throws MalformedPEMException if the given text
+     *                               cannot be parsed as a valid PEM format.
      */
-    byte[] parse(String pemText) throws InvalidPEMFormatException;
+    byte[] parse(String pemText) throws MalformedPEMException;
 }
