@@ -5,7 +5,6 @@ package com.zerodeplibs.webpush.key;
  * to indicate that the public key is invalid.
  *
  * @author Tomoki Sato
- *
  * @see PublicKeySource#extract()
  */
 public class InvalidECPublicKeyException extends RuntimeException {

@@ -30,7 +30,6 @@ public interface PublicKeySourceFactory {
      *
      * @param x509Bytes the byte array representing a public key.
      * @return a new PublicKeySource.
-     *
      * @see java.security.spec.X509EncodedKeySpec
      */
     PublicKeySource fromX509Bytes(byte[] x509Bytes);

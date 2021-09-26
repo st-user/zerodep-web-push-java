@@ -11,7 +11,6 @@ import java.security.interfaces.ECPrivateKey;
  * </p>
  *
  * @author Tomoki Sato
- *
  * @see PublicKeySource
  * @see PrivateKeySources
  */

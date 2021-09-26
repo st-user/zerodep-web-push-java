@@ -9,7 +9,6 @@ package com.zerodeplibs.webpush.key;
  * </p>
  *
  * @author Tomoki Sato
- *
  * @see PEMParsers
  */
 public interface PEMParser {
