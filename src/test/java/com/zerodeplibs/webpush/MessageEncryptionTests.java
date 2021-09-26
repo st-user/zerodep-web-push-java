@@ -26,8 +26,8 @@ public class MessageEncryptionTests {
         String auth = generateAuthSecretString();
         String payload = "Hello World. This is a payload for testing.";
 
-        UserAgentMessageEncryptionKeys userAgentMessageEncryptionKeys =
-            UserAgentMessageEncryptionKeys.of(p256dh, auth);
+        UserAgentMessageEncryptionKeyInfo userAgentMessageEncryptionKeys =
+            UserAgentMessageEncryptionKeyInfo.of(p256dh, auth);
         MessageEncryption messageEncryption = MessageEncryptions.of();
 
         EncryptedPushMessage encrypted = messageEncryption.encrypt(

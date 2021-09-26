@@ -16,31 +16,31 @@ import java.util.Base64;
  * @author Tomoki Sato
  * @see PushSubscription
  */
-public class UserAgentMessageEncryptionKeys {
+public class UserAgentMessageEncryptionKeyInfo {
 
     private final ECPublicKey uaPublic;
     private final byte[] uncompressedUaPublic;
     private final byte[] authSecret;
 
-    private UserAgentMessageEncryptionKeys(ECPublicKey uaPublic, byte[] uncompressedUaPublic,
-                                           byte[] authSecret) {
+    private UserAgentMessageEncryptionKeyInfo(ECPublicKey uaPublic, byte[] uncompressedUaPublic,
+                                              byte[] authSecret) {
         this.uaPublic = uaPublic;
         this.uncompressedUaPublic = uncompressedUaPublic;
         this.authSecret = authSecret;
     }
 
     /**
-     * Creates a new UserAgentMessageEncryptionKeys from the PushSubscription.
+     * Creates a new UserAgentMessageEncryptionKeyInfo from the PushSubscription.
      *
      * @param subscription a PushSubscription.
-     * @return a new UserAgentMessageEncryptionKeys.
+     * @return a new UserAgentMessageEncryptionKeyInfo.
      */
-    public static UserAgentMessageEncryptionKeys from(PushSubscription subscription) {
+    public static UserAgentMessageEncryptionKeyInfo from(PushSubscription subscription) {
         return of(subscription.getKeys().getP256dh(), subscription.getKeys().getAuth());
     }
 
     /**
-     * Creates a new UserAgentMessageEncryptionKeys
+     * Creates a new UserAgentMessageEncryptionKeyInfo
      * with the p256dh and the auth.
      *
      * <p>
@@ -50,33 +50,33 @@ public class UserAgentMessageEncryptionKeys {
      *
      * @param p256dh a p256dh.
      * @param auth   an auth.
-     * @return a new UserAgentMessageEncryptionKeys.
+     * @return a new UserAgentMessageEncryptionKeyInfo.
      */
-    public static UserAgentMessageEncryptionKeys of(String p256dh,
-                                                    String auth) {
+    public static UserAgentMessageEncryptionKeyInfo of(String p256dh,
+                                                       String auth) {
         return of(base64urlToBytes(p256dh), base64urlToBytes(auth));
     }
 
     /**
-     * Creates a new UserAgentMessageEncryptionKeys
+     * Creates a new UserAgentMessageEncryptionKeyInfo
      * with the p256dh and the auth.
      *
      * <p>
      * This method is a byte array version
-     * of {@link UserAgentMessageEncryptionKeys#of(String, String)}.
+     * of {@link UserAgentMessageEncryptionKeyInfo#of(String, String)}.
      * </p>
      *
      * @param p256dh a p256dh.
      * @param auth   an auth.
-     * @return a new UserAgentMessageEncryptionKeys.
+     * @return a new UserAgentMessageEncryptionKeyInfo.
      */
-    public static UserAgentMessageEncryptionKeys of(byte[] p256dh,
-                                                    byte[] auth) {
+    public static UserAgentMessageEncryptionKeyInfo of(byte[] p256dh,
+                                                       byte[] auth) {
 
         PublicKeySource publicKeySource =
             PublicKeySources.ofUncompressedBytes(p256dh);
 
-        return new UserAgentMessageEncryptionKeys(
+        return new UserAgentMessageEncryptionKeyInfo(
             publicKeySource.extract(),
             Arrays.copyOf(p256dh, p256dh.length),
             Arrays.copyOf(auth, auth.length));

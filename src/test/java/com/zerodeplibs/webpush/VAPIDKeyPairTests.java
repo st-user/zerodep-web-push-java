@@ -53,7 +53,7 @@ public class VAPIDKeyPairTests {
         ECPrivateKey privateKey = (ECPrivateKey) keyPair.getPrivate();
         ECPublicKey publicKey = (ECPublicKey) keyPair.getPublic();
 
-        VAPIDKeyPair vapidKeyPair = new VAPIDKeyPair(
+        VAPIDKeyPair vapidKeyPair = VAPIDKeyPairs.of(
             PrivateKeySources.ofECPrivateKey(privateKey),
             PublicKeySources.ofECPublicKey(publicKey),
             TestingJWTGeneraator::new
@@ -64,7 +64,7 @@ public class VAPIDKeyPairTests {
 
         byte[] expectedBytes = Arrays.copyOfRange(publicKeyEncoded, publicKeyEncoded.length - 65,
             publicKeyEncoded.length);
-        assertThat(vapidKeyPair.extractUncompressedPublicKeyBytes(), equalTo(expectedBytes));
+        assertThat(vapidKeyPair.extractUncompressedPublicKey(), equalTo(expectedBytes));
 
     }
 
@@ -76,7 +76,7 @@ public class VAPIDKeyPairTests {
         ECPrivateKey privateKey = (ECPrivateKey) keyPair.getPrivate();
         ECPublicKey publicKey = (ECPublicKey) keyPair.getPublic();
 
-        VAPIDKeyPair vapidKeyPair = new VAPIDKeyPair(
+        VAPIDKeyPair vapidKeyPair = VAPIDKeyPairs.of(
             PrivateKeySources.ofECPrivateKey(privateKey),
             PublicKeySources.ofECPublicKey(publicKey),
             TestingJWTGeneraator::new

@@ -52,10 +52,11 @@ class Aes128GcmMessageEncryption implements MessageEncryption {
 
     @Override
     public EncryptedPushMessage encrypt(
-        UserAgentMessageEncryptionKeys userAgentMessageEncryptionKeys, PushMessage pushMessage) {
+        UserAgentMessageEncryptionKeyInfo userAgentMessageEncryptionKeyInfo,
+        PushMessage pushMessage) {
 
         try {
-            return encryptInternal(userAgentMessageEncryptionKeys, pushMessage);
+            return encryptInternal(userAgentMessageEncryptionKeyInfo, pushMessage);
         } catch (InvalidAlgorithmParameterException
             | NoSuchAlgorithmException
             | InvalidKeyException
@@ -68,12 +69,12 @@ class Aes128GcmMessageEncryption implements MessageEncryption {
     }
 
     byte[] decrypt(
-        UserAgentMessageEncryptionKeys userAgentMessageEncryptionKeys,
+        UserAgentMessageEncryptionKeyInfo userAgentMessageEncryptionKeyInfo,
         Aes128GcmEncryptedMessage encrypted,
         ECPrivateKey uaPrivate) {
 
         try {
-            return decryptInternal(userAgentMessageEncryptionKeys, encrypted, uaPrivate);
+            return decryptInternal(userAgentMessageEncryptionKeyInfo, encrypted, uaPrivate);
         } catch (NoSuchAlgorithmException
             | InvalidKeyException
             | InvalidAlgorithmParameterException
@@ -85,11 +86,11 @@ class Aes128GcmMessageEncryption implements MessageEncryption {
     }
 
     private EncryptedPushMessage encryptInternal(
-        UserAgentMessageEncryptionKeys userAgentMessageEncryptionKeys, PushMessage payload)
+        UserAgentMessageEncryptionKeyInfo userAgentMessageEncryptionKeyInfo, PushMessage payload)
         throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, InvalidKeyException,
         IllegalBlockSizeException, NoSuchPaddingException, BadPaddingException {
 
-        ECPublicKey uaPublic = userAgentMessageEncryptionKeys.getPublicKey();
+        ECPublicKey uaPublic = userAgentMessageEncryptionKeyInfo.getPublicKey();
 
         KeyPair asKeyPair = generateAsKeyPair();
         PrivateKey asPrivate = asKeyPair.getPrivate();
@@ -104,8 +105,8 @@ class Aes128GcmMessageEncryption implements MessageEncryption {
         CekAndNonce cekAndNonce = calcCekAndNonce(
             salt,
             ecdhSecret,
-            userAgentMessageEncryptionKeys.getAuthSecret(),
-            userAgentMessageEncryptionKeys.getUncompressedUaPublic(),
+            userAgentMessageEncryptionKeyInfo.getAuthSecret(),
+            userAgentMessageEncryptionKeyInfo.getUncompressedUaPublic(),
             asPublicUncompressed
         );
         byte[] cek = cekAndNonce.getCek();
@@ -127,9 +128,10 @@ class Aes128GcmMessageEncryption implements MessageEncryption {
         return new Aes128GcmEncryptedMessage(encryptedBytes);
     }
 
-    private byte[] decryptInternal(UserAgentMessageEncryptionKeys userAgentMessageEncryptionKeys,
-                                   Aes128GcmEncryptedMessage encrypted,
-                                   ECPrivateKey uaPrivate)
+    private byte[] decryptInternal(
+        UserAgentMessageEncryptionKeyInfo userAgentMessageEncryptionKeyInfo,
+        Aes128GcmEncryptedMessage encrypted,
+        ECPrivateKey uaPrivate)
         throws NoSuchAlgorithmException, InvalidKeyException, InvalidAlgorithmParameterException,
         NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
 
@@ -146,8 +148,8 @@ class Aes128GcmMessageEncryption implements MessageEncryption {
         CekAndNonce cekAndNonce = calcCekAndNonce(
             salt,
             ecdhSecret,
-            userAgentMessageEncryptionKeys.getAuthSecret(),
-            userAgentMessageEncryptionKeys.getUncompressedUaPublic(),
+            userAgentMessageEncryptionKeyInfo.getAuthSecret(),
+            userAgentMessageEncryptionKeyInfo.getUncompressedUaPublic(),
             uncompressedAsPublicKeyBytes
         );
 

@@ -40,7 +40,7 @@ public class MessageEncryptionBenchmark {
     @State(Scope.Benchmark)
     public static class PlanForEncryptionOnly {
 
-        UserAgentMessageEncryptionKeys uaKeys;
+        UserAgentMessageEncryptionKeyInfo uaKeyInfo;
         PushMessage pushMessage;
         MessageEncryption messageEncryption;
 
@@ -53,7 +53,7 @@ public class MessageEncryptionBenchmark {
             String auth = generateAuthSecretString();
             String payload = "Hello World. This is a payload for testing.";
 
-            this.uaKeys = UserAgentMessageEncryptionKeys.of(p256dh, auth);
+            this.uaKeyInfo = UserAgentMessageEncryptionKeyInfo.of(p256dh, auth);
             this.pushMessage = PushMessage.ofUTF8(payload);
             this.messageEncryption = MessageEncryptions.of();
         }
@@ -86,7 +86,7 @@ public class MessageEncryptionBenchmark {
     @BenchmarkMode(Mode.AverageTime)
     public void onlyEncryption(Blackhole h, PlanForEncryptionOnly plan) {
         h.consume(plan.messageEncryption.encrypt(
-            plan.uaKeys, plan.pushMessage
+            plan.uaKeyInfo, plan.pushMessage
         ));
     }
 
@@ -98,12 +98,12 @@ public class MessageEncryptionBenchmark {
     @BenchmarkMode(Mode.AverageTime)
     public void encryptionProcess(Blackhole h, PlanForEncryptionProcess plan) {
 
-        UserAgentMessageEncryptionKeys userAgentMessageEncryptionKeys =
-            UserAgentMessageEncryptionKeys.of(plan.p256dh, plan.auth);
+        UserAgentMessageEncryptionKeyInfo userAgentMessageEncryptionKeyInfo =
+            UserAgentMessageEncryptionKeyInfo.of(plan.p256dh, plan.auth);
         MessageEncryption messageEncryption = MessageEncryptions.of();
 
         EncryptedPushMessage encrypted = messageEncryption.encrypt(
-            userAgentMessageEncryptionKeys,
+            userAgentMessageEncryptionKeyInfo,
             PushMessage.ofUTF8(plan.payload)
         );
 

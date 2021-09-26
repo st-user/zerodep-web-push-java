@@ -41,7 +41,7 @@ import java.util.Objects;
  * </p>
  *
  * @author Tomoki Sato
- * @see UserAgentMessageEncryptionKeys
+ * @see UserAgentMessageEncryptionKeyInfo
  */
 public class PushSubscription {
 
