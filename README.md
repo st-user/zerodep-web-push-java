@@ -31,7 +31,7 @@ JDK 8+
 
 ## Third-party library
 
-In order to implement the entire Web Push function in this library, at least the following two types of functions must be provided from outside this library.
+In order to implement the entire Web Push function with this library, at least the following two types of functions must be provided from outside this library.
 Below are some examples of third-party libraries.
 
 (Off course, it is possible to use the one you make yourself).
