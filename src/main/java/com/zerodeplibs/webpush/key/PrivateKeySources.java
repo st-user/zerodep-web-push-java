@@ -33,8 +33,8 @@ import java.util.Base64;
  * PrivateKeySource derSource = PrivateKeySources.ofDerFile(derPath);
  *
  * byte[] pemBytes = Files.readAllBytes(pemPath);
- * String pemString = new String(pemBytes, StandardCharsets.UTF_8);
- * PrivateKeySource pemSource2 = PrivateKeySources.ofPEMString(pemString);
+ * String pemText = new String(pemBytes, StandardCharsets.UTF_8);
+ * PrivateKeySource pemSource2 = PrivateKeySources.ofPEMText(pemText);
  *
  * byte[] derBytes = Files.readAllBytes(derPath);
  * PrivateKeySource derSource2 = PrivateKeySources.ofPKCS8Bytes(derBytes);

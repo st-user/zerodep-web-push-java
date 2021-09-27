@@ -1,3 +1,4 @@
 target/
 .idea/
 zerodep-web-push-java.iml
+.DS_Store

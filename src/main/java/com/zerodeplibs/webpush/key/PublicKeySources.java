@@ -40,8 +40,8 @@ import java.util.function.Consumer;
  * PublicKeySource derSource = PublicKeySources.ofDerFile(derPath);
  *
  * byte[] pemBytes = Files.readAllBytes(pemPath);
- * String pemString = new String(pemBytes, StandardCharsets.UTF_8);
- * PublicKeySource pemSource2 = PublicKeySources.ofPEMString(pemString);
+ * String pemText = new String(pemBytes, StandardCharsets.UTF_8);
+ * PublicKeySource pemSource2 = PublicKeySources.ofPEMText(pemText);
  *
  * byte[] derBytes = Files.readAllBytes(derPath);
  * PublicKeySource derSource2 = PublicKeySources.ofX509Bytes(derBytes);
