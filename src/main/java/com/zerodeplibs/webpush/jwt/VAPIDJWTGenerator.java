@@ -9,7 +9,7 @@ package com.zerodeplibs.webpush.jwt;
  * You can use arbitrary 3rd party libraries to implement this interface.
  * For example, if you want to use <a href="https://github.com/auth0/java-jwt">Auth0 Java JWT library</a>,
  * The implementation will be something like below.
- *
+ * </p>
  * <pre class="code">
  *     class MyAuth0VAPIDJWTGenerator implements VAPIDJWTGenerator {
  *
@@ -28,7 +28,6 @@ package com.zerodeplibs.webpush.jwt;
  *         }
  *     }
  * </pre>
- * </p>
  *
  * @author Tomoki Sato
  */

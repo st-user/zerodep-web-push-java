@@ -8,11 +8,11 @@ import java.util.concurrent.TimeUnit;
  *
  * <p>
  * <b>Example:</b>
+ * </p>
  * <pre class="code">
  * // Suggests that the push message is retained for 2 days.
  * myHeader.addHeader("TTL", TTL.days(2));
  * </pre>
- * </p>
  *
  * @author Tomoki Sato
  */

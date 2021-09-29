@@ -23,6 +23,7 @@ public class PEMParsers {
      *
      * <p>
      * <b>Examples:</b>
+     * </p>
      * <pre>
      *  // for '-----BEGIN PRIVATE KEY-----'
      *  // and '-----END PRIVATE KEY-----'.
@@ -32,7 +33,6 @@ public class PEMParsers {
      *  // and '-----END PUBLIC KEY-----'.
      *  PEMParser.ofStandard("PUBLIC KEY");
      * </pre>
-     * </p>
      *
      * <p>
      * The returned PEMParser is intended to parse texts

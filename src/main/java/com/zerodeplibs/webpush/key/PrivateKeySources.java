@@ -15,16 +15,23 @@ import java.util.Base64;
  * <b>Examples:</b><br>
  * The following is an example of commands that uses OpenSSL
  * to generate a file that can be handled with a PrivateKeySource.
+ * </p>
  *
  * <pre class="code">
  * openssl ecparam -genkey -name prime256v1 -noout -out my-private.pem
  * openssl pkcs8 -in private.pem -topk8 -nocrypt -out my-private_pkcs8.pem
  * </pre>
+ *
+ * <p>
  * If you want to generate in DER format, you can also do as follows.
+ * </p>
  * <pre class="code">
  * openssl pkcs8 -in private.pem -topk8 -nocrypt -outform der -out my-private_pkcs8.der
  * </pre>
+ *
+ * <p>
  * The examples of using these files to create PrivateKeySource is as follows.
+ * </p>
  * <pre class="code">
  * Path pemPath = new File("my-private_pkcs8.pem").toPath();
  * Path derPath = new FIle("my-private_pkcs8.der").toPath();
@@ -40,7 +47,6 @@ import java.util.Base64;
  * PrivateKeySource derSource2 = PrivateKeySources.ofPKCS8Bytes(derBytes);
  *
  * </pre>
- * </p>
  *
  * @author Tomoki Sato
  * @see PrivateKeySource

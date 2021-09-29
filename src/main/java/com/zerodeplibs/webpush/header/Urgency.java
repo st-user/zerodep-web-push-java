@@ -5,11 +5,11 @@ package com.zerodeplibs.webpush.header;
  *
  * <p>
  * <b>Example:</b>
+ * </p>
  * <pre class="code">
  * // Set the urgency header field
  * myHeader.addHeader("Urgency", Urgency.veryLow());
  * </pre>
- * </p>
  *
  * @author Tomoki Sato
  */

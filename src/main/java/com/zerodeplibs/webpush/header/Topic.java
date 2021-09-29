@@ -9,13 +9,13 @@ import java.util.regex.Pattern;
  *
  * <p>
  * <b>Example:</b>
+ * </p>
  * <pre class="code">
  * // Makes sure the "Topic" header field doesn't contain illegal characters
  * // and the length doesn't exceed the limit.
  * // (no more than 32 characters from the URL and a filename-safe Base 64 alphabet).
  * myHeader.addHeader("Topic", Topic.ensure("SomeTopic"));
  * </pre>
- * </p>
  *
  * @author Tomoki Sato
  */

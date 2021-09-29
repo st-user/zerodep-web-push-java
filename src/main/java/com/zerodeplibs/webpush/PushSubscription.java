@@ -14,6 +14,7 @@ import java.util.Objects;
  * The following is an implementation example of javascript on the browser side
  * to get the JSON object of push subscription.
  *
+ * </p>
  * <pre class="code">
  *
  *     // It is assumed that you have registered a service worker
@@ -33,7 +34,6 @@ import java.util.Objects;
  *     });
  *
  * </pre>
- * </p>
  *
  * <p>
  * Since setters corresponding to the field names of push subscription are defined in this class,

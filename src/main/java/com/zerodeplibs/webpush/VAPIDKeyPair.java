@@ -16,6 +16,7 @@ import com.zerodeplibs.webpush.key.PublicKeySource;
  *
  * <p>
  * <b>Example:</b>
+ * </p>
  * <pre class="code">
  * VAPIDKeyPair vapidKeyPair = VAPIDKeyPairs.of(
  *      PrivateKeySources.ofPEMFile(new File(privateKeyFilePath).toPath()),
@@ -30,7 +31,6 @@ import com.zerodeplibs.webpush.key.PublicKeySource;
  * myHeader.addHeader("Authorization", headerValue);
  *
  * </pre>
- * </p>
  *
  * <p>
  * As explained in RFC8292, the key pair MUST be usable

@@ -22,16 +22,22 @@ import java.util.function.Consumer;
  * <b>Examples:</b><br>
  * The following is an example of commands that uses OpenSSL
  * to generate a file that can be handled with a PublicKeySource.
- *
+ * </p>
  * <pre class="code">
  * openssl ecparam -genkey -name prime256v1 -noout -out my-private.pem
  * openssl ec -in my-private.pem -pubout -conv_form uncompressed -out my-pub.pem
  * </pre>
+ *
+ * <p>
  * If you want to generate in DER format, you can also do as follows.
+ * </p>
  * <pre class="code">
  * openssl ec -in my-private.pem -pubout -conv_form uncompressed -outform der -out my-pub.der
  * </pre>
+ *
+ * <p>
  * The examples of using these files to create PublicKeySource is as follows.
+ * </p>
  * <pre class="code">
  * Path pemPath = new File("my-pub.pem").toPath();
  * Path derPath = new FIle("my-pub.der").toPath();
@@ -47,7 +53,6 @@ import java.util.function.Consumer;
  * PublicKeySource derSource2 = PublicKeySources.ofX509Bytes(derBytes);
  *
  * </pre>
- * </p>
  *
  * @author Tomoki Sato
  * @see PublicKeySource

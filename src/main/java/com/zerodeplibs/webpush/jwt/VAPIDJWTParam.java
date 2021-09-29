@@ -18,6 +18,7 @@ import java.util.Optional;
  *
  * <p>
  * <b>Example:</b>
+ * </p>
  * <pre class="code">
  *
  * VAPIDJWTParam param = VAPIDJWTParam.getBuilder()
@@ -27,7 +28,6 @@ import java.util.Optional;
  *      .build();
  *
  * </pre>
- * </p>
  *
  * @author Tomoki Sato
  * @see VAPIDJWTGenerator
@@ -62,7 +62,7 @@ public class VAPIDJWTParam {
      *
      * <p>
      * <b>Example:</b>
-     *
+     * </P>
      * <pre class="code">
      *
      * ArrayList&lt;String&gt; hogeList = new ArrayList&lt;&gt;();
@@ -72,13 +72,12 @@ public class VAPIDJWTParam {
      *      .additionalClaim("hoge", hogeList);
      *      .build();
      *
-     *  param.getAdditionalClaim("fuga", Object.class); // -> Optional.empty();
-     *  param.getAdditionalClaim("hoge", String.class); // -> Optional.empty();
-     *  param.getAdditionalClaim("hoge", ArrayList.class).get(); // -> hogeList;
-     *  param.getAdditionalClaim("hoge", List.class).get(); // -> hogeList;
+     *  param.getAdditionalClaim("fuga", Object.class); // -&gt; Optional.empty();
+     *  param.getAdditionalClaim("hoge", String.class); // -&gt; Optional.empty();
+     *  param.getAdditionalClaim("hoge", ArrayList.class).get(); // -&gt; hogeList;
+     *  param.getAdditionalClaim("hoge", List.class).get(); // -&gt; hogeList;
      *
      * </pre>
-     * </P>
      *
      * @param name       the name of the additional claim.
      * @param returnType the type of the additional claim.
@@ -122,11 +121,11 @@ public class VAPIDJWTParam {
          * Specifies a push resource URL from which the origin is extracted.
          * <p>
          * Typically,
+         * </p>
          * <ul>
          *  <li>the resource URL is the value obtained from <a href="https://www.w3.org/TR/push-api/#pushsubscription-interface">an endpoint field of a push subscription</a>.</li>
          *  <li>the extracted origin is used as an "aud"(Audience) claim.</li>
          * </ul>
-         * </p>
          *
          * @param resourceURLString the string representation of a push resource URL.
          * @return this object.
@@ -150,11 +149,11 @@ public class VAPIDJWTParam {
          * Specifies a push resource URL from which the origin is extracted.
          * <p>
          * Typically,
+         * </p>
          * <ul>
          *  <li>the resource URL is the value obtained from <a href="https://www.w3.org/TR/push-api/#pushsubscription-interface">an endpoint field of a push subscription</a>.</li>
          *  <li>the extracted origin is used as an "aud"(Audience) claim.</li>
          * </ul>
-         * </p>
          *
          * @param resourceURL a push resource URL.
          * @return this object.
