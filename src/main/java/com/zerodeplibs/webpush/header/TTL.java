@@ -16,7 +16,10 @@ import java.util.concurrent.TimeUnit;
  *
  * @author Tomoki Sato
  */
-public abstract class TTL {
+public class TTL {
+
+    private TTL() {
+    }
 
     /**
      * Creates a value for the TTL header field by specifying the number of days.

@@ -12,6 +12,9 @@ import java.nio.file.Path;
  */
 class FileUtil {
 
+    private FileUtil() {
+    }
+
     static byte[] readAllBytes(Path path) throws IOException {
         return Files.readAllBytes(path);
     }

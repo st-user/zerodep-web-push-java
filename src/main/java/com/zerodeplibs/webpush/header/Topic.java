@@ -19,7 +19,10 @@ import java.util.regex.Pattern;
  *
  * @author Tomoki Sato
  */
-public abstract class Topic {
+public class Topic {
+
+    private Topic() {
+    }
 
     private static final Pattern BASE64_URL_PATTERN =
         Pattern.compile("^[A-Za-z0-9\\-_]{1,32}$");

@@ -13,6 +13,9 @@ package com.zerodeplibs.webpush.internal;
  */
 public class WebPushPreConditions {
 
+    private WebPushPreConditions() {
+    }
+
     /**
      * Checks whether the given object is null or not.
      *

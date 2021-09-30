@@ -15,6 +15,8 @@ import java.security.NoSuchAlgorithmException;
  */
 public class MessageEncryptions {
 
+    private MessageEncryptions() {
+    }
 
     /**
      * Creates a new MessageEncryption.

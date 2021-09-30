@@ -15,6 +15,9 @@ import java.util.Base64;
  */
 class ECPublicKeyUtil {
 
+    private ECPublicKeyUtil() {
+    }
+
     private static final byte[] P256_HEAD =
         Base64.getDecoder().decode("MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgA");
 

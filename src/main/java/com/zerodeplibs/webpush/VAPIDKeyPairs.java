@@ -22,6 +22,9 @@ import java.util.function.BiFunction;
  */
 public class VAPIDKeyPairs {
 
+    private VAPIDKeyPairs() {
+    }
+
     /**
      * Creates a new VAPIDKeyPair with the private key source,
      * the public key source and the factory for {@link VAPIDJWTGenerator}.

@@ -13,7 +13,10 @@ package com.zerodeplibs.webpush.header;
  *
  * @author Tomoki Sato
  */
-public abstract class Urgency {
+public class Urgency {
+
+    private Urgency() {
+    }
 
     /**
      * "very-low" urgency.
