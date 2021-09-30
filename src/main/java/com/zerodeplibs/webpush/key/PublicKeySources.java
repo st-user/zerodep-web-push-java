@@ -54,7 +54,7 @@ import java.util.Base64;
  * </pre>
  *
  * <p>
- * <b>Thread Safety:</b><br/>
+ * <b>Thread Safety:</b><br>
  * The factory methods themselves are thread-safe,
  * but the returned objects are <b>NOT</b> thread-safe.
  * </p>

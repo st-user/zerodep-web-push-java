@@ -9,7 +9,7 @@ package com.zerodeplibs.webpush.key;
  * </p>
  *
  * <p>
- * <b>Thread Safety:</b><br/>
+ * <b>Thread Safety:</b><br>
  * Depends on the implementation. See {@link PEMParsers}.
  * </p>
  *
