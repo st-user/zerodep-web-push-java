@@ -37,6 +37,11 @@ import com.zerodeplibs.webpush.key.PublicKeySource;
  * with the Elliptic Curve Digital Signature Algorithm (ECDSA) over the P-256 curve.
  * </p>
  *
+ * <p>
+ * <b>Thread Safety:</b><br/>
+ * Depends on the implementation. See {@link VAPIDKeyPairs}.
+ * </p>
+ *
  * @author Tomoki Sato
  * @see PrivateKeySource
  * @see PublicKeySource

@@ -7,7 +7,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.security.interfaces.ECPublicKey;
 import java.util.Base64;
-import java.util.function.Consumer;
 
 /**
  * Static factory methods for instantiating an implementation class of {@link PublicKeySource}.
@@ -54,9 +53,14 @@ import java.util.function.Consumer;
  *
  * </pre>
  *
+ * <p>
+ * <b>Thread Safety:</b><br/>
+ * The factory methods themselves are thread-safe,
+ * but the returned objects are <b>NOT</b> thread-safe.
+ * </p>
+ *
  * @author Tomoki Sato
  * @see PublicKeySource
- * @see PublicKeySourceFactory
  * @see InvalidECPublicKeyException
  * @see PrivateKeySource
  * @see PrivateKeySources
@@ -76,7 +80,8 @@ public class PublicKeySources {
      *                                             or the length isn't 65 bytes.
      */
     public static PublicKeySource ofUncompressedBytes(byte[] uncompressedBytes) {
-        return withValidation().fromUncompressedBytes(uncompressedBytes);
+        return BytesPublicKeySource.ofUncompressed(uncompressedBytes,
+            ECPublicKeyUtil::validateECPublicKey);
     }
 
     /**
@@ -88,7 +93,7 @@ public class PublicKeySources {
      * @see java.security.spec.X509EncodedKeySpec
      */
     public static PublicKeySource ofX509Bytes(byte[] x509Bytes) {
-        return withValidation().fromX509Bytes(x509Bytes);
+        return BytesPublicKeySource.ofX509(x509Bytes, ECPublicKeyUtil::validateECPublicKey);
     }
 
     /**
@@ -217,7 +222,7 @@ public class PublicKeySources {
      * @return a new PublicKeySource.
      */
     public static PublicKeySource ofECPublicKey(ECPublicKey publicKey) {
-        return withValidation().fromECPublicKey(publicKey);
+        return new KeyObjectPublicKeySource(publicKey, ECPublicKeyUtil::validateECPublicKey);
     }
 
     /**
@@ -239,7 +244,6 @@ public class PublicKeySources {
         private final Path pemFilePath;
         private Charset charset = StandardCharsets.UTF_8;
         private PEMParser parser = PEMParsers.ofStandard(PEMParser.SUBJECT_PUBLIC_KEY_INFO_LABEL);
-        private PublicKeySourceFactory factory = withValidation();
 
         PEMFileSourceBuilder(Path pemFilePath) {
             this.pemFilePath = pemFilePath;
@@ -270,18 +274,6 @@ public class PublicKeySources {
         }
 
         /**
-         * Specifies the factory to use when creating the PublicKeySource.
-         *
-         * @param factory the factory to use.
-         * @return this object.
-         */
-        public PEMFileSourceBuilder factory(PublicKeySourceFactory factory) {
-            WebPushPreConditions.checkNotNull(factory, "factory");
-            this.factory = factory;
-            return this;
-        }
-
-        /**
          * Creates a new PublicKeySource.
          *
          * @return a new PublicKeySource.
@@ -291,64 +283,10 @@ public class PublicKeySources {
          */
         public PublicKeySource build() throws IOException {
             byte[] parsed = this.parser.parse(FileUtil.readAsString(pemFilePath, charset));
-            return this.factory.fromX509Bytes(parsed);
+            return ofX509Bytes(parsed);
         }
 
     }
 
-    /**
-     * Returns an instance of the factory that performs public key validation.
-     *
-     * @return the factory that performs public key validation.
-     * @see PublicKeySources
-     */
-    public static PublicKeySourceFactory withValidation() {
-        return DEFAULT_INSTANCE;
-    }
-
-    /**
-     * Returns an instance of the factory that does not perform public key validation.
-     *
-     * <br>
-     * <p>
-     * <b>WARNING</b>:
-     * It is not recommended that you use this factory
-     * unless you have a clear reason for not requiring public key validation.
-     * </P>
-     *
-     * @return the factory that does not perform public key validation.
-     */
-    public static PublicKeySourceFactory noValidation() {
-        return NO_VALIDATION_INSTANCE;
-    }
-
-    private static final PublicKeySourceFactory DEFAULT_INSTANCE =
-        new FactoryImpl(ECPublicKeyUtil::validateECPublicKey);
-    private static final PublicKeySourceFactory NO_VALIDATION_INSTANCE = new FactoryImpl(pub -> {
-    });
-
-    private static class FactoryImpl implements PublicKeySourceFactory {
-
-        private final Consumer<ECPublicKey> validator;
-
-        FactoryImpl(Consumer<ECPublicKey> validator) {
-            this.validator = validator;
-        }
-
-        @Override
-        public PublicKeySource fromUncompressedBytes(byte[] uncompressedBytes) {
-            return BytesPublicKeySource.ofUncompressed(uncompressedBytes, this.validator);
-        }
-
-        @Override
-        public PublicKeySource fromX509Bytes(byte[] x509Bytes) {
-            return BytesPublicKeySource.ofX509(x509Bytes, this.validator);
-        }
-
-        @Override
-        public PublicKeySource fromECPublicKey(ECPublicKey publicKey) {
-            return new KeyObjectPublicKeySource(publicKey, this.validator);
-        }
-    }
 
 }

@@ -45,6 +45,9 @@ public class UserAgentMessageEncryptionKeyInfo {
      *                                             from the give p256dh is invalid.
      */
     public static UserAgentMessageEncryptionKeyInfo from(PushSubscription.Keys subscriptionKeys) {
+
+        WebPushPreConditions.checkNotNull(subscriptionKeys, "subscriptionKeys");
+
         return of(subscriptionKeys.getP256dh(), subscriptionKeys.getAuth());
     }
 
@@ -69,6 +72,10 @@ public class UserAgentMessageEncryptionKeyInfo {
      */
     public static UserAgentMessageEncryptionKeyInfo of(String p256dh,
                                                        String auth) {
+
+        WebPushPreConditions.checkNotNull(p256dh, "p256dh");
+        WebPushPreConditions.checkNotNull(auth, "auth");
+
         return of(base64urlToBytes(p256dh), base64urlToBytes(auth));
     }
 
@@ -108,33 +115,15 @@ public class UserAgentMessageEncryptionKeyInfo {
         return Base64.getUrlDecoder().decode(text);
     }
 
-    /**
-     * Gets the ECPublicKey.
-     * The public key is typically extracted from the p256dh field.
-     *
-     * @return the ECPublicKey.
-     */
-    public ECPublicKey getPublicKey() {
+    ECPublicKey getPublicKey() {
         return this.uaPublic;
     }
 
-    /**
-     * Gets the public key encoded in the uncompressed form[X9.62].
-     * The public key is typically extracted from the p256dh field.
-     *
-     * @return the public key encoded in the uncompressed form.
-     */
-    public byte[] getUncompressedUaPublic() {
+    byte[] getUncompressedUaPublic() {
         return Arrays.copyOf(uncompressedUaPublic, uncompressedUaPublic.length);
     }
 
-    /**
-     * Gets the authSecret.
-     * The authSecret is typically extracted from the auth field.
-     *
-     * @return the authSecret.
-     */
-    public byte[] getAuthSecret() {
+    byte[] getAuthSecret() {
         return Arrays.copyOf(authSecret, authSecret.length);
     }
 }

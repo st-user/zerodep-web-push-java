@@ -5,6 +5,12 @@ import java.security.NoSuchAlgorithmException;
 /**
  * Static utility methods for instantiating an implementation class of {@link MessageEncryption}.
  *
+ * <p>
+ * <b>Thread Safety:</b><br/>
+ * The factory methods themselves are thread-safe,
+ * but the returned objects are <b>NOT</b> thread-safe.
+ * </p>
+ *
  * @author Tomoki Sato
  */
 public class MessageEncryptions {

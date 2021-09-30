@@ -8,6 +8,11 @@ package com.zerodeplibs.webpush.key;
  * is obtained by the factory method of {@link PEMParsers}.
  * </p>
  *
+ * <p>
+ * <b>Thread Safety:</b><br/>
+ * Depends on the implementation. See {@link PEMParsers}.
+ * </p>
+ *
  * @author Tomoki Sato
  * @see PEMParsers
  */

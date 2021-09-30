@@ -1,6 +1,5 @@
 package com.zerodeplibs.webpush.jwt;
 
-import com.zerodeplibs.webpush.exception.MalformedURLRuntimeException;
 import com.zerodeplibs.webpush.internal.WebPushPreConditions;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -86,9 +85,14 @@ public class VAPIDJWTParam {
      * @see Builder#additionalClaim(String, Object)
      */
     public <T> Optional<T> getAdditionalClaim(String name, Class<T> returnType) {
+        WebPushPreConditions.checkNotNull(name, "name");
+        WebPushPreConditions.checkNotNull(returnType, "returnType");
+
         Object v = this.additionalClaims.get(name);
         if (returnType.isInstance(v)) {
-            return Optional.of((T) v);
+            @SuppressWarnings("unchecked")
+            T ret = (T) v;
+            return Optional.of(ret);
         }
         return Optional.empty();
     }

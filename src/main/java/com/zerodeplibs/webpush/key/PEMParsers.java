@@ -5,6 +5,12 @@ import com.zerodeplibs.webpush.internal.WebPushPreConditions;
 /**
  * Static utility methods for instantiating an implementation class of {@link PEMParser}.
  *
+ * <p>
+ * <b>Thread Safety:</b><br/>
+ * The factory methods themselves are thread-safe.
+ * The returned objects are also thread-safe because they are immutable.
+ * </p>
+ *
  * @author Tomoki Sato
  */
 public class PEMParsers {

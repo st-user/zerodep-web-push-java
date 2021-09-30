@@ -17,7 +17,6 @@ import java.security.interfaces.ECPublicKey;
  * @author Tomoki Sato
  * @see PrivateKeySource
  * @see PublicKeySources
- * @see PublicKeySourceFactory
  */
 public interface PublicKeySource {
 

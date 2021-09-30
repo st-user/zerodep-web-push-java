@@ -1,5 +1,6 @@
 package com.zerodeplibs.webpush;
 
+import com.zerodeplibs.webpush.internal.WebPushPreConditions;
 import com.zerodeplibs.webpush.jwt.VAPIDJWTGenerator;
 import com.zerodeplibs.webpush.jwt.VAPIDJWTParam;
 import com.zerodeplibs.webpush.key.PrivateKeySource;
@@ -27,6 +28,10 @@ class StandardVAPIDKeyPair implements VAPIDKeyPair {
                          BiFunction<ECPrivateKey, ECPublicKey, VAPIDJWTGenerator>
                              jwtGeneratorFactory) {
 
+        WebPushPreConditions.checkNotNull(privateKeySource, "privateKeySource");
+        WebPushPreConditions.checkNotNull(publicKeySource, "publicKeySource");
+        WebPushPreConditions.checkNotNull(jwtGeneratorFactory, "the factory for VAPIDJWTGenerator");
+
         ECPrivateKey privateKey = privateKeySource.extract();
         ECPublicKey publicKey = publicKeySource.extract();
 
@@ -45,6 +50,9 @@ class StandardVAPIDKeyPair implements VAPIDKeyPair {
 
     @Override
     public String generateAuthorizationHeaderValue(VAPIDJWTParam jwtParam) {
+
+        WebPushPreConditions.checkNotNull(jwtParam, "jwtParam");
+
         return String.format("vapid t=%s, k=%s", this.jwtGenerator.generate(jwtParam),
             this.uncompressedPublicKeyBase64);
     }

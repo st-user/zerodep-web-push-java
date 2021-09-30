@@ -25,7 +25,7 @@ public abstract class TTL {
      * @return the value converted from days to seconds.
      * @throws IllegalArgumentException if the number of days is negative.
      */
-    public static Long days(long days) {
+    public static long days(long days) {
         return seconds(TimeUnit.DAYS.toSeconds(days));
     }
 
@@ -36,7 +36,7 @@ public abstract class TTL {
      * @return the value converted from hours to seconds.
      * @throws IllegalArgumentException if the number of seconds is negative.
      */
-    public static Long hours(long hours) {
+    public static long hours(long hours) {
         return seconds(TimeUnit.HOURS.toSeconds(hours));
     }
 
@@ -48,7 +48,7 @@ public abstract class TTL {
      * @return the value converted from minutes to seconds.
      * @throws IllegalArgumentException if the number of minutes is negative.
      */
-    public static Long minutes(long minutes) {
+    public static long minutes(long minutes) {
         return seconds(TimeUnit.MINUTES.toSeconds(minutes));
     }
 
@@ -59,7 +59,7 @@ public abstract class TTL {
      * @return the given seconds.
      * @throws IllegalArgumentException if the number of seconds is negative.
      */
-    public static Long seconds(long seconds) {
+    public static long seconds(long seconds) {
         WebPushPreConditions.checkArgument(seconds >= 0,
             "TTL should be a non-negative number.");
         return seconds;
