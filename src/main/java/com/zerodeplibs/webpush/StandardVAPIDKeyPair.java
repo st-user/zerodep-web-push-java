@@ -30,21 +30,27 @@ class StandardVAPIDKeyPair implements VAPIDKeyPair {
 
         WebPushPreConditions.checkNotNull(privateKeySource, "privateKeySource");
         WebPushPreConditions.checkNotNull(publicKeySource, "publicKeySource");
-        WebPushPreConditions.checkNotNull(jwtGeneratorFactory, "the factory for VAPIDJWTGenerator");
+        WebPushPreConditions.checkNotNull(jwtGeneratorFactory, "jwtGeneratorFactory");
 
         ECPrivateKey privateKey = privateKeySource.extract();
+        WebPushPreConditions.checkNotNull(privateKey, "The extracted private key");
         ECPublicKey publicKey = publicKeySource.extract();
+        WebPushPreConditions.checkNotNull(publicKey, "The extracted public key");
 
-        this.uncompressedPublicKey = publicKeySource.extractUncompressedBytes();
+        this.uncompressedPublicKey = publicKeySource.extractBytesInUncompressedForm();
 
         this.uncompressedPublicKeyBase64 = Base64.getUrlEncoder().withoutPadding()
             .encodeToString(this.uncompressedPublicKey);
 
-        this.jwtGenerator = jwtGeneratorFactory.apply(privateKey, publicKey);
+        VAPIDJWTGenerator jwtGenerator = jwtGeneratorFactory.apply(privateKey, publicKey);
+        WebPushPreConditions.checkNotNull(jwtGenerator,
+            "The VAPIDJWTGenerator created by the jwtGeneratorFactory");
+
+        this.jwtGenerator = jwtGenerator;
     }
 
     @Override
-    public byte[] extractUncompressedPublicKey() {
+    public byte[] extractPublicKeyInUncompressedForm() {
         return Arrays.copyOf(this.uncompressedPublicKey, this.uncompressedPublicKey.length);
     }
 

@@ -203,7 +203,7 @@ public class VAPIDJWTParam {
          *                               is called more than once.
          */
         public Builder expiresAt(Date expiresAt) {
-            WebPushPreConditions.checkNotNull(expiresAt, "resourceURL");
+            WebPushPreConditions.checkNotNull(expiresAt, "expiresAt");
             WebPushPreConditions.checkState(this._expiresAt == null,
                 MSG_EXPIRES_AT_NO_MORE_THAN_ONCE);
             this._expiresAt = expiresAt;

@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 public class TTLTests {
 
     @Test
-    public void ttlShouldSupplyAnIntegerRepresentingTimeInSeconds() {
+    public void shouldSupplyAnIntegerRepresentingTimeInSeconds() {
 
         assertThat(TTL.days(2), equalTo(2 * 24 * 60 * 60L));
         assertThat(TTL.hours(2), equalTo(2 * 60 * 60L));
@@ -18,7 +18,7 @@ public class TTLTests {
     }
 
     @Test
-    public void ttlShouldThrowExceptionWhenNegativeNumberIsPassed() {
+    public void shouldThrowExceptionWhenNegativeNumberIsPassed() {
         String expectedMessage =
             "TTL should be a non-negative number.";
 

@@ -1,8 +1,10 @@
 package com.zerodeplibs.webpush.key;
 
+import static com.zerodeplibs.webpush.TestAssertionUtil.assertNullCheck;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
@@ -27,7 +29,7 @@ public class PublicKeySourcesTests {
         "BFTM3SVd4HiPb+eWN3w+i8dTP+0LhfRK/gxJI3/ZNvH0SUdxyAZri6HDm56g5FpNFD3pJiYEUTjElrfEGIy18FE=";
 
     @Test
-    public void publicKeySourceCanExtractPublicKeyFromUncompressedBytes() {
+    public void shouldExtractPublicKeyFromUncompressedBytes() {
 
         ECPublicKey publicKey =
             PublicKeySources.ofUncompressedBytes(decodeBase64(PUBLIC_KEY_UNCOMPRESSED_BYTES_BASE64))
@@ -37,7 +39,7 @@ public class PublicKeySourcesTests {
     }
 
     @Test
-    public void publicKeySourceCanExtractPublicKeyFromX509Bytes() {
+    public void shouldExtractPublicKeyFromX509Bytes() {
 
         ECPublicKey publicKey =
             PublicKeySources.ofX509Bytes(decodeBase64(PUBLIC_KEY_X509_BYTES_BASE64))
@@ -47,7 +49,7 @@ public class PublicKeySourcesTests {
     }
 
     @Test
-    public void publicKeySourceCanExtractPublicKeyFromPEMString() {
+    public void shouldExtractPublicKeyFromPEMText() {
 
         ECPublicKey publicKey = PublicKeySources.ofPEMText(PUBLIC_KEY_PEM_STRING)
             .extract();
@@ -56,7 +58,7 @@ public class PublicKeySourcesTests {
     }
 
     @Test
-    public void publicKeySourceCanExtractPublicKeyFromUncompressedBase64String() {
+    public void shouldExtractPublicKeyFromUncompressedBase64Text() {
 
         ECPublicKey publicKey =
             PublicKeySources.ofUncompressedBase64Text(PUBLIC_KEY_UNCOMPRESSED_BYTES_BASE64)
@@ -66,7 +68,7 @@ public class PublicKeySourcesTests {
     }
 
     @Test
-    public void publicKeySourceCanExtractPublicKeyFromX509Base64String() {
+    public void shouldExtractPublicKeyFromX509Base64Text() {
 
         ECPublicKey publicKey = PublicKeySources.ofX509Base64Text(PUBLIC_KEY_X509_BYTES_BASE64)
             .extract();
@@ -75,7 +77,7 @@ public class PublicKeySourcesTests {
     }
 
     @Test
-    public void publicKeySourceCanExtractPublicKeyFromPEMFile()
+    public void shouldExtractPublicKeyFromPEMFile()
         throws URISyntaxException, IOException {
         ECPublicKey publicKey = PublicKeySources.ofPEMFile(
                 Paths.get(this.getClass().getResource(PUBLIC_KEY_PEM_FILE_NAME).toURI()))
@@ -85,7 +87,7 @@ public class PublicKeySourcesTests {
     }
 
     @Test
-    public void publicKeySourceCanExtractPublicKeyFromDERFile()
+    public void shouldExtractPublicKeyFromDERFile()
         throws URISyntaxException, IOException {
         ECPublicKey publicKey = PublicKeySources.ofDERFile(
                 Paths.get(this.getClass().getResource(PUBLIC_KEY_DER_FILE_NAME).toURI()))
@@ -95,7 +97,67 @@ public class PublicKeySourcesTests {
     }
 
 
-    private byte[] decodeBase64(String base64String) {
-        return Base64.getDecoder().decode(base64String);
+    @Test
+    public void shouldThrowExceptionWhenNullReferencesArePassed() {
+
+        assertNullCheck(() -> PublicKeySources.ofUncompressedBytes(null),
+            "uncompressedBytes");
+
+        assertNullCheck(() -> PublicKeySources.ofX509Bytes(null),
+            "x509Bytes");
+
+        assertNullCheck(() -> PublicKeySources.ofPEMText(null),
+            "pemText");
+
+        assertNullCheck(() -> PublicKeySources.ofPEMText(null, PEMParsers.ofStandard("Test")),
+            "pemText");
+
+        assertNullCheck(() -> PublicKeySources.ofPEMText("ABC", null),
+            "parser");
+
+        assertNullCheck(() -> PublicKeySources.ofUncompressedBase64Text(null),
+            "uncompressedBytesBase64Text");
+
+        assertNullCheck(() -> PublicKeySources.ofX509Base64Text(null),
+            "x509Base64Text");
+
+        assertNullCheck(() -> PublicKeySources.ofPEMFile(null),
+            "path");
+
+        assertNullCheck(() -> PublicKeySources.ofPEMFile(null, PEMParsers.ofStandard("Test")),
+            "path");
+
+        assertNullCheck(
+            () -> PublicKeySources.ofPEMFile(new File(".").toPath(), null),
+            "parser");
+
+        assertNullCheck(
+            () -> PublicKeySources.ofDERFile(null),
+            "path");
+
+        assertNullCheck(
+            () -> PublicKeySources.ofECPublicKey(null),
+            "publicKey");
+
+        assertNullCheck(
+            () -> PublicKeySources.getPEMFileSourceBuilder(null),
+            "path");
+    }
+
+    @Test
+    public void builderShouldThrowExceptionWhenNullReferencesArePassed() {
+
+        assertNullCheck(
+            () -> PublicKeySources.getPEMFileSourceBuilder(new File(".").toPath()).charset(null),
+            "charset");
+
+        assertNullCheck(
+            () -> PublicKeySources.getPEMFileSourceBuilder(new File(".").toPath()).parser(null),
+            "parser");
+
+    }
+
+    private byte[] decodeBase64(String Base64Text) {
+        return Base64.getDecoder().decode(Base64Text);
     }
 }

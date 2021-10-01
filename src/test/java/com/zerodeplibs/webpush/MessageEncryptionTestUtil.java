@@ -22,7 +22,7 @@ class MessageEncryptionTestUtil {
 
     static String generateP256dhString(ECPublicKey uaPublic) {
         byte[] uncompressedBytes =
-            PublicKeySources.ofECPublicKey(uaPublic).extractUncompressedBytes();
+            PublicKeySources.ofECPublicKey(uaPublic).extractBytesInUncompressedForm();
         return toBase64Url(uncompressedBytes);
     }
 

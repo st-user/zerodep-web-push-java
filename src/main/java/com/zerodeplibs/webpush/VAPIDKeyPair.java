@@ -63,7 +63,7 @@ public interface VAPIDKeyPair {
      * @return the byte array of the public key in uncompressed form.
      * @see PushSubscription
      */
-    byte[] extractUncompressedPublicKey();
+    byte[] extractPublicKeyInUncompressedForm();
 
     /**
      * Generates the value to set in the Authorization header field

@@ -112,6 +112,7 @@ public class PrivateKeySources {
      * @see java.security.spec.PKCS8EncodedKeySpec
      */
     public static PrivateKeySource ofPEMText(String pemText, PEMParser parser) {
+        WebPushPreConditions.checkNotNull(parser, "parser");
         return ofPKCS8Bytes(parser.parse(pemText));
     }
 
@@ -128,6 +129,7 @@ public class PrivateKeySources {
     // BEGIN CHECK STYLE OFF
     public static PrivateKeySource ofPKCS8Base64Text(
         String pkcs8Base64Text) { // END CHECK STYLE OFF
+        WebPushPreConditions.checkNotNull(pkcs8Base64Text, "pkcs8Base64Text");
         return ofPKCS8Bytes(Base64.getDecoder().decode(pkcs8Base64Text));
     }
 
@@ -194,11 +196,11 @@ public class PrivateKeySources {
     /**
      * Gets a new PEMFileSourceBuilder.
      *
-     * @param pemFilePath the path to the PEM formatted file.
+     * @param path the path to the PEM formatted file.
      * @return a new PEMFileSourceBuilder.
      */
-    public static PEMFileSourceBuilder getPEMFileSourceBuilder(Path pemFilePath) {
-        return new PEMFileSourceBuilder(pemFilePath);
+    public static PEMFileSourceBuilder getPEMFileSourceBuilder(Path path) {
+        return new PEMFileSourceBuilder(path);
     }
 
     /**
@@ -207,12 +209,13 @@ public class PrivateKeySources {
      * @author Tomoki Sato
      */
     public static class PEMFileSourceBuilder {
-        private final Path pemFilePath;
+        private final Path path;
         private Charset charset = StandardCharsets.UTF_8;
         private PEMParser parser = PEMParsers.ofStandard(PEMParser.PKCS8_PRIVATE_KEY_LABEL);
 
-        PEMFileSourceBuilder(Path pemFilePath) {
-            this.pemFilePath = pemFilePath;
+        PEMFileSourceBuilder(Path path) {
+            WebPushPreConditions.checkNotNull(path, "path");
+            this.path = path;
         }
 
         /**
@@ -249,7 +252,7 @@ public class PrivateKeySources {
          */
         public PrivateKeySource build() throws IOException {
             return PrivateKeySources.ofPEMText(
-                FileUtil.readAsString(pemFilePath, charset),
+                FileUtil.readAsString(path, charset),
                 parser
             );
         }

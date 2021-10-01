@@ -1,5 +1,6 @@
 package com.zerodeplibs.webpush.key;
 
+import static com.zerodeplibs.webpush.TestAssertionUtil.assertNullCheck;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -14,7 +15,7 @@ import org.junit.jupiter.api.Test;
 public class PEMParserTests {
 
     @Test
-    public void parseShouldExtractBytesFromPEMEncodedText() {
+    public void shouldExtractBytesFromPEMEncodedText() {
 
         String rawText = "Hello World!!";
         String base64Text = toBase64WithoutPadding(rawText);
@@ -36,7 +37,7 @@ public class PEMParserTests {
     }
 
     @Test
-    public void parseShouldExtractBytesFromPEMEncodedTextContainsOutsideTheEbs() {
+    public void shouldExtractBytesFromPEMEncodedTextContainsOutsideTheEbs() {
 
         String rawText = "Hello World!!";
         String base64Text = toBase64(rawText);
@@ -310,6 +311,9 @@ public class PEMParserTests {
         assertParserConstruction(hyphen);
         assertParserConstruction(delete);
 
+        // null
+        assertNullCheck(() -> PEMParsers.ofStandard(null), "label");
+
         // valid formats.
         PEMParsers.ofStandard("");
         PEMParsers.ofStandard("A PRIVATE KEY X");
@@ -325,6 +329,12 @@ public class PEMParserTests {
         assertParserConstruction("PRIVATE- KEY");
         assertParserConstruction("PRIVATE -KEY");
     }
+
+    @Test
+    public void shouldThrowExceptionWhenNullReferencesArePassed() {
+        assertNullCheck(() -> PEMParsers.ofStandard("Test").parse(null), "pemText");
+    }
+
 
     private void assertParserConstruction(String label) {
         String expectedErrorMessageFmt = "The input label is invalid: %s";

@@ -30,7 +30,7 @@ class KeyObjectPublicKeySource implements PublicKeySource {
     }
 
     @Override
-    public byte[] extractUncompressedBytes() {
+    public byte[] extractBytesInUncompressedForm() {
         this.processed();
         return ECPublicKeyUtil.encodedBytesToUncompressedBytes(this.publicKey.getEncoded());
     }

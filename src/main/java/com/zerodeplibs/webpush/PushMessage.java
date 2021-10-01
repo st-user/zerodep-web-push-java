@@ -27,7 +27,7 @@ public class PushMessage {
      */
     public static PushMessage of(byte[] messageBytes) {
         WebPushPreConditions.checkArgument(messageBytes != null && messageBytes.length > 0,
-            "messageBytes should not be noll or empty.");
+            "messageBytes should not be null or empty.");
 
         return new PushMessage(Arrays.copyOf(messageBytes, messageBytes.length));
     }
@@ -43,7 +43,7 @@ public class PushMessage {
     // BEGIN CHECK STYLE OFF
     public static PushMessage ofUTF8(String messageText) { // END CHECK STYLE OFF
         WebPushPreConditions.checkArgument(messageText != null && messageText.length() > 0,
-            "a push message should not be noll or empty.");
+            "messageText should not be null or empty.");
 
         return new PushMessage(messageText.getBytes(StandardCharsets.UTF_8));
     }

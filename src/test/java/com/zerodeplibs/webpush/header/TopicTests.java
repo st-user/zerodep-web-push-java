@@ -1,5 +1,6 @@
 package com.zerodeplibs.webpush.header;
 
+import static com.zerodeplibs.webpush.TestAssertionUtil.assertNullCheck;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -11,7 +12,7 @@ import org.junit.jupiter.api.Test;
 public class TopicTests {
 
     @Test
-    public void topicShouldThrowExceptionWhenIllegalCharactersArePassed() {
+    public void shouldThrowExceptionWhenIllegalCharactersArePassed() {
         Topic.ensure("AZaz09_-");
         Topic.ensure("--__9900zzaaZZAA");
         Topic.ensure(repeatChar("a", 32));
@@ -19,6 +20,7 @@ public class TopicTests {
         String expectedMessage =
             "The Topic header field must be no more than 32 characters from the URL and a filename-safe Base 64 alphabet";
 
+        assertNullCheck(() -> Topic.ensure(null), "topic");
 
         assertThat(
             assertThrows(IllegalArgumentException.class, () -> Topic.ensure("")).getMessage(),

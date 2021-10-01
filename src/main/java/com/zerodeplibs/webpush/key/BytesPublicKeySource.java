@@ -71,7 +71,7 @@ class BytesPublicKeySource implements PublicKeySource {
     }
 
     @Override
-    public byte[] extractUncompressedBytes() {
+    public byte[] extractBytesInUncompressedForm() {
         this.extractECPublicKey();
         return ECPublicKeyUtil.encodedBytesToUncompressedBytes(this.x509Bytes);
     }

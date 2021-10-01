@@ -101,7 +101,7 @@ class Aes128GcmMessageEncryption implements MessageEncryption {
         PrivateKey asPrivate = asKeyPair.getPrivate();
         PublicKey asPublic = asKeyPair.getPublic();
         byte[] asPublicUncompressed =
-            PublicKeySources.ofECPublicKey((ECPublicKey) asPublic).extractUncompressedBytes();
+            PublicKeySources.ofECPublicKey((ECPublicKey) asPublic).extractBytesInUncompressedForm();
 
         byte[] ecdhSecret = calcECDHSecret(asPrivate, uaPublic);
         byte[] salt = new byte[16];

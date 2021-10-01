@@ -36,5 +36,5 @@ public interface PublicKeySource {
      * @throws InvalidECPublicKeyException when the extracted
      *                                     public key is invalid(Depending on the implementation).
      */
-    byte[] extractUncompressedBytes() throws InvalidECPublicKeyException;
+    byte[] extractBytesInUncompressedForm() throws InvalidECPublicKeyException;
 }

@@ -132,6 +132,7 @@ public class PublicKeySources {
      * @see java.security.spec.X509EncodedKeySpec
      */
     public static PublicKeySource ofPEMText(String pemText, PEMParser parser) {
+        WebPushPreConditions.checkNotNull(parser, "parser");
         return ofX509Bytes(parser.parse(pemText));
     }
 
@@ -141,14 +142,16 @@ public class PublicKeySources {
      * The binary data is assumed to represent a public key
      * on the P-256 curve that encoded in the uncompressed form[X9.62].
      *
-     * @param uncompressedBytesBase64 the base64-encoded public key.
+     * @param uncompressedBytesBase64Text the base64-encoded public key.
      * @return a new PublicKeySource.
      * @throws MalformedUncompressedBytesException if the given array doesn't start with 0x4
      *                                             or the length isn't 65 bytes.
      * @throws IllegalArgumentException            if the given text is not in valid Base64 scheme.
      */
-    public static PublicKeySource ofUncompressedBase64Text(String uncompressedBytesBase64) {
-        return ofUncompressedBytes(Base64.getDecoder().decode(uncompressedBytesBase64));
+    public static PublicKeySource ofUncompressedBase64Text(String uncompressedBytesBase64Text) {
+        WebPushPreConditions.checkNotNull(uncompressedBytesBase64Text,
+            "uncompressedBytesBase64Text");
+        return ofUncompressedBytes(Base64.getDecoder().decode(uncompressedBytesBase64Text));
     }
 
     /**
@@ -162,6 +165,7 @@ public class PublicKeySources {
      * @see java.security.spec.X509EncodedKeySpec
      */
     public static PublicKeySource ofX509Base64Text(String x509Base64Text) {
+        WebPushPreConditions.checkNotNull(x509Base64Text, "x509Base64Text");
         return ofX509Bytes(Base64.getDecoder().decode(x509Base64Text));
     }
 
@@ -228,11 +232,11 @@ public class PublicKeySources {
     /**
      * Gets a new PEMFileSourceBuilder.
      *
-     * @param pemFilePath the path to the PEM formatted file.
+     * @param path the path to the PEM formatted file.
      * @return a new PEMFileSourceBuilder.
      */
-    public static PEMFileSourceBuilder getPEMFileSourceBuilder(Path pemFilePath) {
-        return new PEMFileSourceBuilder(pemFilePath);
+    public static PEMFileSourceBuilder getPEMFileSourceBuilder(Path path) {
+        return new PEMFileSourceBuilder(path);
     }
 
     /**
@@ -241,12 +245,13 @@ public class PublicKeySources {
      * @author Tomoki Sato
      */
     public static class PEMFileSourceBuilder {
-        private final Path pemFilePath;
+        private final Path path;
         private Charset charset = StandardCharsets.UTF_8;
         private PEMParser parser = PEMParsers.ofStandard(PEMParser.SUBJECT_PUBLIC_KEY_INFO_LABEL);
 
-        PEMFileSourceBuilder(Path pemFilePath) {
-            this.pemFilePath = pemFilePath;
+        PEMFileSourceBuilder(Path path) {
+            WebPushPreConditions.checkNotNull(path, "path");
+            this.path = path;
         }
 
         /**
@@ -282,7 +287,7 @@ public class PublicKeySources {
          *                               cannot be parsed as a valid PEM format.
          */
         public PublicKeySource build() throws IOException {
-            byte[] parsed = this.parser.parse(FileUtil.readAsString(pemFilePath, charset));
+            byte[] parsed = this.parser.parse(FileUtil.readAsString(path, charset));
             return ofX509Bytes(parsed);
         }
 

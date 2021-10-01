@@ -1,11 +1,15 @@
 package com.zerodeplibs.webpush;
 
+import static com.zerodeplibs.webpush.TestAssertionUtil.assertNullCheck;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 
 import com.zerodeplibs.webpush.jwt.VAPIDJWTGenerator;
 import com.zerodeplibs.webpush.jwt.VAPIDJWTParam;
+import com.zerodeplibs.webpush.key.InvalidECPublicKeyException;
+import com.zerodeplibs.webpush.key.PrivateKeySource;
 import com.zerodeplibs.webpush.key.PrivateKeySources;
+import com.zerodeplibs.webpush.key.PublicKeySource;
 import com.zerodeplibs.webpush.key.PublicKeySources;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -22,31 +26,8 @@ import org.junit.jupiter.api.Test;
 public class VAPIDKeyPairTests {
 
 
-    private static class TestingJWTGeneraator implements VAPIDJWTGenerator {
-
-        private ECPrivateKey privateKey;
-        private ECPublicKey publicKey;
-
-        TestingJWTGeneraator(ECPrivateKey privateKey, ECPublicKey publicKey) {
-            this.privateKey = privateKey;
-            this.publicKey = publicKey;
-        }
-
-        @Override
-        public String generate(VAPIDJWTParam param) {
-            String ret = Stream.of(
-                param.getOrigin(),
-                param.getSubject().get(),
-                param.getExpiresAt().toString(),
-                privateKey.toString(),
-                publicKey.toString()
-            ).collect(Collectors.joining(":"));
-            return ret;
-        }
-    }
-
     @Test
-    public void uncompressedPublicKeyBytesShouldReturnBytesInUncompressedForm()
+    public void shouldExtractECPublicKeyInUncompressedForm()
         throws NoSuchAlgorithmException {
 
         KeyPair keyPair = generateKeyPair();
@@ -64,16 +45,17 @@ public class VAPIDKeyPairTests {
 
         byte[] expectedBytes = Arrays.copyOfRange(publicKeyEncoded, publicKeyEncoded.length - 65,
             publicKeyEncoded.length);
-        assertThat(vapidKeyPair.extractUncompressedPublicKey(), equalTo(expectedBytes));
+        assertThat(vapidKeyPair.extractPublicKeyInUncompressedForm(), equalTo(expectedBytes));
 
     }
 
     @Test
-    public void createAuthorizationHeaderValueShouldCreateValueFromKeyPairAndJWTParam()
+    public void shouldGenerateAuthorizationHeaderFieldWithTheGivenParameters()
         throws NoSuchAlgorithmException {
 
         KeyPair keyPair = generateKeyPair();
         ECPrivateKey privateKey = (ECPrivateKey) keyPair.getPrivate();
+
         ECPublicKey publicKey = (ECPublicKey) keyPair.getPublic();
 
         VAPIDKeyPair vapidKeyPair = VAPIDKeyPairs.of(
@@ -109,6 +91,102 @@ public class VAPIDKeyPairTests {
             String.format("vapid t=%s, k=%s", expectedTokenString, expectedPublicKeyString);
         assertThat(vapidKeyPair.generateAuthorizationHeaderValue(jwtParam),
             equalTo(expectedString));
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenNullReferencesArePassed() throws NoSuchAlgorithmException {
+
+        KeyPair keyPair = generateKeyPair();
+        ECPrivateKey privateKey = (ECPrivateKey) keyPair.getPrivate();
+        ECPublicKey publicKey = (ECPublicKey) keyPair.getPublic();
+
+        assertNullCheck(() -> VAPIDKeyPairs.of(
+                null, PublicKeySources.ofECPublicKey(publicKey), TestingJWTGeneraator::new),
+            "privateKeySource");
+
+        assertNullCheck(() -> VAPIDKeyPairs.of(
+                PrivateKeySources.ofECPrivateKey(privateKey), null, TestingJWTGeneraator::new),
+            "publicKeySource");
+
+        assertNullCheck(() -> VAPIDKeyPairs.of(
+                PrivateKeySources.ofECPrivateKey(privateKey), PublicKeySources.ofECPublicKey(publicKey),
+                null),
+            "jwtGeneratorFactory");
+
+        assertNullCheck(() -> VAPIDKeyPairs.of(
+                new NullablePrivateKeySource(null), PublicKeySources.ofECPublicKey(publicKey),
+                TestingJWTGeneraator::new),
+            "The extracted private key");
+
+        assertNullCheck(() -> VAPIDKeyPairs.of(
+                PrivateKeySources.ofECPrivateKey(privateKey),
+                new NullablePublicKeySource(null, new byte[] {0}),
+                TestingJWTGeneraator::new),
+            "The extracted public key");
+
+        assertNullCheck(() -> VAPIDKeyPairs.of(
+                PrivateKeySources.ofECPrivateKey(privateKey), PublicKeySources.ofECPublicKey(publicKey),
+                (priv, pub) -> {
+                    return null;
+                }),
+            "The VAPIDJWTGenerator created by the jwtGeneratorFactory");
+    }
+
+    private static class TestingJWTGeneraator implements VAPIDJWTGenerator {
+
+        private final ECPrivateKey privateKey;
+        private final ECPublicKey publicKey;
+
+        TestingJWTGeneraator(ECPrivateKey privateKey, ECPublicKey publicKey) {
+            this.privateKey = privateKey;
+            this.publicKey = publicKey;
+        }
+
+        @Override
+        public String generate(VAPIDJWTParam param) {
+            return String.join(":",
+                param.getOrigin(),
+                param.getSubject().get(),
+                param.getExpiresAt().toString(),
+                privateKey.toString(),
+                publicKey.toString()
+            );
+        }
+    }
+
+    private static class NullablePublicKeySource implements PublicKeySource {
+
+        private final ECPublicKey publicKey;
+        private final byte[] uncompressedBytes;
+
+        NullablePublicKeySource(ECPublicKey publicKey, byte[] uncompressedBytes) {
+            this.publicKey = publicKey;
+            this.uncompressedBytes = uncompressedBytes;
+        }
+
+        @Override
+        public ECPublicKey extract() throws InvalidECPublicKeyException {
+            return this.publicKey;
+        }
+
+        @Override
+        public byte[] extractBytesInUncompressedForm() throws InvalidECPublicKeyException {
+            return this.uncompressedBytes;
+        }
+    }
+
+    private static class NullablePrivateKeySource implements PrivateKeySource {
+
+        private final ECPrivateKey privateKey;
+
+        NullablePrivateKeySource(ECPrivateKey privateKey) {
+            this.privateKey = privateKey;
+        }
+
+        @Override
+        public ECPrivateKey extract() {
+            return this.privateKey;
+        }
     }
 
     private KeyPair generateKeyPair() throws NoSuchAlgorithmException {

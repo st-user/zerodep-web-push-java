@@ -10,7 +10,7 @@ public class UrgencyTests {
 
 
     @Test
-    public void urgencyShouldReturnAcceptableUrgencyHeaderFiledValue() {
+    public void shouldReturnAcceptableUrgencyHeaderFiledValue() {
         assertThat(Urgency.veryLow(), equalTo("very-low"));
         assertThat(Urgency.low(), equalTo("low"));
         assertThat(Urgency.normal(), equalTo("normal"));
