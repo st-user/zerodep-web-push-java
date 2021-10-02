@@ -36,7 +36,7 @@ public interface VAPIDJWTGenerator {
     /**
      * Generates a JWT used for VAPID.
      *
-     * @param param the parameters used to build the JWT.
+     * @param param parameters used to build the JWT.
      * @return a JWT.
      */
     String generate(VAPIDJWTParam param);

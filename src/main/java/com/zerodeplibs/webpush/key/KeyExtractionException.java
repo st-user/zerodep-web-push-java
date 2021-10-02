@@ -6,13 +6,13 @@ package com.zerodeplibs.webpush.key;
  *
  * <p>
  * The underlying exception can be obtained
- * by calling {@link KeyExtractionException#getCause()}.
+ * by calling {@link #getCause()}.
  * </p>
  *
  * @author Tomoki Sato
  */
 public class KeyExtractionException extends RuntimeException {
-    public KeyExtractionException(Throwable cause) {
+    KeyExtractionException(Throwable cause) {
         super(cause);
     }
 }

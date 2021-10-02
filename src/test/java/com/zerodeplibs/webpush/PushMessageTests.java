@@ -24,7 +24,8 @@ public class PushMessageTests {
             equalTo(String.format(messageFormat, "messageBytes")));
 
         assertThat(
-            assertThrows(IllegalArgumentException.class, () -> PushMessage.ofUTF8(null)).getMessage(),
+            assertThrows(IllegalArgumentException.class,
+                () -> PushMessage.ofUTF8(null)).getMessage(),
             equalTo(String.format(messageFormat, "messageText")));
 
         assertThat(

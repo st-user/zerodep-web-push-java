@@ -9,10 +9,10 @@ import java.security.interfaces.ECPublicKey;
 import java.util.Base64;
 
 /**
- * Static factory methods for instantiating an implementation class of {@link PublicKeySource}.
+ * Static factory methods for {@link PublicKeySource}.
  *
  * <p>
- * PublicKeySource created by the static factory methods
+ * {@link PublicKeySource} created by the static factory methods
  * of this class performs public key validation during extraction.
  * It uses the validation method described in Section 5.6.2.3 of <a href="https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-56Ar2.pdf">Recommendation for Pair-Wise Key Establishment Schemes Using Discrete Logarithm Cryptography - NIST Special Publication 800-56A Revision 2</a>.
  * </p>
@@ -20,7 +20,7 @@ import java.util.Base64;
  * <p>
  * <b>Examples:</b><br>
  * The following is an example of commands that uses OpenSSL
- * to generate a file that can be handled with a PublicKeySource.
+ * to generate a file that can be handled with {@link PublicKeySource}s.
  * </p>
  * <pre class="code">
  * openssl ecparam -genkey -name prime256v1 -noout -out my-private.pem
@@ -35,7 +35,7 @@ import java.util.Base64;
  * </pre>
  *
  * <p>
- * The examples of using these files to create PublicKeySource is as follows.
+ * The examples of using these files to create {@link PublicKeySource}s are as follows.
  * </p>
  * <pre class="code">
  * Path pemPath = new File("my-pub.pem").toPath();
@@ -71,12 +71,13 @@ public class PublicKeySources {
     }
 
     /**
-     * Create a PublicKeySource with the byte array representing
+     * Create a new {@link PublicKeySource} with the given octet sequence representing
      * a public key on the P-256 curve encoded in the uncompressed form[X9.62].
      *
-     * @param uncompressedBytes the byte array representing a public key.
-     * @return a new PublicKeySource.
-     * @throws MalformedUncompressedBytesException if the given array doesn't start with 0x4
+     * @param uncompressedBytes the octet sequence representing a public key.
+     * @return a new {@link PublicKeySource}.
+     * @throws MalformedUncompressedBytesException if the given octet sequence
+     *                                             doesn't start with 0x04
      *                                             or the length isn't 65 bytes.
      */
     public static PublicKeySource ofUncompressedBytes(byte[] uncompressedBytes) {
@@ -85,11 +86,11 @@ public class PublicKeySources {
     }
 
     /**
-     * Creates a PublicKeySource with the byte array
+     * Creates a new {@link PublicKeySource} with the given octet sequence
      * that is assumed to be encoded according to the X.509 standard.
      *
-     * @param x509Bytes the byte array representing a public key.
-     * @return a new PublicKeySource.
+     * @param x509Bytes the octet sequence representing a public key.
+     * @return a new {@link PublicKeySource}.
      * @see java.security.spec.X509EncodedKeySpec
      */
     public static PublicKeySource ofX509Bytes(byte[] x509Bytes) {
@@ -97,16 +98,17 @@ public class PublicKeySources {
     }
 
     /**
-     * Creates a PublicKeySource with the PEM-encoded text.
-     * The underlying binary data is assumed to be encoded according to the X.509 standard.
+     * Creates a new {@link PublicKeySource} with the given PEM-encoded text.
+     * The underlying octet sequence is assumed to be encoded according to the X.509 standard.
      *
      * <p>
-     * the PEM-encoded text is assumed to start with '-----BEGIN PUBLIC KEY-----'
-     * and end with '-----END PUBLIC KEY-----'.
+     * the PEM-encoded text is assumed to contain a public key data
+     * that starts with '-----BEGIN PUBLIC KEY-----'
+     * and ends with '-----END PUBLIC KEY-----'.
      * </p>
      *
      * @param pemText the PEM-encoded text representing a public key.
-     * @return a new PublicKeySource.
+     * @return a new {@link PublicKeySource}.
      * @throws MalformedPEMException if the given text
      *                               cannot be parsed as a valid PEM format.
      * @see java.security.spec.X509EncodedKeySpec
@@ -117,8 +119,9 @@ public class PublicKeySources {
     }
 
     /**
-     * Creates a PublicKeySource with the PEM-encoded text and the {@link PEMParser}.
-     * The underlying binary data is assumed to be encoded according to the X.509 standard.
+     * Creates a new {@link PublicKeySource} with the given PEM-encoded text
+     * and the given {@link PEMParser}.
+     * The underlying octet sequence is assumed to be encoded according to the X.509 standard.
      *
      * <p>
      * the PEM-encoded text are parsed by the given {@link PEMParser}.
@@ -126,7 +129,7 @@ public class PublicKeySources {
      *
      * @param pemText the PEM-encoded text representing a public key.
      * @param parser  the parser for parsing the PEM-encoded text.
-     * @return a new PublicKeySource.
+     * @return a new {@link PublicKeySource}.
      * @throws MalformedPEMException if the given text
      *                               cannot be parsed as a valid PEM format.
      * @see java.security.spec.X509EncodedKeySpec
@@ -137,14 +140,14 @@ public class PublicKeySources {
     }
 
     /**
-     * Creates a PublicKeySource with the base64-encoded public key
+     * Creates a new {@link PublicKeySource} with the given base64-encoded public key
      * (<b>NOT</b> base64<b>url</b>-encoded).
-     * The binary data is assumed to represent a public key
+     * The octet sequence is assumed to represent a public key
      * on the P-256 curve that encoded in the uncompressed form[X9.62].
      *
-     * @param uncompressedBytesBase64Text the base64-encoded public key.
-     * @return a new PublicKeySource.
-     * @throws MalformedUncompressedBytesException if the given array doesn't start with 0x4
+     * @param uncompressedBytesBase64Text a base64-encoded public key.
+     * @return a new {@link PublicKeySource}.
+     * @throws MalformedUncompressedBytesException if the octet sequence doesn't start with 0x04
      *                                             or the length isn't 65 bytes.
      * @throws IllegalArgumentException            if the given text is not in valid Base64 scheme.
      */
@@ -155,12 +158,12 @@ public class PublicKeySources {
     }
 
     /**
-     * Creates a PublicKeySource with the base64-encoded public key
+     * Creates a new {@link PublicKeySource} with the given base64-encoded public key
      * (<b>NOT</b> base64<b>url</b>-encoded).
-     * The binary data is assumed to be encoded according to the X.509 standard.
+     * The octet sequence is assumed to be encoded according to the X.509 standard.
      *
-     * @param x509Base64Text the base64-encoded public key.
-     * @return a new PublicKeySource.
+     * @param x509Base64Text a base64-encoded public key.
+     * @return a new {@link PublicKeySource}.
      * @throws IllegalArgumentException if the given text is not in valid Base64 scheme.
      * @see java.security.spec.X509EncodedKeySpec
      */
@@ -170,18 +173,20 @@ public class PublicKeySources {
     }
 
     /**
-     * Creates a PublicKeySource with the PEM formatted file specified by the path.
-     * The underlying binary data is assumed to be encoded according to the X.509 standard.
+     * Creates a new {@link PublicKeySource} with the PEM formatted file specified
+     * by the given path.
+     * The underlying octet sequence is assumed to be encoded according to the X.509 standard.
      *
      * <p>
-     * The first line of the file is assumed to be '-----BEGIN PUBLIC KEY-----'
-     * and the end line of the file is assumed to be '-----END PUBLIC KEY-----'.
+     * The PEM formatted file is assumed to contain a public key data
+     * that starts with '-----BEGIN PUBLIC KEY-----'
+     * and ends with '-----END PUBLIC KEY-----'.
      * </p>
      *
-     * @param path the path to the PEM formatted file.
-     * @return a new PublicKeySource.
+     * @param path the path to a PEM formatted file.
+     * @return a new {@link PublicKeySource}.
      * @throws IOException           if an I/O error occurs.
-     * @throws MalformedPEMException if the given text
+     * @throws MalformedPEMException if the contents of the given file
      *                               cannot be parsed as a valid PEM format.
      */
     public static PublicKeySource ofPEMFile(Path path) throws IOException {
@@ -189,18 +194,19 @@ public class PublicKeySources {
     }
 
     /**
-     * Creates a PublicKeySource with the PEM formatted file specified by the path.
-     * The underlying binary data is assumed to be encoded according to the X.509 standard.
+     * Creates a new {@link PublicKeySource} with the PEM formatted file specified
+     * by the given path.
+     * The underlying octet sequence is assumed to be encoded according to the X.509 standard.
      *
      * <p>
      * The contents of the PEM file are parsed by the given {@link PEMParser}.
      * </p>
      *
-     * @param path   the path to the PEM formatted file.
+     * @param path   the path to a PEM formatted file.
      * @param parser the parser for parsing the contents of the PEM file.
-     * @return a new PublicKeySource.
+     * @return a new {@link PublicKeySource}.
      * @throws IOException           if an I/O error occurs.
-     * @throws MalformedPEMException if the given text
+     * @throws MalformedPEMException if the contents of the given file
      *                               cannot be parsed as a valid PEM format.
      */
     public static PublicKeySource ofPEMFile(Path path, PEMParser parser) throws IOException {
@@ -208,11 +214,11 @@ public class PublicKeySources {
     }
 
     /**
-     * Creates a PublicKeySource with the DER file specified by the path.
-     * Its binary data is assumed to be encoded according to the X.509 standard.
+     * Creates a new {@link PublicKeySource} with the DER file specified by the given path.
+     * Its octet sequence is assumed to be encoded according to the X.509 standard.
      *
-     * @param path the path to the DER file.
-     * @return a new PublicKeySource.
+     * @param path the path to a DER file.
+     * @return a new {@link PublicKeySource}.
      * @throws IOException if an I/O error occurs.
      */
     public static PublicKeySource ofDERFile(Path path) throws IOException {
@@ -220,27 +226,27 @@ public class PublicKeySources {
     }
 
     /**
-     * Creates a PublicKeySource that wraps the given ECPublicKey object.
+     * Creates a new {@link PublicKeySource} that wraps the given {@link ECPublicKey} object.
      *
-     * @param publicKey the ECPublicKey.
-     * @return a new PublicKeySource.
+     * @param publicKey an {@link ECPublicKey} object.
+     * @return a new {@link PublicKeySource}.
      */
     public static PublicKeySource ofECPublicKey(ECPublicKey publicKey) {
         return new KeyObjectPublicKeySource(publicKey, ECPublicKeyUtil::validateECPublicKey);
     }
 
     /**
-     * Gets a new PEMFileSourceBuilder.
+     * Gets a new {@link PEMFileSourceBuilder}.
      *
-     * @param path the path to the PEM formatted file.
-     * @return a new PEMFileSourceBuilder.
+     * @param path the path to a PEM formatted file.
+     * @return a new {@link PEMFileSourceBuilder}.
      */
     public static PEMFileSourceBuilder getPEMFileSourceBuilder(Path path) {
         return new PEMFileSourceBuilder(path);
     }
 
     /**
-     * The builder class for creating instances of the PublicKeySource from PEM formatted files.
+     * The builder class for creating {@link PublicKeySource} from PEM formatted files.
      *
      * @author Tomoki Sato
      */
@@ -257,7 +263,7 @@ public class PublicKeySources {
         /**
          * Specifies the encoding of the PEM file.
          *
-         * @param charset the encoding.
+         * @param charset the encoding of the PEM file.
          * @return this object.
          */
         public PEMFileSourceBuilder charset(Charset charset) {
@@ -279,11 +285,11 @@ public class PublicKeySources {
         }
 
         /**
-         * Creates a new PublicKeySource.
+         * Creates a new {@link PublicKeySource}.
          *
-         * @return a new PublicKeySource.
+         * @return a new {@link PublicKeySource}.
          * @throws IOException           if an I/O error occurs.
-         * @throws MalformedPEMException if the given text
+         * @throws MalformedPEMException if the contents of the file
          *                               cannot be parsed as a valid PEM format.
          */
         public PublicKeySource build() throws IOException {

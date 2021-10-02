@@ -3,7 +3,7 @@ package com.zerodeplibs.webpush;
 import java.security.NoSuchAlgorithmException;
 
 /**
- * Static utility methods for instantiating an implementation class of {@link MessageEncryption}.
+ * Static factory methods for {@link MessageEncryption}.
  *
  * <p>
  * <b>Thread Safety:</b><br>
@@ -19,9 +19,9 @@ public class MessageEncryptions {
     }
 
     /**
-     * Creates a new MessageEncryption.
+     * Creates a new {@link MessageEncryption}.
      *
-     * @return s new MessageEncryption.
+     * @return a new {@link MessageEncryption}.
      */
     public static MessageEncryption of() {
         try {

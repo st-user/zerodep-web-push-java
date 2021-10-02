@@ -10,8 +10,8 @@ import com.zerodeplibs.webpush.key.PublicKeySource;
  * for the Voluntary Application Server Identification (VAPID) described in <a href="https://datatracker.ietf.org/doc/html/rfc8292">RFC8292</a>.
  *
  * <p>
- * Usually, an instance of the implementation class of this interface
- * is obtained by the factory method of {@link VAPIDKeyPairs}.
+ * Usually, an instance of this interface
+ * is obtained by a factory method of {@link VAPIDKeyPairs}.
  * </p>
  *
  * <p>
@@ -27,7 +27,7 @@ import com.zerodeplibs.webpush.key.PublicKeySource;
  * ........
  *
  * VAPIDJWTParam jwtParam = ......
- * String headerValue = vapidKeyPair.createAuthorizationHeaderValue(jwtParam);
+ * String headerValue = vapidKeyPair.generateAuthorizationHeaderValue(jwtParam);
  * myHeader.addHeader("Authorization", headerValue);
  *
  * </pre>
@@ -52,25 +52,26 @@ import com.zerodeplibs.webpush.key.PublicKeySource;
 public interface VAPIDKeyPair {
 
     /**
-     * Extracts the byte array of the elliptic curve (EC) public key in uncompressed form
-     * (a 65-byte array starting with 0x04).
+     * Extracts the octet sequence of the public key in uncompressed form
+     * (65-byte array starting with 0x04).
      *
      * <p>
-     * Typically, the return value of this method is sent to browsers
+     * Typically, the value is sent to browsers
      * and used to set the 'applicationServerKey' fields when calling 'pushManager.subscribe()'.
      * </p>
      *
-     * @return the byte array of the public key in uncompressed form.
+     * @return the octet sequence of the public key in uncompressed form.
      * @see PushSubscription
      */
     byte[] extractPublicKeyInUncompressedForm();
 
     /**
-     * Generates the value to set in the Authorization header field
+     * Generates a credential(that uses 'vapid' authentication scheme)
+     * used to set an Authorization header field
      * when requesting the delivery of a push message.
      *
-     * @param jwtParam the parameters to use when generating JSON Web Token (JWT).
-     * @return the value to set in the Authorization header field.
+     * @param jwtParam parameters to use when generating JSON Web Token (JWT).
+     * @return a credential like 'vapid t=eyJ0e....., k=BA1H....'.
      */
     String generateAuthorizationHeaderValue(VAPIDJWTParam jwtParam);
 }

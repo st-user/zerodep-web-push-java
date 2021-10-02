@@ -4,8 +4,8 @@ package com.zerodeplibs.webpush;
  * Implementations of this interface provide the functionality of <a href="https://datatracker.ietf.org/doc/html/rfc8291">Message Encryption for Web Push</a>.
  *
  * <p>
- * Usually, an instance of the implementation class of this interface
- * is obtained by the factory method of {@link MessageEncryptions}.
+ * Usually, an instance of this interface
+ * is obtained by a factory method of {@link MessageEncryptions}.
  * </p>
  *
  * @author Tomoki Sato
@@ -14,15 +14,13 @@ package com.zerodeplibs.webpush;
 public interface MessageEncryption {
 
     /**
-     * Encrypts the given pushMessage with the given subscriptionKeys.
+     * Encrypts the given pushMessage with the given userAgentMessageEncryptionKeyInfo.
      *
-     * @param userAgentMessageEncryptionKeyInfo push subscription keys for the user agent
-     *                                          to which the push message is sent.
-     * @param pushMessage                       the push message to be encrypted.
+     * @param userAgentMessageEncryptionKeyInfo user agent side keys for encryption.
      * @return the encrypted push message.
      */
     EncryptedPushMessage encrypt(
         UserAgentMessageEncryptionKeyInfo userAgentMessageEncryptionKeyInfo,
-        PushMessage pushMessage) throws MessageEncryptionException;
+        PushMessage pushMessage);
 
 }

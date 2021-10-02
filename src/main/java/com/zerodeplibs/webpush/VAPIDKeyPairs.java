@@ -9,7 +9,7 @@ import java.security.interfaces.ECPublicKey;
 import java.util.function.BiFunction;
 
 /**
- * Static utility methods for instantiating an implementation class of {@link VAPIDKeyPair}.
+ * Static factory methods for {@link VAPIDKeyPair}.
  *
  * <p>
  * <b>Thread Safety:</b><br>
@@ -26,15 +26,15 @@ public class VAPIDKeyPairs {
     }
 
     /**
-     * Creates a new VAPIDKeyPair with the private key source,
-     * the public key source and the factory for {@link VAPIDJWTGenerator}.
+     * Creates a new {@link VAPIDKeyPair} with the given private key source,
+     * the given public key source and the given factory for {@link VAPIDJWTGenerator}.
      *
-     * @param privateKeySource    the private key source.
-     * @param publicKeySource     the public key source.
-     * @param jwtGeneratorFactory the factory for {@link VAPIDJWTGenerator}.
-     * @return a new VAPIDKeyPair
+     * @param privateKeySource    a private key source.
+     * @param publicKeySource     a public key source.
+     * @param jwtGeneratorFactory a factory for {@link VAPIDJWTGenerator}.
+     * @return a new {@link VAPIDKeyPair}
      * @throws InvalidECPublicKeyException if the public key extracted
-     *                                     from the public key source is invalid.
+     *                                     from the given public key source is invalid.
      */
     public static VAPIDKeyPair of(PrivateKeySource privateKeySource,
                                   PublicKeySource publicKeySource,

@@ -19,11 +19,11 @@ public class PushMessage {
     }
 
     /**
-     * Creates a PushMessage with the given byte array.
+     * Creates a new {@link PushMessage} with the given octet sequence.
      *
-     * @param messageBytes the byte array representing a push message.
-     * @return a new PushMessage
-     * @throws IllegalArgumentException if the array is null or empty.
+     * @param messageBytes the octet sequence representing a push message.
+     * @return a new {@link PushMessage}.
+     * @throws IllegalArgumentException if the given octet sequence is null or empty.
      */
     public static PushMessage of(byte[] messageBytes) {
         WebPushPreConditions.checkArgument(messageBytes != null && messageBytes.length > 0,
@@ -33,12 +33,12 @@ public class PushMessage {
     }
 
     /**
-     * Creates a PushMessage with the given text.
+     * Creates a new {@link PushMessage} with the given text.
      * The given text is encoded by using UTF-8.
      *
      * @param messageText the text representing a push message.
-     * @return a new PushMessage.
-     * @throws IllegalArgumentException if the text is null or empty.
+     * @return a new {@link PushMessage}.
+     * @throws IllegalArgumentException if the given text is null or empty.
      */
     // BEGIN CHECK STYLE OFF
     public static PushMessage ofUTF8(String messageText) { // END CHECK STYLE OFF

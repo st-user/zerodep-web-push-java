@@ -21,7 +21,7 @@ class StandardPEMParser implements PEMParser {
     }
 
     @Override
-    public byte[] parse(String pemText) throws MalformedPEMException {
+    public byte[] parse(String pemText) {
         WebPushPreConditions.checkNotNull(pemText, "pemText");
 
         String contentLf = pemText.replace("\r\n", "\n");

@@ -4,8 +4,8 @@ package com.zerodeplibs.webpush.key;
  * Implementations of this interface provide the functionality for parsing PEM format.
  *
  * <p>
- * Usually, an instance of the implementation class of this interface
- * is obtained by the factory method of {@link PEMParsers}.
+ * Usually, an instance of this interface
+ * is obtained by a factory method of {@link PEMParsers}.
  * </p>
  *
  * <p>
@@ -18,10 +18,24 @@ package com.zerodeplibs.webpush.key;
  */
 public interface PEMParser {
 
+    /**
+     * The format string for encapsulation boundary(BEGIN).
+     */
     String BEGIN_ENCAPSULATION_BOUNDARIES_FMR = "-----BEGIN %s-----";
+
+    /**
+     * The format string for encapsulation boundary(END).
+     */
     String END_ENCAPSULATION_BOUNDARIES_FMR = "-----END %s-----";
 
+    /**
+     * The label in encapsulation boundary for PKCS #8 Private Key Info.
+     */
     String PKCS8_PRIVATE_KEY_LABEL = "PRIVATE KEY";
+
+    /**
+     * The label in encapsulation boundary for Subject Public Key Info.
+     */
     String SUBJECT_PUBLIC_KEY_INFO_LABEL = "PUBLIC KEY";
 
     /**
@@ -32,5 +46,5 @@ public interface PEMParser {
      * @throws MalformedPEMException if the given text
      *                               cannot be parsed as a valid PEM format.
      */
-    byte[] parse(String pemText) throws MalformedPEMException;
+    byte[] parse(String pemText);
 }

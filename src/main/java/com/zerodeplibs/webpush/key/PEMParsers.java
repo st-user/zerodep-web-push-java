@@ -3,7 +3,7 @@ package com.zerodeplibs.webpush.key;
 import com.zerodeplibs.webpush.internal.WebPushPreConditions;
 
 /**
- * Static utility methods for instantiating an implementation class of {@link PEMParser}.
+ * Static factory methods for {@link PEMParser}.
  *
  * <p>
  * <b>Thread Safety:</b><br>
@@ -19,34 +19,35 @@ public class PEMParsers {
     }
 
     /**
-     * Creates an instance of the {@link PEMParser} implementation
-     * with the given label for encapsulation boundaries.
+     * Creates a new {@link PEMParser} with the given label for encapsulation boundaries.
      *
      * <p>
      * This parser ignores characters outside the encapsulation boundaries
-     * (ie, characters before '-----BEGIN .... -----' or after '-----END ..... -----').
+     * (i.e. all the characters before '-----BEGIN .... -----' or after '-----END ..... -----').
      * </p>
      *
      * <p>
      * <b>Examples:</b>
      * </p>
      * <pre>
-     *  // for '-----BEGIN PRIVATE KEY-----'
-     *  // and '-----END PRIVATE KEY-----'.
+     *  // Creates a parser for PEM-encoded texts
+     *  // in which the private key data starts with '-----BEGIN PRIVATE KEY-----'
+     *  // and ends with '-----END PRIVATE KEY-----'.
      *  PEMParser.ofStandard("PRIVATE KEY");
      *
-     *  // for '-----BEGIN PUBLIC KEY-----'
-     *  // and '-----END PUBLIC KEY-----'.
+     *  // Creates a parser for PEM-encoded texts
+     *  // in which the public key data starts with '-----BEGIN PUBLIC KEY-----'
+     *  // and ends with '-----END PUBLIC KEY-----'.
      *  PEMParser.ofStandard("PUBLIC KEY");
      * </pre>
      *
      * <p>
-     * The returned PEMParser is intended to parse texts
-     * encoded in <a href="https://datatracker.ietf.org/doc/html/rfc7468#section-3">the standard format described in RFC7468</a>.
+     * The returned {@link PEMParser} is intended to parse texts
+     * encoded in <a href="https://datatracker.ietf.org/doc/html/rfc7468#section-3">the 'Standard' format described in RFC7468</a>.
      * </p>
      *
      * @param label a label for encapsulation boundaries.
-     * @return an instance of the {@link PEMParser} implementation.
+     * @return a new {@link PEMParser}.
      * @throws IllegalArgumentException if the format of the given label is invalid.
      */
     public static PEMParser ofStandard(String label) {

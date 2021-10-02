@@ -21,8 +21,8 @@ class BytesPublicKeySource implements PublicKeySource {
     private final Consumer<ECPublicKey> publicKeyPostProcessor;
 
     private static final String MSG_INVALID_UNCOMPRESSED_BYTES =
-        "An uncompressed byte array for a public key "
-            + "must start with 0x4 and its length must be 65 bytes.";
+        "An uncompressed octet sequence for a public key "
+            + "must start with 0x04 and its length must be 65 bytes.";
 
     static BytesPublicKeySource ofUncompressed(byte[] uncompressedBytes,
                                                Consumer<ECPublicKey> publicKeyPostProcessor) {

@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * Parameters for generating JSON Web Token (JWT) used
+ * This class represents parameters for generating JSON Web Token (JWT) used
  * for the Voluntary Application Server Identification
  * (<a href="https://datatracker.ietf.org/doc/html/rfc8292">VAPID</a>).
  *
@@ -47,9 +47,9 @@ public class VAPIDJWTParam {
     }
 
     /**
-     * Gets a new Builder.
+     * Gets a new {@link Builder}.
      *
-     * @return a new Builder.
+     * @return a new {@link Builder}.
      */
     public static Builder getBuilder() {
         return new Builder();
@@ -57,7 +57,7 @@ public class VAPIDJWTParam {
 
     /**
      * Gets an additional claim specified at the time of the instantiation
-     * by specifying the name and type.
+     * by the given name and type.
      *
      * <p>
      * <b>Example:</b>
@@ -241,9 +241,9 @@ public class VAPIDJWTParam {
         }
 
         /**
-         * Creates a new VAPIDJWTParam.
+         * Creates a new {@link VAPIDJWTParam}.
          *
-         * @return a new VAPIDJWTParam.
+         * @return a new {@link VAPIDJWTParam}.
          * @throws IllegalStateException if the resource URL and
          *                               the expiration time aren't specified.
          */

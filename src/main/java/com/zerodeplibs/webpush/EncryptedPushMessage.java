@@ -8,9 +8,10 @@ package com.zerodeplibs.webpush;
 public interface EncryptedPushMessage {
 
     /**
-     * Converts this push message to the byte array.
+     * Converts this encrypted push message to an octet sequence.
+     * This octet sequence is typically set to the body of the HTTP request to the push service.
      *
-     * @return the byte array.
+     * @return an octet sequence that represents this encrypted push message.
      */
     byte[] toBytes();
 }

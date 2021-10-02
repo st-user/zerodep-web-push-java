@@ -7,7 +7,7 @@ package com.zerodeplibs.webpush.header;
  * <b>Example:</b>
  * </p>
  * <pre class="code">
- * // Set the urgency header field
+ * // Sets the urgency header field
  * myHeader.addHeader("Urgency", Urgency.veryLow());
  * </pre>
  *
@@ -55,7 +55,7 @@ public class Urgency {
     }
 
     /**
-     * The enum represents the options for the <a href="https://datatracker.ietf.org/doc/html/rfc8030#section-5.3">Urgency</a> header field.
+     * This enum represents the options for the <a href="https://datatracker.ietf.org/doc/html/rfc8030#section-5.3">Urgency</a> header field.
      *
      * @author Tomoki Sato
      */

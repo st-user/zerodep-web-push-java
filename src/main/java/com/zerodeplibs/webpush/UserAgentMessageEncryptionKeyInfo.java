@@ -10,10 +10,10 @@ import java.util.Arrays;
 import java.util.Base64;
 
 /**
- * This class represents the user agent-side keys for push message encryption.
+ * This class represents a user agent side keys for push message encryption.
  *
  * <p>
- * Typically, an instance of this class is created from a '<a href="https://www.w3.org/TR/push-api/#pushsubscription-interface">keys</a>' field of a <a href="https://www.w3.org/TR/push-api/#push-subscription">push subscription</a>.
+ * Typically, an instance of this class is created by using a '<a href="https://www.w3.org/TR/push-api/#pushsubscription-interface">keys</a>' field of a <a href="https://www.w3.org/TR/push-api/#push-subscription">push subscription</a>.
  * </p>
  *
  * @author Tomoki Sato
@@ -33,16 +33,19 @@ public class UserAgentMessageEncryptionKeyInfo {
     }
 
     /**
-     * Creates a new UserAgentMessageEncryptionKeyInfo from the PushSubscription.
+     * Creates a new {@link UserAgentMessageEncryptionKeyInfo}
+     * from a {@link PushSubscription}'s 'keys' field.
      *
-     * @param subscriptionKeys a PushSubscription 'Keys' field.
-     * @return a new UserAgentMessageEncryptionKeyInfo.
-     * @throws IllegalArgumentException            if the given keys' text are not
-     *                                             in valid Base64 scheme.
-     * @throws MalformedUncompressedBytesException if the given p256dh doesn't start with 0x4
+     * @param subscriptionKeys a PushSubscription's 'keys' field.
+     * @return a new {@link UserAgentMessageEncryptionKeyInfo}.
+     * @throws IllegalArgumentException            if the 'keys.p256dh' is invalid
+     *                                             as a base64url string or the 'keys.auth'
+     *                                             is invalid as a base64url string.
+     * @throws MalformedUncompressedBytesException if the given p256dh doesn't start with 0x04
      *                                             or the length isn't 65 bytes.
      * @throws InvalidECPublicKeyException         if the public key extracted
      *                                             from the give p256dh is invalid.
+     * @see PushSubscription
      */
     public static UserAgentMessageEncryptionKeyInfo from(PushSubscription.Keys subscriptionKeys) {
 
@@ -52,8 +55,8 @@ public class UserAgentMessageEncryptionKeyInfo {
     }
 
     /**
-     * Creates a new UserAgentMessageEncryptionKeyInfo
-     * with the p256dh and the auth.
+     * Creates a new {@link UserAgentMessageEncryptionKeyInfo}
+     * with the given p256dh and auth.
      *
      * <p>
      * It is assumed that the p256dh and the auth are base64-url encoded
@@ -62,10 +65,11 @@ public class UserAgentMessageEncryptionKeyInfo {
      *
      * @param p256dh a p256dh.
      * @param auth   an auth.
-     * @return a new UserAgentMessageEncryptionKeyInfo.
-     * @throws IllegalArgumentException            if the given texts are not
-     *                                             in valid Base64 scheme.
-     * @throws MalformedUncompressedBytesException if the given p256dh doesn't start with 0x4
+     * @return a new {@link UserAgentMessageEncryptionKeyInfo}.
+     * @throws IllegalArgumentException            if the 'keys.p256dh' is invalid
+     *                                             as a base64url string or the 'keys.auth'
+     *                                             is invalid as a base64url string.
+     * @throws MalformedUncompressedBytesException if the given p256dh doesn't start with 0x04
      *                                             or the length isn't 65 bytes.
      * @throws InvalidECPublicKeyException         if the public key extracted
      *                                             from the give p256dh is invalid.
@@ -80,8 +84,8 @@ public class UserAgentMessageEncryptionKeyInfo {
     }
 
     /**
-     * Creates a new UserAgentMessageEncryptionKeyInfo
-     * with the p256dh and the auth.
+     * Creates a new {@link UserAgentMessageEncryptionKeyInfo}
+     * with the given p256dh and the auth.
      *
      * <p>
      * This method is a byte array version
@@ -90,8 +94,8 @@ public class UserAgentMessageEncryptionKeyInfo {
      *
      * @param p256dh a p256dh.
      * @param auth   an auth.
-     * @return a new UserAgentMessageEncryptionKeyInfo.
-     * @throws MalformedUncompressedBytesException if the given p256dh doesn't start with 0x4
+     * @return a new {@link UserAgentMessageEncryptionKeyInfo}.
+     * @throws MalformedUncompressedBytesException if the given p256dh doesn't start with 0x04
      *                                             or the length isn't 65 bytes.
      * @throws InvalidECPublicKeyException         if the public key extracted
      *                                             from the give p256dh is invalid.

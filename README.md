@@ -1,6 +1,6 @@
 # zerodep-web-push-java
 
-A Java [Web Push](https://datatracker.ietf.org/doc/html/rfc8030) application server side library
+A Java [Web Push](https://datatracker.ietf.org/doc/html/rfc8030) application server-side library
 that has no dependencies on any specific third-party library.
 
 - Provides the functionalities for [VAPID](https://datatracker.ietf.org/doc/html/rfc8292)
@@ -8,7 +8,7 @@ that has no dependencies on any specific third-party library.
   for [Message Encryption for Web Push](https://datatracker.ietf.org/doc/html/rfc8291)
 - Assumes that the [Push API](https://www.w3.org/TR/push-api/) is used.
 
-This library itself does not provide all the functionality needed for Web Push.
+This library itself doesn't provide all the functionalities needed for Web Push.
 
 The JSON Web Token (JWT) functionality and the Http Client functionality usually need to be provided
 externally. However, you can choose arbitrary libraries that suit your project.
@@ -16,7 +16,8 @@ externally. However, you can choose arbitrary libraries that suit your project.
 ## The motivation for this project
 
 The motivation for this project is to make it easy to implement Web Push functionality on any
-architecture.
+architecture(e.g. an existing project that already depends on a specific web-framework and various
+third-party libraries).
 
 To achieve this, this project focuses on:
 
@@ -24,16 +25,16 @@ To achieve this, this project focuses on:
 - providing independent classes for each feature. For example, in this library, the `VAPIDKeyPair`
   interface and the `MessageEncryption` interface are defined and can be used independently.
 
-## Requirement
+## Requirements
 
 JDK 8+
 
-(To build from source, JDK 9+.)
+(To build from source, JDK 9+)
 
-## Third-party library
+## Third-party libraries
 
-In order to implement the entire Web Push function with this library, at least the following two
-types of functions must be provided from outside this library. Below are some examples of
+In order to implement the complete Web Push functionality with this library, at least the following
+two types of functionalities must be provided from outside this library. Below are some examples of
 third-party libraries.
 
 (Off course, it is possible to use the one you make yourself).
@@ -75,25 +76,25 @@ TBD
 ### Null safety
 
 The public methods and constructors of this library do not accept `null`s and do not return `null`s.
-They throw an `Exception` when a null reference is passed. The methods
+They throw an `Exception` when a null reference is passed. Some methods
 return `java.util.Optional.empty()` when they need to indicate that the value does not exist.
 
 The exceptions are:
 
 - `com.zerodeplibs.webpush.PushSubscription.java`
-- The runtime exceptions and checked exceptions thrown by the methods and constructors. For
-  example, `getCause()` can return null.
+- The methods of runtime exceptions and checked exceptions thrown by some methods and constructors.
+  For example, their `getCause()` can return null.
 
 ### Thread safe or not thread safe
 
-The classes and methods listed below can be called from multiple threads at the same time (thread
-safe). However, the other classes and methods should **NOT** be considered thread-safe.
+The methods listed below can be called from multiple threads at the same time (thread safe).
+However, the others should **NOT** be considered thread-safe.
 
 **Thread safe**
 
 - The static utility methods(e.g. `com.zerodeplibs.webpush.header.Topic#ensure`).
-- Implementations and instances that meet the conditions for thread safety described in javadoc(e.g.
-  an instance of `com.zerodeplibs.webpush.VAPIDKeyPair.java`).
+- The methods of instances that meet the conditions for thread safety described in their javadoc(
+  e.g. an instance of `com.zerodeplibs.webpush.VAPIDKeyPair.java`).
 
 ## License
 

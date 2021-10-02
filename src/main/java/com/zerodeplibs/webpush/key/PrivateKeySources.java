@@ -9,12 +9,12 @@ import java.security.interfaces.ECPrivateKey;
 import java.util.Base64;
 
 /**
- * Static factory methods for instantiating an implementation class of {@link PrivateKeySource}.
+ * Static factory methods for {@link PrivateKeySource}.
  *
  * <p>
  * <b>Examples:</b><br>
  * The following is an example of commands that uses OpenSSL
- * to generate a file that can be handled with a PrivateKeySource.
+ * to generate a file that can be handled with {@link PrivateKeySource}s.
  * </p>
  *
  * <pre class="code">
@@ -30,7 +30,7 @@ import java.util.Base64;
  * </pre>
  *
  * <p>
- * The examples of using these files to create PrivateKeySource is as follows.
+ * The examples of using these files to create {@link PrivateKeySource}s are as follows.
  * </p>
  * <pre class="code">
  * Path pemPath = new File("my-private_pkcs8.pem").toPath();
@@ -65,11 +65,11 @@ public class PrivateKeySources {
     }
 
     /**
-     * Creates a PrivateKeySource with the byte array
+     * Creates a new {@link PrivateKeySource} with the given octet sequence
      * that is assumed to be encoded according to the PKCS#8 standard.
      *
-     * @param pkcs8Bytes the byte array representing a private key.
-     * @return a new PrivateKeySource.
+     * @param pkcs8Bytes the octet sequence representing a private key.
+     * @return a new {@link PrivateKeySource}.
      * @see java.security.spec.PKCS8EncodedKeySpec
      */
     // BEGIN CHECK STYLE OFF
@@ -78,16 +78,17 @@ public class PrivateKeySources {
     }
 
     /**
-     * Creates a PrivateKeySource with the PEM-encoded text.
-     * The underlying binary data is assumed to be encoded according to the PKCS#8 standard.
+     * Creates a new {@link PrivateKeySource} with the given PEM-encoded text.
+     * The underlying octet sequence is assumed to be encoded according to the PKCS#8 standard.
      *
      * <p>
-     * the PEM-encoded text is assumed to start with '-----BEGIN PRIVATE KEY-----'
-     * and end with '-----END PRIVATE KEY-----'.
+     * the PEM-encoded text is assumed to contain a private key data
+     * that starts with '-----BEGIN PRIVATE KEY-----'
+     * and ends with '-----END PRIVATE KEY-----'.
      * </p>
      *
-     * @param pemText the PEM-encoded text representing a private key.
-     * @return a new PrivateKeySource.
+     * @param pemText the PEM-encoded text containing a private key data.
+     * @return a new {@link PrivateKeySource}.
      * @throws MalformedPEMException if the given text
      *                               cannot be parsed as a valid PEM format.
      * @see java.security.spec.PKCS8EncodedKeySpec
@@ -97,8 +98,9 @@ public class PrivateKeySources {
     }
 
     /**
-     * Creates a PrivateKeySource with the PEM-encoded text and the {@link PEMParser}.
-     * The underlying binary data is assumed to be encoded according to the PKCS#8 standard.
+     * Creates a new {@link PrivateKeySource} with the given PEM-encoded text
+     * and the given {@link PEMParser}.
+     * The underlying octet sequence is assumed to be encoded according to the PKCS#8 standard.
      *
      * <p>
      * the PEM-encoded text are parsed by the given {@link PEMParser}.
@@ -106,7 +108,7 @@ public class PrivateKeySources {
      *
      * @param pemText the PEM-encoded text representing a private key.
      * @param parser  the parser for parsing the PEM-encoded text.
-     * @return a new PrivateKeySource.
+     * @return a new {@link PrivateKeySource}.
      * @throws MalformedPEMException if the given text
      *                               cannot be parsed as a valid PEM format.
      * @see java.security.spec.PKCS8EncodedKeySpec
@@ -117,12 +119,12 @@ public class PrivateKeySources {
     }
 
     /**
-     * Creates a PrivateKeySource with the base64-encoded private key
+     * Creates a new {@link PrivateKeySource} with the given base64-encoded private key
      * (<b>NOT</b> base64<b>url</b>-encoded).
-     * The binary data is assumed to be encoded according to the PKCS#8 standard.
+     * The octet sequence is assumed to be encoded according to the PKCS#8 standard.
      *
-     * @param pkcs8Base64Text the base64-encoded private key.
-     * @return a new PrivateKeySource.
+     * @param pkcs8Base64Text a base64-encoded private key.
+     * @return a new {@link PrivateKeySource}.
      * @throws IllegalArgumentException if the given text is not in valid Base64 scheme.
      * @see java.security.spec.PKCS8EncodedKeySpec
      */
@@ -134,18 +136,20 @@ public class PrivateKeySources {
     }
 
     /**
-     * Creates a PrivateKeySource with the PEM formatted file specified by the path.
-     * The underlying binary data is assumed to be encoded according to the PKCS#8 standard.
+     * Creates a new {@link PrivateKeySource} with the PEM formatted file specified
+     * by the given path.
+     * The underlying octet sequence is assumed to be encoded according to the PKCS#8 standard.
      *
      * <p>
-     * The first line of the file is assumed to be '-----BEGIN PRIVATE KEY-----'
-     * and the end line of the file is assumed to be '-----END PRIVATE KEY-----'.
+     * The PEM formatted file is assumed to contain a private key data
+     * that starts with '-----BEGIN PRIVATE KEY-----'
+     * and ends with '-----END PRIVATE KEY-----'.
      * </p>
      *
-     * @param path the path to the PEM formatted file.
-     * @return a new PrivateKeySource.
+     * @param path the path to a PEM formatted file.
+     * @return a new {@link PrivateKeySource}.
      * @throws IOException           if an I/O error occurs.
-     * @throws MalformedPEMException if the given text
+     * @throws MalformedPEMException if the contents of the given file
      *                               cannot be parsed as a valid PEM format.
      */
     public static PrivateKeySource ofPEMFile(Path path) throws IOException {
@@ -153,18 +157,19 @@ public class PrivateKeySources {
     }
 
     /**
-     * Creates a PrivateKeySource with the PEM formatted file specified by the path.
-     * The underlying binary data is assumed to be encoded according to the PKCS#8 standard.
+     * Creates a new {@link PrivateKeySource} with the PEM formatted file specified
+     * by the given path.
+     * The underlying octet sequence is assumed to be encoded according to the PKCS#8 standard.
      *
      * <p>
      * The contents of the PEM file are parsed by the given {@link PEMParser}.
      * </p>
      *
-     * @param path   the path to the PEM formatted file.
-     * @param parser the parser for parsing the contents of the PEM file.
-     * @return a new PrivateKeySource.
+     * @param path   the path to a PEM formatted file.
+     * @param parser a parser for parsing the contents of the PEM file.
+     * @return a new {@link PrivateKeySource}.
      * @throws IOException           if an I/O error occurs.
-     * @throws MalformedPEMException if the given text
+     * @throws MalformedPEMException if the contents of the given file
      *                               cannot be parsed as a valid PEM format.
      */
     public static PrivateKeySource ofPEMFile(Path path, PEMParser parser) throws IOException {
@@ -172,11 +177,11 @@ public class PrivateKeySources {
     }
 
     /**
-     * Creates a PrivateKeySource with the DER file specified by the path.
-     * Its binary data is assumed to be encoded according to the PKCS#8 standard.
+     * Creates a new {@link PrivateKeySource} with the DER file specified by the given path.
+     * Its octet sequence is assumed to be encoded according to the PKCS#8 standard.
      *
-     * @param path the path to the DER file.
-     * @return a new PrivateKeySource.
+     * @param path the path to a DER file.
+     * @return a new {@link PrivateKeySource}.
      * @throws IOException if an I/O error occurs.
      */
     public static PrivateKeySource ofDERFile(Path path) throws IOException {
@@ -184,27 +189,27 @@ public class PrivateKeySources {
     }
 
     /**
-     * Creates a PrivateKeySource that wraps the given ECPrivateKey object.
+     * Creates a new {@link PrivateKeySource} that wraps the given {@link ECPrivateKey} object.
      *
-     * @param privateKey the ECPrivateKey.
-     * @return a new PrivateKeySource.
+     * @param privateKey an {@link ECPrivateKey} object.
+     * @return a new {@link PrivateKeySource}.
      */
     public static PrivateKeySource ofECPrivateKey(ECPrivateKey privateKey) {
         return new KeyObjectPrivateKeySource(privateKey);
     }
 
     /**
-     * Gets a new PEMFileSourceBuilder.
+     * Gets a new {@link PEMFileSourceBuilder}.
      *
-     * @param path the path to the PEM formatted file.
-     * @return a new PEMFileSourceBuilder.
+     * @param path the path to a PEM formatted file.
+     * @return a new {@link PEMFileSourceBuilder}.
      */
     public static PEMFileSourceBuilder getPEMFileSourceBuilder(Path path) {
         return new PEMFileSourceBuilder(path);
     }
 
     /**
-     * The builder class for creating instances of the PrivateKeySource from PEM formatted files.
+     * The builder class for creating {@link PrivateKeySource} from PEM formatted files.
      *
      * @author Tomoki Sato
      */
@@ -221,7 +226,7 @@ public class PrivateKeySources {
         /**
          * Specifies the encoding of the PEM file.
          *
-         * @param charset the encoding.
+         * @param charset the encoding of the PEM file.
          * @return this object.
          */
         public PEMFileSourceBuilder charset(Charset charset) {
@@ -243,11 +248,11 @@ public class PrivateKeySources {
         }
 
         /**
-         * Creates a new PrivateKeySource.
+         * Creates a new {@link PrivateKeySource}.
          *
-         * @return a new PrivateKeySource.
+         * @return a new {@link PrivateKeySource}.
          * @throws IOException           if an I/O error occurs.
-         * @throws MalformedPEMException if the given text
+         * @throws MalformedPEMException if the contents of the file
          *                               cannot be parsed as a valid PEM format.
          */
         public PrivateKeySource build() throws IOException {
