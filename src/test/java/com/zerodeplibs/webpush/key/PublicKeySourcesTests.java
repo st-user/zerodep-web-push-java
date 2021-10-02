@@ -58,25 +58,6 @@ public class PublicKeySourcesTests {
     }
 
     @Test
-    public void shouldExtractPublicKeyFromUncompressedBase64Text() {
-
-        ECPublicKey publicKey =
-            PublicKeySources.ofUncompressedBase64Text(PUBLIC_KEY_UNCOMPRESSED_BYTES_BASE64)
-                .extract();
-
-        assertThat(publicKey.getAlgorithm(), equalTo("EC"));
-    }
-
-    @Test
-    public void shouldExtractPublicKeyFromX509Base64Text() {
-
-        ECPublicKey publicKey = PublicKeySources.ofX509Base64Text(PUBLIC_KEY_X509_BYTES_BASE64)
-            .extract();
-
-        assertThat(publicKey.getAlgorithm(), equalTo("EC"));
-    }
-
-    @Test
     public void shouldExtractPublicKeyFromPEMFile()
         throws URISyntaxException, IOException {
         ECPublicKey publicKey = PublicKeySources.ofPEMFile(
@@ -114,12 +95,6 @@ public class PublicKeySourcesTests {
 
         assertNullCheck(() -> PublicKeySources.ofPEMText("ABC", null),
             "parser");
-
-        assertNullCheck(() -> PublicKeySources.ofUncompressedBase64Text(null),
-            "uncompressedBytesBase64Text");
-
-        assertNullCheck(() -> PublicKeySources.ofX509Base64Text(null),
-            "x509Base64Text");
 
         assertNullCheck(() -> PublicKeySources.ofPEMFile(null),
             "path");

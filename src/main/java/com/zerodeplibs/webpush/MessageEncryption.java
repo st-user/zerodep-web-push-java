@@ -17,6 +17,7 @@ public interface MessageEncryption {
      * Encrypts the given pushMessage with the given userAgentMessageEncryptionKeyInfo.
      *
      * @param userAgentMessageEncryptionKeyInfo user agent side keys for encryption.
+     * @param pushMessage                       the push message to be encrypted
      * @return the encrypted push message.
      */
     EncryptedPushMessage encrypt(

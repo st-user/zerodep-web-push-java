@@ -6,7 +6,6 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.security.interfaces.ECPublicKey;
-import java.util.Base64;
 
 /**
  * Static factory methods for {@link PublicKeySource}.
@@ -137,39 +136,6 @@ public class PublicKeySources {
     public static PublicKeySource ofPEMText(String pemText, PEMParser parser) {
         WebPushPreConditions.checkNotNull(parser, "parser");
         return ofX509Bytes(parser.parse(pemText));
-    }
-
-    /**
-     * Creates a new {@link PublicKeySource} with the given base64-encoded public key
-     * (<b>NOT</b> base64<b>url</b>-encoded).
-     * The octet sequence is assumed to represent a public key
-     * on the P-256 curve that encoded in the uncompressed form[X9.62].
-     *
-     * @param uncompressedBytesBase64Text a base64-encoded public key.
-     * @return a new {@link PublicKeySource}.
-     * @throws MalformedUncompressedBytesException if the octet sequence doesn't start with 0x04
-     *                                             or the length isn't 65 bytes.
-     * @throws IllegalArgumentException            if the given text is not in valid Base64 scheme.
-     */
-    public static PublicKeySource ofUncompressedBase64Text(String uncompressedBytesBase64Text) {
-        WebPushPreConditions.checkNotNull(uncompressedBytesBase64Text,
-            "uncompressedBytesBase64Text");
-        return ofUncompressedBytes(Base64.getDecoder().decode(uncompressedBytesBase64Text));
-    }
-
-    /**
-     * Creates a new {@link PublicKeySource} with the given base64-encoded public key
-     * (<b>NOT</b> base64<b>url</b>-encoded).
-     * The octet sequence is assumed to be encoded according to the X.509 standard.
-     *
-     * @param x509Base64Text a base64-encoded public key.
-     * @return a new {@link PublicKeySource}.
-     * @throws IllegalArgumentException if the given text is not in valid Base64 scheme.
-     * @see java.security.spec.X509EncodedKeySpec
-     */
-    public static PublicKeySource ofX509Base64Text(String x509Base64Text) {
-        WebPushPreConditions.checkNotNull(x509Base64Text, "x509Base64Text");
-        return ofX509Bytes(Base64.getDecoder().decode(x509Base64Text));
     }
 
     /**

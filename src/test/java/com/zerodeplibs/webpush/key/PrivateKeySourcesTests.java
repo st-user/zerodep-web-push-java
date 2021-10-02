@@ -47,16 +47,6 @@ public class PrivateKeySourcesTests {
     }
 
     @Test
-    public void shouldExtractPrivateKeyFromPKCS8Base64Text() {
-
-        ECPrivateKey privateKey =
-            PrivateKeySources.ofPKCS8Base64Text(PRIVATE_KEY_PKCS8_BYTES_BASE64)
-                .extract();
-
-        assertThat(privateKey.getAlgorithm(), equalTo("EC"));
-    }
-
-    @Test
     public void shouldExtractPrivateKeyFromPEMFile()
         throws URISyntaxException, IOException {
 
@@ -92,9 +82,6 @@ public class PrivateKeySourcesTests {
 
         assertNullCheck(() -> PrivateKeySources.ofPEMText("ABC", null),
             "parser");
-
-        assertNullCheck(() -> PrivateKeySources.ofPKCS8Base64Text(null),
-            "pkcs8Base64Text");
 
         assertNullCheck(() -> PrivateKeySources.ofPEMFile(null),
             "path");

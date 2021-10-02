@@ -6,7 +6,6 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.security.interfaces.ECPrivateKey;
-import java.util.Base64;
 
 /**
  * Static factory methods for {@link PrivateKeySource}.
@@ -116,23 +115,6 @@ public class PrivateKeySources {
     public static PrivateKeySource ofPEMText(String pemText, PEMParser parser) {
         WebPushPreConditions.checkNotNull(parser, "parser");
         return ofPKCS8Bytes(parser.parse(pemText));
-    }
-
-    /**
-     * Creates a new {@link PrivateKeySource} with the given base64-encoded private key
-     * (<b>NOT</b> base64<b>url</b>-encoded).
-     * The octet sequence is assumed to be encoded according to the PKCS#8 standard.
-     *
-     * @param pkcs8Base64Text a base64-encoded private key.
-     * @return a new {@link PrivateKeySource}.
-     * @throws IllegalArgumentException if the given text is not in valid Base64 scheme.
-     * @see java.security.spec.PKCS8EncodedKeySpec
-     */
-    // BEGIN CHECK STYLE OFF
-    public static PrivateKeySource ofPKCS8Base64Text(
-        String pkcs8Base64Text) { // END CHECK STYLE OFF
-        WebPushPreConditions.checkNotNull(pkcs8Base64Text, "pkcs8Base64Text");
-        return ofPKCS8Bytes(Base64.getDecoder().decode(pkcs8Base64Text));
     }
 
     /**
