@@ -38,7 +38,7 @@ using [Spring Boot](https://spring.io/projects/spring-boot).
 
 ### private key
 
-In general, it is not recommended storing the private key in plain text on the file system
+In general, it is not recommended storing private keys in plain text on a file system
 (In the above example, we do that for simplicity).
 
 However, such a method is still useful depending on architectures.
