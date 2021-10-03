@@ -14,9 +14,7 @@ import com.zerodeplibs.webpush.key.PublicKeySource;
  * is obtained by a factory method of {@link VAPIDKeyPairs}.
  * </p>
  *
- * <p>
- * <b>Example:</b>
- * </p>
+ * <h3>Example:</h3>
  * <pre class="code">
  * VAPIDKeyPair vapidKeyPair = VAPIDKeyPairs.of(
  *      PrivateKeySources.ofPEMFile(new File(privateKeyFilePath).toPath()),
@@ -37,8 +35,8 @@ import com.zerodeplibs.webpush.key.PublicKeySource;
  * with the Elliptic Curve Digital Signature Algorithm (ECDSA) over the P-256 curve.
  * </p>
  *
+ * <h3>Thread Safety:</h3>
  * <p>
- * <b>Thread Safety:</b>
  * Depends on the implementation. See {@link VAPIDKeyPairs}.
  * </p>
  *

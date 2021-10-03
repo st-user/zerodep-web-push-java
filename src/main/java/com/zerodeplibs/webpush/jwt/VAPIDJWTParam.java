@@ -15,9 +15,7 @@ import java.util.Optional;
  * for the Voluntary Application Server Identification
  * (<a href="https://datatracker.ietf.org/doc/html/rfc8292">VAPID</a>).
  *
- * <p>
- * <b>Example:</b>
- * </p>
+ * <h3>Example:</h3>
  * <pre class="code">
  *
  * VAPIDJWTParam param = VAPIDJWTParam.getBuilder()
@@ -59,9 +57,7 @@ public class VAPIDJWTParam {
      * Gets an additional claim specified at the time of the instantiation
      * by the given name and type.
      *
-     * <p>
-     * <b>Example:</b>
-     * </P>
+     * <h3>Example:</h3>
      * <pre class="code">
      *
      * ArrayList&lt;String&gt; hogeList = new ArrayList&lt;&gt;();

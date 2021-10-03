@@ -3,9 +3,7 @@ package com.zerodeplibs.webpush.header;
 /**
  * The utility class for the <a href="https://datatracker.ietf.org/doc/html/rfc8030#section-5.3">Urgency</a> header field.
  *
- * <p>
- * <b>Example:</b>
- * </p>
+ * <h3>Example:</h3>
  * <pre class="code">
  * // Sets the urgency header field
  * myHeader.addHeader("Urgency", Urgency.veryLow());

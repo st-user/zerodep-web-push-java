@@ -7,9 +7,7 @@ import java.util.regex.Pattern;
 /**
  * The utility class for the <a href="https://datatracker.ietf.org/doc/html/rfc8030#section-5.4">Topic</a> header field.
  *
- * <p>
- * <b>Example:</b>
- * </p>
+ * <h3>Example:</h3>
  * <pre class="code">
  * // Makes sure the "Topic" header field doesn't contain illegal characters
  * // and the length doesn't exceed the limit.

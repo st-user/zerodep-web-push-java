@@ -8,15 +8,15 @@ package com.zerodeplibs.webpush.key;
  * is obtained by a factory method of {@link PEMParsers}.
  * </p>
  *
+ * <h3>WARNING:</h3>
  * <p>
- * <b>WARNING:</b>
  * Implementations of this interface are intended to parse PEM-encoded texts originated
- * from trusted sources(e.g. the PEM file created by yourself).
+ * from trusted sources(e.g. a PEM file created by yourself).
  * So don't parse data originated from untrusted sources.
  * </p>
  *
+ * <h3>Thread Safety:</h3>
  * <p>
- * <b>Thread Safety:</b>
  * Depends on the implementation. See {@link PEMParsers}.
  * </p>
  *

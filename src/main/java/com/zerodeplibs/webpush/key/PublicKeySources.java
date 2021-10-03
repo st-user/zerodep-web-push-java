@@ -16,8 +16,8 @@ import java.security.interfaces.ECPublicKey;
  * It uses the validation method described in Section 5.6.2.3 of <a href="https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-56Ar2.pdf">Recommendation for Pair-Wise Key Establishment Schemes Using Discrete Logarithm Cryptography - NIST Special Publication 800-56A Revision 2</a>.
  * </p>
  *
+ * <h3>Examples:</h3>
  * <p>
- * <b>Examples:</b>
  * The following is an example of commands that uses OpenSSL
  * to generate a file that can be handled with {@link PublicKeySource}s.
  * </p>
@@ -52,8 +52,8 @@ import java.security.interfaces.ECPublicKey;
  *
  * </pre>
  *
+ * <h3>Thread Safety:</h3>
  * <p>
- * <b>Thread Safety:</b>
  * The factory methods themselves are thread-safe,
  * but the returned objects are <b>NOT</b> thread-safe.
  * </p>

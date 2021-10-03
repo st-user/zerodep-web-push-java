@@ -5,8 +5,8 @@ import com.zerodeplibs.webpush.internal.WebPushPreConditions;
 /**
  * Static factory methods for {@link PEMParser}.
  *
+ * <h3>Thread Safety:</h3>
  * <p>
- * <b>Thread Safety:</b>
  * The factory methods themselves are thread-safe.
  * The returned objects are also thread-safe because they are immutable.
  * </p>
@@ -26,9 +26,7 @@ public class PEMParsers {
      * (i.e. all the characters before '-----BEGIN .... -----' or after '-----END ..... -----').
      * </p>
      *
-     * <p>
-     * <b>Examples:</b>
-     * </p>
+     * <h3>Examples:</h3>
      * <pre>
      *  // Creates a parser for PEM-encoded texts
      *  // in which the private key data starts with '-----BEGIN PRIVATE KEY-----'

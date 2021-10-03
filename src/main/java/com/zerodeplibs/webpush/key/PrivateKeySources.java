@@ -10,8 +10,8 @@ import java.security.interfaces.ECPrivateKey;
 /**
  * Static factory methods for {@link PrivateKeySource}.
  *
+ * <h3>Examples:</h3>
  * <p>
- * <b>Examples:</b>
  * The following is an example of commands that uses OpenSSL
  * to generate a file that can be handled with {@link PrivateKeySource}s.
  * </p>
@@ -47,8 +47,8 @@ import java.security.interfaces.ECPrivateKey;
  *
  * </pre>
  *
+ * <h3>Thread Safety:</h3>
  * <p>
- * <b>Thread Safety:</b>
  * The factory methods themselves are thread-safe,
  * but the returned objects are <b>NOT</b> thread-safe.
  * </p>

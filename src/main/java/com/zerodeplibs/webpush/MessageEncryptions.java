@@ -5,8 +5,8 @@ import java.security.NoSuchAlgorithmException;
 /**
  * Static factory methods for {@link MessageEncryption}.
  *
+ * <h3>Thread Safety:</h3>
  * <p>
- * <b>Thread Safety:</b>
  * The factory methods themselves are thread-safe,
  * but the returned objects are <b>NOT</b> thread-safe.
  * </p>

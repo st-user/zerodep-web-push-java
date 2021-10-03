@@ -11,8 +11,8 @@ import java.util.function.BiFunction;
 /**
  * Static factory methods for {@link VAPIDKeyPair}.
  *
+ * <h3>Thread Safety:</h3>
  * <p>
- * <b>Thread Safety:</b>
  * The factory methods themselves are thread-safe.
  * The returned objects are thread-safe only if an instance
  * obtained from <code>jwtGeneratorFactory</code> is thread-safe.

@@ -6,9 +6,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * The utility class for the <a href="https://datatracker.ietf.org/doc/html/rfc8030#section-5.2">TTL</a> header field.
  *
- * <p>
- * <b>Example:</b>
- * </p>
+ * <h3>Example:</h3>
  * <pre class="code">
  * // Suggests that the push message is retained for 2 days.
  * myHeader.addHeader("TTL", TTL.days(2));

@@ -3,8 +3,8 @@ package com.zerodeplibs.webpush.internal;
 /**
  * The utility class for helping a method or constructor check its preconditions.
  *
+ * <h3>WARNING:</h3>
  * <p>
- * <b>WARNING:</b>
  * This class is intended to be used internally in this library.
  * Therefore, don't use this class from outside this library.
  * </p>
