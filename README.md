@@ -2,4 +2,4 @@
 A Java Web Push application server side library that has no dependencies on any specific third-party library.
 
 
-Currently under development on the dev branch. Version 1.0.0 will be released soon.
+Currently under development on the [dev branch](https://github.com/st-user/zerodep-web-push-java/tree/dev). Version 1.0.0 will be released soon.
