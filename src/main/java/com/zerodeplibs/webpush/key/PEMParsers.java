@@ -6,7 +6,7 @@ import com.zerodeplibs.webpush.internal.WebPushPreConditions;
  * Static factory methods for {@link PEMParser}.
  *
  * <p>
- * <b>Thread Safety:</b><br>
+ * <b>Thread Safety:</b>
  * The factory methods themselves are thread-safe.
  * The returned objects are also thread-safe because they are immutable.
  * </p>

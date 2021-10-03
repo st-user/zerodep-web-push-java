@@ -46,7 +46,7 @@ import java.util.Objects;
 public class PushSubscription {
 
     private String endpoint;
-    private String expirationTime;
+    private Long expirationTime;
     private Keys keys;
 
     /**
@@ -111,11 +111,11 @@ public class PushSubscription {
         this.endpoint = endpoint;
     }
 
-    public String getExpirationTime() {
+    public Long getExpirationTime() {
         return expirationTime;
     }
 
-    public void setExpirationTime(String expirationTime) {
+    public void setExpirationTime(Long expirationTime) {
         this.expirationTime = expirationTime;
     }
 

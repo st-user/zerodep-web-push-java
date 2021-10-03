@@ -19,7 +19,7 @@ public class MessageEncryptionTests {
 
 
     @Test
-    public void shouldEncryptPayloadUsingSuppliedSubscriptionKeys() throws Exception {
+    public void shouldEncryptMessageUsingTheGivenSubscriptionKeys() throws Exception {
 
 
         KeyPair uaKeyPair = generateKeyPair();

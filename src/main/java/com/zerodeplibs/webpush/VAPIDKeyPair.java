@@ -38,7 +38,7 @@ import com.zerodeplibs.webpush.key.PublicKeySource;
  * </p>
  *
  * <p>
- * <b>Thread Safety:</b><br>
+ * <b>Thread Safety:</b>
  * Depends on the implementation. See {@link VAPIDKeyPairs}.
  * </p>
  *

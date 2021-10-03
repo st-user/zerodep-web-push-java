@@ -9,7 +9,14 @@ package com.zerodeplibs.webpush.key;
  * </p>
  *
  * <p>
- * <b>Thread Safety:</b><br>
+ * <b>WARNING:</b>
+ * Implementations of this interface are intended to parse PEM-encoded texts originated
+ * from trusted sources(e.g. the PEM file created by yourself).
+ * So don't parse data originated from untrusted sources.
+ * </p>
+ *
+ * <p>
+ * <b>Thread Safety:</b>
  * Depends on the implementation. See {@link PEMParsers}.
  * </p>
  *

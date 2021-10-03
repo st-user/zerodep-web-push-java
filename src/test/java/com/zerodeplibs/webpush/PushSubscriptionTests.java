@@ -10,18 +10,116 @@ public class PushSubscriptionTests {
     @Test
     public void equalsShouldCompareTheTwoObjectsBasedOnTheirProperties() {
 
-        PushSubscription a = new PushSubscription();
-        PushSubscription.Keys keysForA = new PushSubscription.Keys();
-        a.setEndpoint("1");
-        keysForA.setP256dh("a");
-        a.setKeys(keysForA);
+        PushSubscription a = createInstance(
+            "1",
+            100L,
+            "a",
+            "b"
+        );
 
-        PushSubscription b = new PushSubscription();
-        PushSubscription.Keys keysForB = new PushSubscription.Keys();
-        b.setEndpoint("1");
-        keysForB.setP256dh("a");
-        b.setKeys(keysForB);
+        PushSubscription b = createInstance(
+            "1",
+            100L,
+            "a",
+            "b"
+        );
 
-        assertThat(a, equalTo(b));
+        assertThat(a.equals(null), equalTo(false));
+        assertThat(a.equals(new Object()), equalTo(false));
+        assertThat(a.getKeys().equals(null), equalTo(false));
+        assertThat(a.getKeys().equals(new Object()), equalTo(false));
+
+        assertThat(a.equals(b), equalTo(true));
+        assertThat(a.hashCode(), equalTo(b.hashCode()));
+        assertThat(a.toString(), equalTo(b.toString()));
+
+        // Each property
+        //// endpoint
+        assertThat(
+            createInstance(
+                "1", null, null, null
+            ).equals(
+                createInstance(
+                    "1", null, null, null
+                )), equalTo(true));
+
+        assertThat(
+            createInstance(
+                "1", null, null, null
+            ).equals(
+                createInstance(
+                    "2", null, null, null
+                )), equalTo(false));
+
+        //// expirationTime
+        assertThat(
+            createInstance(
+                null, 100L, null, null
+            ).equals(
+                createInstance(
+                    null, 100L, null, null
+                )), equalTo(true));
+
+        assertThat(
+            createInstance(
+                null, 100L, null, null
+            ).equals(
+                createInstance(
+                    null, 101L, null, null
+                )), equalTo(false));
+
+        //// keys.p256dh
+        assertThat(
+            createInstance(
+                null, null, "a", null
+            ).equals(
+                createInstance(
+                    null, null, "a", null
+                )), equalTo(true));
+
+        assertThat(
+            createInstance(
+                null, null, "a", null
+            ).equals(
+                createInstance(
+                    null, null, "b", null
+                )), equalTo(false));
+
+        //// keys.auth
+        assertThat(
+            createInstance(
+                null, null, null, "x"
+            ).equals(
+                createInstance(
+                    null, null, null, "x"
+                )), equalTo(true));
+
+        //// keys.auth
+        assertThat(
+            createInstance(
+                null, null, null, "x"
+            ).equals(
+                createInstance(
+                    null, null, null, "y"
+                )), equalTo(false));
+    }
+
+    private PushSubscription createInstance(
+        String endpoint,
+        Long expirationTime,
+        String p256dh,
+        String auth
+    ) {
+        PushSubscription pushSubscription = new PushSubscription();
+        pushSubscription.setEndpoint(endpoint);
+        pushSubscription.setExpirationTime(expirationTime);
+
+        if (p256dh != null || auth != null) {
+            PushSubscription.Keys keys = new PushSubscription.Keys();
+            keys.setP256dh(p256dh);
+            keys.setAuth(auth);
+            pushSubscription.setKeys(keys);
+        }
+        return pushSubscription;
     }
 }

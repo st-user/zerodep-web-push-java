@@ -17,7 +17,7 @@ import java.security.interfaces.ECPublicKey;
  * </p>
  *
  * <p>
- * <b>Examples:</b><br>
+ * <b>Examples:</b>
  * The following is an example of commands that uses OpenSSL
  * to generate a file that can be handled with {@link PublicKeySource}s.
  * </p>
@@ -53,7 +53,7 @@ import java.security.interfaces.ECPublicKey;
  * </pre>
  *
  * <p>
- * <b>Thread Safety:</b><br>
+ * <b>Thread Safety:</b>
  * The factory methods themselves are thread-safe,
  * but the returned objects are <b>NOT</b> thread-safe.
  * </p>
