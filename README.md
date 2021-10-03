@@ -14,12 +14,12 @@ using [Spring Boot](https://spring.io/projects/spring-boot).
 1. Set up and run the application.
 
    ```
-   git clone ...
+   git clone https://github.com/st-user/zerodep-web-push-java-example.git
    cd zerodep-web-push-java-example
    mkdir .keys
    cd .keys
    openssl ecparam -genkey -name prime256v1 -noout -out my-private.pem
-   openssl pkcs8 -in private.pem -topk8 -nocrypt -out my-private_pkcs8.pem
+   openssl pkcs8 -in my-private.pem -topk8 -nocrypt -out my-private_pkcs8.pem
    openssl ec -in my-private.pem -pubout -conv_form uncompressed -out my-pub.pem
    cd ../
    mvn clean
