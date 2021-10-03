@@ -1,5 +1,6 @@
 package com.zerodeplibs.webpush;
 
+import static com.zerodeplibs.webpush.MessageEncryptionTestUtil.generateKeyPair;
 import static com.zerodeplibs.webpush.TestAssertionUtil.assertNullCheck;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -11,8 +12,8 @@ import com.zerodeplibs.webpush.key.PrivateKeySource;
 import com.zerodeplibs.webpush.key.PrivateKeySources;
 import com.zerodeplibs.webpush.key.PublicKeySource;
 import com.zerodeplibs.webpush.key.PublicKeySources;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyPair;
-import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
@@ -21,14 +22,19 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 public class VAPIDKeyPairTests {
 
+    @BeforeAll
+    public static void beforeAll() {
+        JCAProviderInitializer.initialize();
+    }
 
     @Test
     public void shouldExtractECPublicKeyInUncompressedForm()
-        throws NoSuchAlgorithmException {
+        throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
 
         KeyPair keyPair = generateKeyPair();
         ECPrivateKey privateKey = (ECPrivateKey) keyPair.getPrivate();
@@ -42,7 +48,6 @@ public class VAPIDKeyPairTests {
 
         byte[] publicKeyEncoded = publicKey.getEncoded();
 
-
         byte[] expectedBytes = Arrays.copyOfRange(publicKeyEncoded, publicKeyEncoded.length - 65,
             publicKeyEncoded.length);
         assertThat(vapidKeyPair.extractPublicKeyInUncompressedForm(), equalTo(expectedBytes));
@@ -51,7 +56,7 @@ public class VAPIDKeyPairTests {
 
     @Test
     public void shouldGenerateAuthorizationHeaderFieldWithTheGivenParameters()
-        throws NoSuchAlgorithmException {
+        throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
 
         KeyPair keyPair = generateKeyPair();
         ECPrivateKey privateKey = (ECPrivateKey) keyPair.getPrivate();
@@ -94,7 +99,8 @@ public class VAPIDKeyPairTests {
     }
 
     @Test
-    public void shouldThrowExceptionWhenNullReferencesArePassed() throws NoSuchAlgorithmException {
+    public void shouldThrowExceptionWhenNullReferencesArePassed()
+        throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
 
         KeyPair keyPair = generateKeyPair();
         ECPrivateKey privateKey = (ECPrivateKey) keyPair.getPrivate();
@@ -189,8 +195,4 @@ public class VAPIDKeyPairTests {
         }
     }
 
-    private KeyPair generateKeyPair() throws NoSuchAlgorithmException {
-        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("EC");
-        return keyPairGenerator.generateKeyPair();
-    }
 }

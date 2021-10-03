@@ -67,9 +67,149 @@ Now the author is preparing the repositories on Github and Maven central.
 
 ## Usage examples
 
-### spring boot
+### Spring Boot
 
-TBD
+full source
+code: [zerodep-web-push-java-example](https://github.com/st-user/zerodep-web-push-java-example)
+
+<details>
+    <summary>Controller class providing VAPID and Message Encryption functionalities</summary>
+
+``` java
+
+@SpringBootApplication
+@RestController
+public class App {
+
+    // Implement VAPIDJWTGenerator with an arbitrary JWT library.
+    static class MyAuth0VAPIDJWTGenerator implements VAPIDJWTGenerator {
+
+        private final Algorithm jwtAlgorithm;
+
+        MyAuth0VAPIDJWTGenerator(ECPrivateKey privateKey, ECPublicKey publicKey) {
+            this.jwtAlgorithm = Algorithm.ECDSA256(publicKey, privateKey);
+        }
+
+        @Override
+        public String generate(VAPIDJWTParam vapidjwtParam) {
+            return JWT.create()
+                .withAudience(vapidjwtParam.getOrigin())
+                .withExpiresAt(vapidjwtParam.getExpiresAt())
+                .withSubject(vapidjwtParam.getSubject().orElse("mailto:example@example.com"))
+                .sign(this.jwtAlgorithm);
+        }
+    }
+
+    @Autowired
+    private VAPIDKeyPair vapidKeyPair;
+
+    // In this example, reads the key pair for VAPID from the file system.
+    @Bean
+    public VAPIDKeyPair vaidKeyPair(
+        @Value("${private.key.file.path}") String privateKeyFilePath,
+        @Value("${public.key.file.path}") String publicKeyFilePath) throws IOException {
+
+        return VAPIDKeyPairs.of(
+            PrivateKeySources.ofPEMFile(new File(privateKeyFilePath).toPath()),
+            PublicKeySources.ofPEMFile(new File(publicKeyFilePath).toPath()),
+            MyAuth0VAPIDJWTGenerator::new
+            // (privateKey, publicKey) -> new MyJose4jVAPIDJWTGenerator(privateKey)
+            // (privateKey, publicKey) -> new MyNimbusJoseJwtVAPIDJWTGenerator(privateKey)
+        );
+    }
+
+    /**
+     * # Step 1.
+     * Sends the public key to user agents.
+     * <p>
+     * The user agents create push subscriptions with this public key.
+     */
+    @GetMapping("/getPublicKey")
+    public byte[] getPublicKey() {
+        return vapidKeyPair.extractPublicKeyInUncompressedForm();
+    }
+
+    /**
+     * # Step 2.
+     * Obtains push subscriptions from user agents.
+     * <p>
+     * The application server(this application) requests the delivery of push messages with these subscriptions.
+     */
+    @PostMapping("/subscribe")
+    public void subscribe(@RequestBody PushSubscription subscription) {
+        this.saveSubscriptionToStorage(subscription);
+    }
+
+    /**
+     * # Step 3.
+     * Requests the delivery of push messages.
+     * <p>
+     * In this example, for simplicity and testability, we implement this feature as an HTTP endpoint.
+     * However, in real applications, this feature does not have to be an HTTP endpoint.
+     */
+    @PostMapping("/sendMessage")
+    public ResponseEntity<String> sendMessage(@RequestBody Map<String, String> messages)
+        throws IOException {
+
+        String message = messages.getOrDefault("message", "").trim();
+        message = message.length() == 0 ? "Default Message." : message;
+
+        OkHttpClient httpClient = new OkHttpClient();
+        MessageEncryption messageEncryption = MessageEncryptions.of();
+
+        for (PushSubscription subscription : getSubscriptionsFromStorage()) {
+
+            VAPIDJWTParam vapidjwtParam = VAPIDJWTParam.getBuilder()
+                .resourceURLString(subscription.getEndpoint())
+                .expiresAfterSeconds((int) TimeUnit.MINUTES.toSeconds(15))
+                .subject("mailto:example@example.com")
+                .build();
+
+            EncryptedPushMessage encryptedPushMessage = messageEncryption.encrypt(
+                UserAgentMessageEncryptionKeyInfo.from(subscription.getKeys()),
+                PushMessage.ofUTF8(message)
+            );
+
+            Request request = new Request.Builder()
+                .url(subscription.getEndpoint())
+                .addHeader("Authorization",
+                    vapidKeyPair.generateAuthorizationHeaderValue(vapidjwtParam))
+                .addHeader("Content-Type", "application/octet-stream")
+                .addHeader("Content-Encoding", "aes128gcm")
+                .addHeader("TTL", String.valueOf(TTL.hours(1)))
+                .addHeader("Urgency", Urgency.low())
+                .addHeader("Topic", Topic.ensure("myTopic"))
+                .post(okhttp3.RequestBody.create(encryptedPushMessage.toBytes()))
+                .build();
+
+            try (Response response = httpClient.newCall(request).execute()) {
+                logger.info(String.format("status code: %d", response.code()));
+            }
+
+        }
+
+        return ResponseEntity.ok()
+            .header(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE)
+            .body("The message has been processed.");
+    }
+
+    private Collection<PushSubscription> getSubscriptionsFromStorage() {
+        return this.subscriptionMap.values();
+    }
+
+    private void saveSubscriptionToStorage(PushSubscription subscription) {
+        this.subscriptionMap.put(subscription.getEndpoint(), subscription);
+    }
+
+    private final Logger logger = LoggerFactory.getLogger(App.class);
+    private final Map<String, PushSubscription> subscriptionMap = new HashMap<>();
+
+    public static void main(String[] args) { SpringApplication.run(App.class, args); }
+}
+
+```
+
+</details>
 
 ## MISC
 
@@ -81,7 +221,8 @@ return `java.util.Optional.empty()` when they need to indicate that the value do
 
 The exceptions are:
 
-- `com.zerodeplibs.webpush.PushSubscription.java`
+- `com.zerodeplibs.webpush.PushSubscription.java`(the server-side representation for
+  a [push subscription](https://www.w3.org/TR/push-api/#push-subscription)).
 - The methods of runtime exceptions and checked exceptions thrown by some methods and constructors.
   For example, their `getCause()` can return null.
 
@@ -95,6 +236,27 @@ However, the others should **NOT** be considered thread-safe.
 - The static utility methods(e.g. `com.zerodeplibs.webpush.header.Topic#ensure`).
 - The methods of instances that meet the conditions for thread safety described in their javadoc(
   e.g. an instance of `com.zerodeplibs.webpush.VAPIDKeyPair.java`).
+
+### Working with Java Cryptography Architecture(JCA)
+
+This library
+uses [the Java Cryptography Architecture (JCA)](https://docs.oracle.com/javase/8/docs/technotes/guides/security/crypto/CryptoSpec.html)
+API for cryptographic operations. The algorithms used by this library are listed below.
+
+``` java
+java.security.SecureRandom
+java.security.KeyFactory.getInstance("EC") 
+java.security.KeyPairGenerator.getInstance("EC") // curve: secp256r1
+javax.crypto.KeyAgreement.getInstance("ECDH")
+javax.crypto.Mac.getInstance("HmacSHA256") 
+javax.crypto.Cipher.getInstance("AES/GCM/NoPadding")
+```
+
+By default, the providers shipped with the JDK will be used(e.g. `SunEC`, `SunJCE`).
+
+Of course, any provider that supports these algorithms is available(
+e.g. [Bouncy Castle](https://bouncycastle.org/)). This is because this library has no dependencies
+on any specific provider.
 
 ## License
 

@@ -4,12 +4,14 @@ import static com.zerodeplibs.webpush.TestAssertionUtil.assertNullCheck;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 
+import com.zerodeplibs.webpush.JCAProviderInitializer;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
 import java.security.interfaces.ECPublicKey;
 import java.util.Base64;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 
@@ -27,6 +29,11 @@ public class PublicKeySourcesTests {
         "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEVMzdJV3geI9v55Y3fD6Lx1M/7QuF9Er+DEkjf9k28fRJR3HIBmuLocObnqDkWk0UPekmJgRROMSWt8QYjLXwUQ==";
     private static final String PUBLIC_KEY_UNCOMPRESSED_BYTES_BASE64 =
         "BFTM3SVd4HiPb+eWN3w+i8dTP+0LhfRK/gxJI3/ZNvH0SUdxyAZri6HDm56g5FpNFD3pJiYEUTjElrfEGIy18FE=";
+
+    @BeforeAll
+    public static void beforeAll() {
+        JCAProviderInitializer.initialize();
+    }
 
     @Test
     public void shouldExtractPublicKeyFromUncompressedBytes() {

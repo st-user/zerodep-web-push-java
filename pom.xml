@@ -19,7 +19,9 @@
 
     <dependencies>
 
-        <!-- https://mvnrepository.com/artifact/org.openjdk.jmh/jmh-core -->
+        <!--
+            Dependencies for testing.
+         -->
         <dependency>
             <groupId>org.openjdk.jmh</groupId>
             <artifactId>jmh-core</artifactId>
@@ -27,7 +29,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.openjdk.jmh/jmh-generator-annprocess -->
         <dependency>
             <groupId>org.openjdk.jmh</groupId>
             <artifactId>jmh-generator-annprocess</artifactId>
@@ -35,7 +36,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
@@ -43,7 +43,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
@@ -51,8 +50,6 @@
             <scope>test</scope>
         </dependency>
 
-
-        <!-- https://mvnrepository.com/artifact/org.hamcrest/hamcrest -->
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest</artifactId>
@@ -60,18 +57,23 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk15on</artifactId>
+            <version>1.69</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
 
-        <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
+        <pluginManagement>
             <plugins>
-                <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
                 <plugin>
                     <artifactId>maven-clean-plugin</artifactId>
                     <version>3.1.0</version>
                 </plugin>
-                <!-- default lifecycle, jar packaging: see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
                 <plugin>
                     <artifactId>maven-resources-plugin</artifactId>
                     <version>3.0.2</version>
@@ -105,6 +107,27 @@
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>2.22.1</version>
+                    <executions>
+                        <execution>
+                            <id>default-test</id>
+                            <phase>test</phase>
+                            <goals>
+                                <goal>test</goal>
+                            </goals>
+                            <configuration>
+                                <classpathDependencyExcludes>
+                                    <classpathDependencyExclude>org.bouncycastle:bcprov-jdk15on</classpathDependencyExclude>
+                                </classpathDependencyExcludes>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>test-with-bouncy-castle</id>
+                            <phase>test</phase>
+                            <goals>
+                                <goal>test</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
                 <plugin>
                     <artifactId>maven-jar-plugin</artifactId>
@@ -123,7 +146,7 @@
                         </altDeploymentRepository>
                     </configuration>
                 </plugin>
-                <!-- site lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle -->
+
                 <plugin>
                     <artifactId>maven-site-plugin</artifactId>
                     <version>3.7.1</version>
@@ -191,7 +214,6 @@
                     <execution>
                         <id>validate</id>
                         <phase>validate</phase>
-                        <!--<phase>verify</phase>-->
                         <goals>
                             <goal>check</goal>
                         </goals>

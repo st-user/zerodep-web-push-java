@@ -4,12 +4,14 @@ import static com.zerodeplibs.webpush.TestAssertionUtil.assertNullCheck;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 
+import com.zerodeplibs.webpush.JCAProviderInitializer;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
 import java.security.interfaces.ECPrivateKey;
 import java.util.Base64;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 public class PrivateKeySourcesTests {
@@ -26,6 +28,11 @@ public class PrivateKeySourcesTests {
         "MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgry+xfRuVtpCPOmxc" +
             "aexkSXhua7zpaclMit3Un3ak+dqhRANCAARUzN0lXeB4j2/nljd8PovHUz/tC4X0" +
             "Sv4MSSN/2Tbx9ElHccgGa4uhw5ueoORaTRQ96SYmBFE4xJa3xBiMtfBR";
+
+    @BeforeAll
+    public static void beforeAll() {
+        JCAProviderInitializer.initialize();
+    }
 
     @Test
     public void shouldExtractPrivateKeyFromPKCS8Bytes() {

@@ -13,10 +13,15 @@ import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 public class MessageEncryptionTests {
 
+    @BeforeAll
+    public static void beforeAll() {
+        JCAProviderInitializer.initialize();
+    }
 
     @Test
     public void shouldEncryptMessageUsingTheGivenSubscriptionKeys() throws Exception {
