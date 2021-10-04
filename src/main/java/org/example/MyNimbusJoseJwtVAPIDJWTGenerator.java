@@ -12,6 +12,10 @@ import com.zerodeplibs.webpush.jwt.VAPIDJWTParam;
 import java.security.interfaces.ECPrivateKey;
 import org.slf4j.LoggerFactory;
 
+/**
+ * The example implementation of {@link VAPIDJWTGenerator}
+ * utilizing <a href="https://connect2id.com/products/nimbus-jose-jwt">Nimbus JOSE + JWT</a>.
+ */
 public class MyNimbusJoseJwtVAPIDJWTGenerator implements VAPIDJWTGenerator {
 
     private final ECDSASigner signer;
@@ -36,7 +40,7 @@ public class MyNimbusJoseJwtVAPIDJWTGenerator implements VAPIDJWTGenerator {
         String payload = String.format(
             "{\"aud\":\"%s\",\"exp\":%d,\"sub\":\"%s\"}",
             param.getOrigin(),
-            param.getExpiresAt().getTime() / 1000,
+            param.getExpiresAtInSeconds(),
             param.getSubject().orElse("mailto:example@example.com")
         );
 

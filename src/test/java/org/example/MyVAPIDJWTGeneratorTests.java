@@ -1,6 +1,12 @@
 package org.example;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zerodeplibs.webpush.jwt.VAPIDJWTParam;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -9,11 +15,11 @@ import java.security.PublicKey;
 import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
 import java.security.spec.ECGenParameterSpec;
+import java.util.Base64;
 import org.jose4j.jwa.AlgorithmConstraints;
 import org.jose4j.jws.AlgorithmIdentifiers;
 import org.jose4j.jws.JsonWebSignature;
 import org.jose4j.lang.JoseException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class MyVAPIDJWTGeneratorTests {
@@ -21,12 +27,13 @@ public class MyVAPIDJWTGeneratorTests {
 
     @Test
     public void generateWithAuth0()
-        throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, JoseException {
+        throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, JoseException,
+        IOException {
 
         KeyPair keyPair = generateKeyPair();
 
-        App.MyAuth0VAPIDJWTGenerator generator =
-            new App.MyAuth0VAPIDJWTGenerator((ECPrivateKey) keyPair.getPrivate(),
+        BasicExample.MyAuth0VAPIDJWTGenerator generator =
+            new BasicExample.MyAuth0VAPIDJWTGenerator((ECPrivateKey) keyPair.getPrivate(),
                 (ECPublicKey) keyPair.getPublic());
 
         VAPIDJWTParam param = VAPIDJWTParam.getBuilder()
@@ -37,11 +44,14 @@ public class MyVAPIDJWTGeneratorTests {
 
         String jwt = generator.generate(param);
         verifySign(jwt, keyPair.getPublic());
+        assertHeader(jwt);
+        assertPayload(jwt);
     }
 
     @Test
     public void generateWithJOSE4j()
-        throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, JoseException {
+        throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, JoseException,
+        IOException {
 
         KeyPair keyPair = generateKeyPair();
         MyJose4jVAPIDJWTGenerator generator =
@@ -55,11 +65,14 @@ public class MyVAPIDJWTGeneratorTests {
 
         String jwt = generator.generate(param);
         verifySign(jwt, keyPair.getPublic());
+        assertHeader(jwt);
+        assertPayload(jwt);
     }
 
     @Test
     public void generateWithNimbusJoseJwt()
-        throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, JoseException {
+        throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, JoseException,
+        IOException {
 
         KeyPair keyPair = generateKeyPair();
         MyNimbusJoseJwtVAPIDJWTGenerator generator =
@@ -73,6 +86,27 @@ public class MyVAPIDJWTGeneratorTests {
 
         String jwt = generator.generate(param);
         verifySign(jwt, keyPair.getPublic());
+        assertHeader(jwt);
+        assertPayload(jwt);
+    }
+
+    private void assertHeader(String jwt) throws IOException {
+        byte[] decoded = splitAndDecode(0, jwt);
+        TestingJWTHeader actual =
+            new ObjectMapper().readValue(decoded, TestingJWTHeader.class);
+
+        assertEquals("JWT", actual.getTyp());
+        assertEquals("ES256", actual.getAlg());
+    }
+
+    private void assertPayload(String jwt) throws IOException {
+        byte[] decoded = splitAndDecode(1, jwt);
+        TestingJWTPayload actual =
+            new ObjectMapper().readValue(decoded, TestingJWTPayload.class);
+
+        assertEquals("https://example.com", actual.getAud());
+        assertTrue(actual.getExp() > System.currentTimeMillis() / 1000);
+        assertEquals("mailto:test@example.com", actual.getSub());
     }
 
     private void verifySign(String jwt, PublicKey publicKey) throws JoseException {
@@ -85,7 +119,7 @@ public class MyVAPIDJWTGeneratorTests {
         verifier.setCompactSerialization(jwt);
         verifier.setKey(publicKey);
 
-        Assertions.assertTrue(verifier.verifySignature());
+        assertTrue(verifier.verifySignature());
     }
 
     private KeyPair generateKeyPair()
@@ -93,5 +127,63 @@ public class MyVAPIDJWTGeneratorTests {
         KeyPairGenerator keyPairGeneragor = KeyPairGenerator.getInstance("EC");
         keyPairGeneragor.initialize(new ECGenParameterSpec("secp256r1"));
         return keyPairGeneragor.generateKeyPair();
+    }
+
+    private byte[] splitAndDecode(int pos, String jwt) {
+        String content = jwt.split("\\.")[pos];
+        return Base64.getDecoder().decode(content.getBytes(StandardCharsets.UTF_8));
+    }
+
+    static class TestingJWTHeader {
+
+        private String typ;
+        private String alg;
+
+        public String getTyp() {
+            return typ;
+        }
+
+        public void setTyp(String typ) {
+            this.typ = typ;
+        }
+
+        public String getAlg() {
+            return alg;
+        }
+
+        public void setAlg(String alg) {
+            this.alg = alg;
+        }
+    }
+
+    static class TestingJWTPayload {
+
+        private String aud;
+        private long exp;
+        private String sub;
+
+        public String getAud() {
+            return aud;
+        }
+
+        public void setAud(String aud) {
+            this.aud = aud;
+        }
+
+        public long getExp() {
+            return exp;
+        }
+
+        public void setExp(long exp) {
+            this.exp = exp;
+        }
+
+        public String getSub() {
+            return sub;
+        }
+
+        public void setSub(String sub) {
+            this.sub = sub;
+        }
     }
 }

@@ -2,6 +2,7 @@ package org.example;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zerodeplibs.webpush.EncryptedPushMessage;
 import com.zerodeplibs.webpush.MessageEncryption;
 import com.zerodeplibs.webpush.MessageEncryptions;
@@ -32,7 +33,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
@@ -45,7 +45,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
 @RestController
-public class App {
+public class BasicExample {
 
     // Implement VAPIDJWTGenerator with an arbitrary JWT library.
     static class MyAuth0VAPIDJWTGenerator implements VAPIDJWTGenerator {
@@ -87,7 +87,7 @@ public class App {
     /**
      * # Step 1.
      * Sends the public key to user agents.
-     *
+     * <p>
      * The user agents create push subscriptions with this public key.
      */
     @GetMapping("/getPublicKey")
@@ -98,7 +98,7 @@ public class App {
     /**
      * # Step 2.
      * Obtains push subscriptions from user agents.
-     *
+     * <p>
      * The application server(this application) requests the delivery of push messages with these subscriptions.
      */
     @PostMapping("/subscribe")
@@ -109,7 +109,7 @@ public class App {
     /**
      * # Step 3.
      * Requests the delivery of push messages.
-     *
+     * <p>
      * In this example, for simplicity and testability, we implement this feature as an HTTP endpoint.
      * However, in real applications, this feature does not have to be an HTTP endpoint.
      */
@@ -131,9 +131,17 @@ public class App {
                 .subject("mailto:example@example.com")
                 .build();
 
+            PushMessage pushMessage = PushMessage.ofUTF8(message);
+
+            // In this example, we send push messages in simple text format.
+            // But you can also send them in JSON format as follows:
+            //
+            // ObjectMapper objectMapper = (Create a new one or get from the DI container.)
+            // PushMessage pushMessage = PushMessage.of(objectMapper.writeValueAsBytes(objectForJson));
+
             EncryptedPushMessage encryptedPushMessage = messageEncryption.encrypt(
                 UserAgentMessageEncryptionKeyInfo.from(subscription.getKeys()),
-                PushMessage.ofUTF8(message)
+                pushMessage
             );
 
             Request request = new Request.Builder()
@@ -141,15 +149,22 @@ public class App {
                 .addHeader("Authorization",
                     vapidKeyPair.generateAuthorizationHeaderValue(vapidjwtParam))
                 .addHeader("Content-Type", "application/octet-stream")
-                .addHeader("Content-Encoding", "aes128gcm")
+                .addHeader("Content-Encoding", encryptedPushMessage.contentEncoding())
                 .addHeader("TTL", String.valueOf(TTL.hours(1)))
                 .addHeader("Urgency", Urgency.low())
                 .addHeader("Topic", Topic.ensure("myTopic"))
+                // Depending on HTTP Client libraries, you may have to set "Content-Length" manually.
+                // .addHeader("Content-Length", String.valueOf(encryptedPushMessage.length()))
                 .post(okhttp3.RequestBody.create(encryptedPushMessage.toBytes()))
                 .build();
 
             try (Response response = httpClient.newCall(request).execute()) {
                 logger.info(String.format("status code: %d", response.code()));
+                // 201 Created : Success!
+                // 410 Gone : The subscription is no longer valid.
+                // etc...
+                // for more information, see the useful link below:
+                // [Response from push service - The Web Push Protocol ](https://developers.google.com/web/fundamentals/push-notifications/web-push-protocol)
             }
 
         }
@@ -167,10 +182,7 @@ public class App {
         this.subscriptionMap.put(subscription.getEndpoint(), subscription);
     }
 
-    private final Logger logger = LoggerFactory.getLogger(App.class);
+    private final Logger logger = LoggerFactory.getLogger(BasicExample.class);
     private final Map<String, PushSubscription> subscriptionMap = new HashMap<>();
 
-    public static void main(String[] args) {
-        SpringApplication.run(App.class, args);
-    }
 }

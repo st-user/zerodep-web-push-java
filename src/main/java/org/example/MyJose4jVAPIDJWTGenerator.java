@@ -8,6 +8,10 @@ import org.jose4j.jws.JsonWebSignature;
 import org.jose4j.lang.JoseException;
 import org.slf4j.LoggerFactory;
 
+/**
+ * The example implementation of {@link VAPIDJWTGenerator}
+ * utilizing <a href="https://bitbucket.org/b_c/jose4j/wiki/Home">jose4j</a>.
+ */
 public class MyJose4jVAPIDJWTGenerator implements VAPIDJWTGenerator {
 
     private final ECPrivateKey privateKey;
@@ -29,7 +33,7 @@ public class MyJose4jVAPIDJWTGenerator implements VAPIDJWTGenerator {
         String payload = String.format(
             "{\"aud\":\"%s\",\"exp\":%d,\"sub\":\"%s\"}",
             param.getOrigin(),
-            param.getExpiresAt().getTime() / 1000,
+            param.getExpiresAtInSeconds(),
             param.getSubject().orElse("mailto:example@example.com")
         );
         jws.setPayload(payload);
