@@ -8,6 +8,7 @@ import com.zerodeplibs.webpush.key.PublicKeySources;
 import java.security.interfaces.ECPublicKey;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.Objects;
 
 /**
  * This class represents a user agent side keys for push message encryption.
@@ -129,5 +130,51 @@ public class UserAgentMessageEncryptionKeyInfo {
 
     byte[] getAuthSecret() {
         return Arrays.copyOf(authSecret, authSecret.length);
+    }
+
+
+    /**
+     * Compares the given object with this object based on their public keys and secrets.
+     *
+     * @param o an object.
+     * @return true if the given object is equal to this object
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof UserAgentMessageEncryptionKeyInfo)) {
+            return false;
+        }
+        UserAgentMessageEncryptionKeyInfo that = (UserAgentMessageEncryptionKeyInfo) o;
+        return uaPublic.equals(that.uaPublic)
+            && Arrays.equals(getUncompressedUaPublic(), that.getUncompressedUaPublic())
+            && Arrays.equals(getAuthSecret(), that.getAuthSecret());
+    }
+
+    /**
+     * Returns the hash code value for this object based on its public key and secret.
+     *
+     * @return the hash code value for this object.
+     */
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(uaPublic);
+        result = 31 * result + Arrays.hashCode(getUncompressedUaPublic());
+        result = 31 * result + Arrays.hashCode(getAuthSecret());
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "UserAgentMessageEncryptionKeyInfo{"
+            + "p256dh='" + encodeBase64(uncompressedUaPublic) + '\''
+            + ", auth='" + encodeBase64(authSecret)
+            + "'}";
+    }
+
+    private String encodeBase64(byte[] bytes) {
+        return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
     }
 }

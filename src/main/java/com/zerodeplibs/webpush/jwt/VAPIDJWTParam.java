@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -36,8 +37,8 @@ public class VAPIDJWTParam {
     private final String subject;
     private final Map<String, Object> additionalClaims;
 
-    VAPIDJWTParam(String origin, Date expiresAt, String subject,
-                  Map<String, Object> additionalClaims) {
+    private VAPIDJWTParam(String origin, Date expiresAt, String subject,
+                          Map<String, Object> additionalClaims) {
         this.origin = origin;
         this.expiresAt = expiresAt;
         this.subject = subject;
@@ -297,5 +298,50 @@ public class VAPIDJWTParam {
      */
     public Optional<String> getSubject() {
         return Optional.ofNullable(subject);
+    }
+
+    /**
+     * Compares the given object with this object based on their properties.
+     *
+     * @param o an object.
+     * @return true if the given object is equal to this object
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof VAPIDJWTParam)) {
+            return false;
+        }
+        VAPIDJWTParam that = (VAPIDJWTParam) o;
+        return getOrigin().equals(that.getOrigin())
+            && getExpiresAt().equals(that.getExpiresAt())
+            && Objects.equals(getSubject(), that.getSubject())
+            && additionalClaims.equals(that.additionalClaims);
+    }
+
+    /**
+     * Returns the hash code value for this object based on its properties.
+     *
+     * @return the hash code value for this object.
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+            getOrigin(),
+            getExpiresAt(),
+            getSubject(),
+            additionalClaims);
+    }
+
+    @Override
+    public String toString() {
+        return "VAPIDJWTParam{"
+            + "origin='" + origin + '\''
+            + ", expiresAt=" + expiresAt
+            + ", subject='" + subject + '\''
+            + ", additionalClaims=" + additionalClaims
+            + '}';
     }
 }

@@ -11,35 +11,80 @@ import java.util.Arrays;
  */
 class Aes128GcmEncryptedMessage implements EncryptedPushMessage {
 
-    private final byte[] encryptedPayload;
+    private final byte[] encryptedMessage;
 
     Aes128GcmEncryptedMessage(byte[] encryptedPayload) {
-        this.encryptedPayload = encryptedPayload;
+        this.encryptedMessage = encryptedPayload;
     }
 
     @Override
     public byte[] toBytes() {
-        return Arrays.copyOf(encryptedPayload, encryptedPayload.length);
+        return Arrays.copyOf(encryptedMessage, encryptedMessage.length);
+    }
+
+    @Override
+    public int length() {
+        return this.encryptedMessage.length;
+    }
+
+    @Override
+    public String contentEncoding() {
+        return "aes128gcm";
     }
 
     byte[] extractSalt() {
-        return Arrays.copyOfRange(encryptedPayload, 0, 16);
+        return Arrays.copyOfRange(encryptedMessage, 0, 16);
     }
 
     int extractRecordSize() {
-        return ByteBuffer.wrap(encryptedPayload, 16, 4).getInt();
+        return ByteBuffer.wrap(encryptedMessage, 16, 4).getInt();
     }
 
     int extractKeyLength() {
-        return encryptedPayload[20];
+        return encryptedMessage[20];
     }
 
     byte[] extractUncompressedAsPublicKeyBytes() {
-        return Arrays.copyOfRange(encryptedPayload, 21, 21 + extractKeyLength());
+        return Arrays.copyOfRange(encryptedMessage, 21, 21 + extractKeyLength());
     }
 
     byte[] extractContent() {
-        return Arrays.copyOfRange(encryptedPayload, 21 + extractKeyLength(),
-            encryptedPayload.length);
+        return Arrays.copyOfRange(encryptedMessage, 21 + extractKeyLength(),
+            encryptedMessage.length);
+    }
+
+    /**
+     * Compares the given object with this object based on their encrypted octet sequences.
+     *
+     * @param o an object.
+     * @return true if the given object is equal to this object
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Aes128GcmEncryptedMessage)) {
+            return false;
+        }
+        Aes128GcmEncryptedMessage that = (Aes128GcmEncryptedMessage) o;
+        return Arrays.equals(encryptedMessage, that.encryptedMessage);
+    }
+
+    /**
+     * Returns the hash code value for this object based on its encrypted octet sequence.
+     *
+     * @return the hash code value for this object.
+     */
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(encryptedMessage);
+    }
+
+    @Override
+    public String toString() {
+        return "Aes128GcmEncryptedMessage{"
+            + "contentEncoding='" + contentEncoding() + '\''
+            + ", length='" + length() + "'}";
     }
 }

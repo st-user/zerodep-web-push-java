@@ -11,7 +11,9 @@ import java.net.URL;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.Test;
@@ -167,6 +169,56 @@ public class VAPIDJWTParamsTests {
                 .resourceURLString("http://example.com")
                 .build(),
             messageForExpirationTimeAbsence);
+    }
+
+    @Test
+    public void twoObjectsShouldBeComparedWithEachOtherBasedOnTheirProperties() {
+
+        Instant mockForNow = Instant.now();
+
+        VAPIDJWTParam a = new TestingBuilder(mockForNow)
+            .resourceURLString("https://example.com")
+            .expiresAfterSeconds(100)
+            .subject("SUBJECT")
+            .additionalClaim("a", "b")
+            .build();
+
+        VAPIDJWTParam b = new TestingBuilder(mockForNow)
+            .resourceURLString("https://example.com")
+            .expiresAfterSeconds(100)
+            .subject("SUBJECT")
+            .additionalClaim("a", "b")
+            .build();
+
+        assertThat(a.equals(null), equalTo(false));
+        assertThat(a.equals(new Object()), equalTo(false));
+
+        assertThat(a.equals(b), equalTo(true));
+        assertThat(a.hashCode(), equalTo(b.hashCode()));
+    }
+
+    @Test
+    public void toStringShouldReturnDescriptionBasedOnProperties() {
+
+        Instant mockForNow = Instant.now();
+
+        VAPIDJWTParam param = new TestingBuilder(mockForNow)
+            .resourceURLString("https://example.com")
+            .expiresAfterSeconds(100)
+            .subject("SUBJECT")
+            .additionalClaim("a", "b")
+            .build();
+
+        Map<String, String> claims = new HashMap<>();
+        claims.put("a", "b");
+        assertThat(param.toString(), equalTo(
+            "VAPIDJWTParam{"
+            + "origin='https://example.com'"
+            + ", expiresAt=" +  Date.from(mockForNow.plusSeconds(100))
+            + ", subject='SUBJECT'"
+            + ", additionalClaims=" + claims + "}"
+        ));
+
     }
 
     private static class TestingBuilder extends VAPIDJWTParam.Builder {

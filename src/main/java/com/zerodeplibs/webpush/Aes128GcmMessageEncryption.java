@@ -119,7 +119,7 @@ class Aes128GcmMessageEncryption implements MessageEncryption {
 
         byte[] encrypted =
             encryptByAesGcm(nonce, cek,
-                concatByteArrays(payload.getMessageBytes(), new byte[] {2}));
+                concatByteArrays(payload.getMessage(), new byte[] {2}));
 
         byte[] header = concatByteArrays(
             salt,

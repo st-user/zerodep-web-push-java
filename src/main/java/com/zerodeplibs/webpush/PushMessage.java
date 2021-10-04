@@ -12,10 +12,10 @@ import java.util.Arrays;
  */
 public class PushMessage {
 
-    private final byte[] messageBytes;
+    private final byte[] message;
 
     private PushMessage(byte[] messageBytes) {
-        this.messageBytes = messageBytes;
+        this.message = messageBytes;
     }
 
     /**
@@ -49,7 +49,42 @@ public class PushMessage {
     }
 
     // Should not change returned byte arrays.
-    byte[] getMessageBytes() {
-        return this.messageBytes;
+    byte[] getMessage() {
+        return this.message;
+    }
+
+    /**
+     * Compares the given object with this object based on their underlying messages.
+     *
+     * @param o an object.
+     * @return true if the given object is equal to this object
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof PushMessage)) {
+            return false;
+        }
+        PushMessage message1 = (PushMessage) o;
+        return Arrays.equals(getMessage(), message1.getMessage());
+    }
+
+    /**
+     * Returns the hash code value for this object based on its underlying message.
+     *
+     * @return the hash code value for this object.
+     */
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(getMessage());
+    }
+
+    @Override
+    public String toString() {
+        return "PushMessage{"
+            + "message=" + Arrays.toString(message)
+            + '}';
     }
 }

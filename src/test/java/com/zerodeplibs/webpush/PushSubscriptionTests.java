@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 public class PushSubscriptionTests {
 
     @Test
-    public void equalsShouldCompareTheTwoObjectsBasedOnTheirProperties() {
+    public void twoObjectsShouldBeComparedWithEachOtherBasedOnTheirProperties() {
 
         PushSubscription a = createInstance(
             "1",
@@ -31,7 +31,6 @@ public class PushSubscriptionTests {
 
         assertThat(a.equals(b), equalTo(true));
         assertThat(a.hashCode(), equalTo(b.hashCode()));
-        assertThat(a.toString(), equalTo(b.toString()));
 
         // Each property
         //// endpoint
@@ -102,6 +101,28 @@ public class PushSubscriptionTests {
                 createInstance(
                     null, null, null, "y"
                 )), equalTo(false));
+    }
+
+
+    @Test
+    public void toStringShouldReturnDescriptionBasedOnProperties() {
+
+        PushSubscription subscription = createInstance(
+            "1",
+            100L,
+            "a",
+            "b"
+        );
+
+        assertThat(subscription.toString(), equalTo(
+            "PushSubscription{"
+            + "endpoint='1'"
+            + ", expirationTime='100'"
+            + ", keys=Keys{"
+            + "p256dh='a'"
+            + ", auth='b'}"
+            + "}"
+        ));
     }
 
     private PushSubscription createInstance(

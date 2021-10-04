@@ -19,7 +19,7 @@ public class MessageEncryptions {
     }
 
     /**
-     * Creates a new {@link MessageEncryption}.
+     * Creates a new {@link MessageEncryption} that uses the "aes128gcm" content encoding.
      *
      * @return a new {@link MessageEncryption}.
      */
