@@ -274,6 +274,10 @@ public class VAPIDJWTParam {
     /**
      * Gets the origin extracted from the resource URL.
      *
+     * <p>
+     * Typically, the returned value is set to an "aud" claim.
+     * </p>
+     *
      * @return the origin.
      */
     public String getOrigin() {
@@ -290,9 +294,27 @@ public class VAPIDJWTParam {
     }
 
     /**
+     * Gets the number of seconds from January 1, 1970, 00:00:00 GMT
+     * to the expiration time.
+     *
+     * <p>
+     * Typically, the returned value is set to an "exp" claim.
+     * </p>
+     *
+     * @return the number of seconds.
+     */
+    public long getExpiresAtInSeconds() {
+        return getExpiresAt().getTime() / 1000;
+    }
+
+    /**
      * Gets the subject.
      * If a subject is specified at the time of the creation,
      * an Optional containing the subject is returned.
+     *
+     * <p>
+     * Typically, the returned value is set to an "sub" claim.
+     * </p>
      *
      * @return an {@link Optional} that contains or doesn't contain the subject.
      */
