@@ -2,7 +2,6 @@ package org.example;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zerodeplibs.webpush.EncryptedPushMessage;
 import com.zerodeplibs.webpush.MessageEncryption;
 import com.zerodeplibs.webpush.MessageEncryptions;
