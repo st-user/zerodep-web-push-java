@@ -38,10 +38,10 @@ import java.security.interfaces.ECPublicKey;
  * </p>
  * <pre class="code">
  * Path pemPath = new File("my-pub.pem").toPath();
- * Path derPath = new FIle("my-pub.der").toPath();
+ * Path derPath = new File("my-pub.der").toPath();
  *
  * PublicKeySource pemSource = PublicKeySources.ofPEMFile(pemPath);
- * PublicKeySource derSource = PublicKeySources.ofDerFile(derPath);
+ * PublicKeySource derSource = PublicKeySources.ofDERFile(derPath);
  *
  * byte[] pemBytes = Files.readAllBytes(pemPath);
  * String pemText = new String(pemBytes, StandardCharsets.UTF_8);

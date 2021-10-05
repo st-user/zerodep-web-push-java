@@ -18,14 +18,14 @@ import java.security.interfaces.ECPrivateKey;
  *
  * <pre class="code">
  * openssl ecparam -genkey -name prime256v1 -noout -out my-private.pem
- * openssl pkcs8 -in private.pem -topk8 -nocrypt -out my-private_pkcs8.pem
+ * openssl pkcs8 -in my-private.pem -topk8 -nocrypt -out my-private_pkcs8.pem
  * </pre>
  *
  * <p>
  * If you want to generate in DER format, you can also do as follows.
  * </p>
  * <pre class="code">
- * openssl pkcs8 -in private.pem -topk8 -nocrypt -outform der -out my-private_pkcs8.der
+ * openssl pkcs8 -in my-private.pem -topk8 -nocrypt -outform der -out my-private_pkcs8.der
  * </pre>
  *
  * <p>
@@ -33,10 +33,10 @@ import java.security.interfaces.ECPrivateKey;
  * </p>
  * <pre class="code">
  * Path pemPath = new File("my-private_pkcs8.pem").toPath();
- * Path derPath = new FIle("my-private_pkcs8.der").toPath();
+ * Path derPath = new File("my-private_pkcs8.der").toPath();
  *
  * PrivateKeySource pemSource = PrivateKeySources.ofPEMFile(pemPath);
- * PrivateKeySource derSource = PrivateKeySources.ofDerFile(derPath);
+ * PrivateKeySource derSource = PrivateKeySources.ofDERFile(derPath);
  *
  * byte[] pemBytes = Files.readAllBytes(pemPath);
  * String pemText = new String(pemBytes, StandardCharsets.UTF_8);

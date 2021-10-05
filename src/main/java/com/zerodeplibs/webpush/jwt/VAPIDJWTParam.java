@@ -55,10 +55,11 @@ public class VAPIDJWTParam {
     }
 
     /**
-     * Gets an additional claim specified at the time of the instantiation
+     * Gets the additional claim specified at the time of the instantiation
      * by the given name and type.
      *
-     * <h3>Example:</h3>
+     * <b>Example:</b>
+     *
      * <pre class="code">
      *
      * ArrayList&lt;String&gt; hogeList = new ArrayList&lt;&gt;();
