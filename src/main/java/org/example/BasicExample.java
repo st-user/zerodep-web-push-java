@@ -47,7 +47,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class BasicExample {
 
-    // Implement VAPIDJWTGenerator with an arbitrary JWT library.
+    /**
+     * An implementation of VAPIDJWTGenerator.
+     *
+     * In this example, we use <a href="https://github.com/auth0/java-jwt">Java JWT - auth0</a>
+     * Of course, we can use an arbitrary JWT library.
+     *
+     * @see MyJose4jVAPIDJWTGenerator
+     * @see MyNimbusJoseJwtVAPIDJWTGenerator
+     */
     static class MyAuth0VAPIDJWTGenerator implements VAPIDJWTGenerator {
 
         private final Algorithm jwtAlgorithm;
