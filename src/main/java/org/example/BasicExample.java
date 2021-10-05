@@ -69,7 +69,14 @@ public class BasicExample {
     @Autowired
     private VAPIDKeyPair vapidKeyPair;
 
-    // In this example, reads the key pair for VAPID from the file system.
+    /**
+     * In this example, we read the key pair for VAPID
+     * from a PEM formatted file on the file system.
+     *
+     * You can extract key pairs from various sources.
+     * For example, '.der' file(binary content), an octet sequence stored in a database and so on.
+     * Please see the javadoc of PrivateKeySources and PublicKeySources.
+     */
     @Bean
     public VAPIDKeyPair vaidKeyPair(
         @Value("${private.key.file.path}") String privateKeyFilePath,
