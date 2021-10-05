@@ -75,7 +75,12 @@ public class PushSubscription {
             this.auth = auth;
         }
 
-
+        /**
+         * Compares the given object with this object based on their properties.
+         *
+         * @param o an object.
+         * @return true if the given object is equal to this object
+         */
         @Override
         public boolean equals(Object o) {
             if (this == o) {
@@ -89,6 +94,11 @@ public class PushSubscription {
                 && Objects.equals(getAuth(), keys.getAuth());
         }
 
+        /**
+         * Returns the hash code value for this object based on its properties.
+         *
+         * @return the hash code value for this object.
+         */
         @Override
         public int hashCode() {
             return Objects.hash(getP256dh(), getAuth());
@@ -127,6 +137,12 @@ public class PushSubscription {
         this.keys = keys;
     }
 
+    /**
+     * Compares the given object with this object based on their properties.
+     *
+     * @param o an object.
+     * @return true if the given object is equal to this object
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -141,6 +157,11 @@ public class PushSubscription {
             && Objects.equals(getKeys(), that.getKeys());
     }
 
+    /**
+     * Returns the hash code value for this object based on its properties.
+     *
+     * @return the hash code value for this object.
+     */
     @Override
     public int hashCode() {
         return Objects.hash(getEndpoint(), getExpirationTime(), getKeys());

@@ -31,6 +31,13 @@ JDK 8+
 
 (To build from source, JDK 9+)
 
+## Installation
+
+TBD
+
+Now the author is preparing the repositories on Github and Maven central.
+
+
 ## Third-party libraries
 
 In order to implement the complete Web Push functionality with this library, at least the following
@@ -39,7 +46,8 @@ third-party libraries.
 
 (Off course, it is possible to use the one you make yourself).
 
-### JWT
+<details>
+    <summary><b>JWT</b></summary>
 
 This kind of library is used to generate JSON Web Token (JWT)
 for [VAPID](https://datatracker.ietf.org/doc/html/rfc8292).
@@ -48,7 +56,10 @@ for [VAPID](https://datatracker.ietf.org/doc/html/rfc8292).
 - [jose4j](https://bitbucket.org/b_c/jose4j/wiki/Home)
 - [Nimbus JOSE + JWT](https://connect2id.com/products/nimbus-jose-jwt)
 
-### HTTP Client
+</details>
+
+<details>
+    <summary><b>HTTP Client</b></summary>
 
 Application servers need to make an HTTP Request in order to request the push service to deliver a
 push message.
@@ -59,11 +70,7 @@ This kind of library is used to make HTTP Requests.
 - [Apache HTTPClient](https://hc.apache.org/httpcomponents-client-5.1.x/)
 - [Java HTTP Client(JDK 11+)](https://docs.oracle.com/en/java/javase/11/docs/api/java.net.http/java/net/http/HttpClient.html)
 
-## Installation
-
-TBD
-
-Now the author is preparing the repositories on Github and Maven central.
+</details>
 
 ## Usage examples
 
@@ -73,15 +80,23 @@ full source
 code: [zerodep-web-push-java-example](https://github.com/st-user/zerodep-web-push-java-example)
 
 <details>
-    <summary>Controller class providing VAPID and Message Encryption functionalities</summary>
+    <summary><b>Controller for VAPID and Message Encryption</b></summary>
 
 ``` java
 
 @SpringBootApplication
 @RestController
-public class App {
+public class BasicExample {
 
-    // Implement VAPIDJWTGenerator with an arbitrary JWT library.
+    /**
+     * An implementation of VAPIDJWTGenerator.
+     *
+     * In this example, we use <a href="https://github.com/auth0/java-jwt">Java JWT - auth0</a>
+     * Of course, we can use an arbitrary JWT library.
+     *
+     * @see MyJose4jVAPIDJWTGenerator
+     * @see MyNimbusJoseJwtVAPIDJWTGenerator
+     */
     static class MyAuth0VAPIDJWTGenerator implements VAPIDJWTGenerator {
 
         private final Algorithm jwtAlgorithm;
@@ -103,7 +118,14 @@ public class App {
     @Autowired
     private VAPIDKeyPair vapidKeyPair;
 
-    // In this example, reads the key pair for VAPID from the file system.
+    /**
+     * In this example, we read the key pair for VAPID
+     * from a PEM formatted file on the file system.
+     *
+     * You can extract key pairs from various sources.
+     * For example, '.der' file(binary content), an octet sequence stored in a database and so on.
+     * Please see the javadoc of PrivateKeySources and PublicKeySources.
+     */
     @Bean
     public VAPIDKeyPair vaidKeyPair(
         @Value("${private.key.file.path}") String privateKeyFilePath,
@@ -165,9 +187,17 @@ public class App {
                 .subject("mailto:example@example.com")
                 .build();
 
+            PushMessage pushMessage = PushMessage.ofUTF8(message);
+
+            // In this example, we send push messages in simple text format.
+            // But you can also send them in JSON format as follows:
+            //
+            // ObjectMapper objectMapper = (Create a new one or get from the DI container.)
+            // PushMessage pushMessage = PushMessage.of(objectMapper.writeValueAsBytes(objectForJson));
+
             EncryptedPushMessage encryptedPushMessage = messageEncryption.encrypt(
                 UserAgentMessageEncryptionKeyInfo.from(subscription.getKeys()),
-                PushMessage.ofUTF8(message)
+                pushMessage
             );
 
             Request request = new Request.Builder()
@@ -175,15 +205,22 @@ public class App {
                 .addHeader("Authorization",
                     vapidKeyPair.generateAuthorizationHeaderValue(vapidjwtParam))
                 .addHeader("Content-Type", "application/octet-stream")
-                .addHeader("Content-Encoding", "aes128gcm")
+                .addHeader("Content-Encoding", encryptedPushMessage.contentEncoding())
                 .addHeader("TTL", String.valueOf(TTL.hours(1)))
                 .addHeader("Urgency", Urgency.low())
                 .addHeader("Topic", Topic.ensure("myTopic"))
+                // Depending on HTTP Client libraries, you may have to set "Content-Length" manually.
+                // .addHeader("Content-Length", String.valueOf(encryptedPushMessage.length()))
                 .post(okhttp3.RequestBody.create(encryptedPushMessage.toBytes()))
                 .build();
 
             try (Response response = httpClient.newCall(request).execute()) {
                 logger.info(String.format("status code: %d", response.code()));
+                // 201 Created : Success!
+                // 410 Gone : The subscription is no longer valid.
+                // etc...
+                // for more information, see the useful link below:
+                // [Response from push service - The Web Push Protocol ](https://developers.google.com/web/fundamentals/push-notifications/web-push-protocol)
             }
 
         }
@@ -201,10 +238,9 @@ public class App {
         this.subscriptionMap.put(subscription.getEndpoint(), subscription);
     }
 
-    private final Logger logger = LoggerFactory.getLogger(App.class);
+    private final Logger logger = LoggerFactory.getLogger(BasicExample.class);
     private final Map<String, PushSubscription> subscriptionMap = new HashMap<>();
 
-    public static void main(String[] args) { SpringApplication.run(App.class, args); }
 }
 
 ```
@@ -213,7 +249,8 @@ public class App {
 
 ## MISC
 
-### Null safety
+<details>
+    <summary><b>Null safety</b></summary>
 
 The public methods and constructors of this library do not accept `null`s and do not return `null`s.
 They throw an `Exception` when a null reference is passed. Some methods
@@ -226,7 +263,11 @@ The exceptions are:
 - The methods of runtime exceptions and checked exceptions thrown by some methods and constructors.
   For example, their `getCause()` can return null.
 
-### Thread safe or not thread safe
+</details>
+
+
+<details>
+    <summary><b>Thread safe or not thread safe</b></summary>
 
 The methods listed below can be called from multiple threads at the same time (thread safe).
 However, the others should **NOT** be considered thread-safe.
@@ -237,7 +278,10 @@ However, the others should **NOT** be considered thread-safe.
 - The methods of instances that meet the conditions for thread safety described in their javadoc(
   e.g. an instance of `com.zerodeplibs.webpush.VAPIDKeyPair.java`).
 
-### Working with Java Cryptography Architecture(JCA)
+</details>
+
+<details>
+    <summary><b>Working with Java Cryptography Architecture(JCA)</b></summary>
 
 This library
 uses [the Java Cryptography Architecture (JCA)](https://docs.oracle.com/javase/8/docs/technotes/guides/security/crypto/CryptoSpec.html)
@@ -257,6 +301,8 @@ By default, the providers shipped with the JDK will be used(e.g. `SunEC`, `SunJC
 Of course, any provider that supports these algorithms is available(
 e.g. [Bouncy Castle](https://bouncycastle.org/)). This is because this library has no dependencies
 on any specific provider.
+
+</details>
 
 ## License
 
