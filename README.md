@@ -1,6 +1,6 @@
 # zerodep-web-push-java
 
-A Java [Web Push](https://datatracker.ietf.org/doc/html/rfc8030) application server-side library
+A Java [Web Push](https://datatracker.ietf.org/doc/html/rfc8030) server-side library
 that has no dependencies on any specific third-party library.
 
 - Provides the functionalities for [VAPID](https://datatracker.ietf.org/doc/html/rfc8292)
