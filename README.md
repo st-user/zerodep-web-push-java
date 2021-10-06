@@ -1,7 +1,7 @@
 # zerodep-web-push-java
 
-A Java [Web Push](https://datatracker.ietf.org/doc/html/rfc8030) server-side library
-that has no dependencies on any specific third-party library.
+A Java [Web Push](https://datatracker.ietf.org/doc/html/rfc8030) server-side library that has no
+dependencies on any specific third-party library.
 
 - Provides the functionalities for [VAPID](https://datatracker.ietf.org/doc/html/rfc8292)
 - Provides the functionalities
@@ -33,10 +33,15 @@ JDK 8+
 
 ## Installation
 
-TBD
+``` xml
 
-Now the author is preparing the repositories on Github and Maven central.
+<dependency>
+  <groupId>com.zerodeplibs</groupId>
+  <artifactId>zerodep-web-push-java</artifactId>
+  <version>1.0.0</version>
+</dependency>
 
+```
 
 ## Third-party libraries
 
@@ -310,4 +315,7 @@ MIT
 
 ## Contribution
 
-TBD
+This project follows a [git flow](https://nvie.com/posts/a-successful-git-branching-model/) -style
+model.
+
+Please open pull requests against the `dev` branch.
