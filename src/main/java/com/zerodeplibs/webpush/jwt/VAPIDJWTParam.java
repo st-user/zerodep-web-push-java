@@ -10,6 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 
 /**
  * This class represents parameters for generating JSON Web Token (JWT) used
@@ -93,6 +94,15 @@ public class VAPIDJWTParam {
             return Optional.of(ret);
         }
         return Optional.empty();
+    }
+
+    /**
+     * Performs the given action for each additional claim.
+     *
+     * @param action the action to be performed for each additional claim.
+     */
+    public void forEachAdditionalClaim(BiConsumer<String, Object> action) {
+        this.additionalClaims.forEach(action);
     }
 
     /**
