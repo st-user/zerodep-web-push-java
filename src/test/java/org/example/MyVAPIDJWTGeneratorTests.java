@@ -16,6 +16,8 @@ import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
 import java.security.spec.ECGenParameterSpec;
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 import org.jose4j.jwa.AlgorithmConstraints;
 import org.jose4j.jws.AlgorithmIdentifiers;
 import org.jose4j.jws.JsonWebSignature;
@@ -36,10 +38,13 @@ public class MyVAPIDJWTGeneratorTests {
             new BasicExample.MyAuth0VAPIDJWTGenerator((ECPrivateKey) keyPair.getPrivate(),
                 (ECPublicKey) keyPair.getPublic());
 
+        Map<String, String> additionalClaim = new HashMap<>();
+        additionalClaim.put("myClaim", "hello");
         VAPIDJWTParam param = VAPIDJWTParam.getBuilder()
             .resourceURLString("https://example.com")
             .expiresAfterSeconds(60)
             .subject("mailto:test@example.com")
+            .additionalClaim("adClaim", additionalClaim)
             .build();
 
         String jwt = generator.generate(param);
@@ -61,6 +66,7 @@ public class MyVAPIDJWTGeneratorTests {
             .resourceURLString("https://example.com")
             .expiresAfterSeconds(60)
             .subject("mailto:test@example.com")
+            .additionalClaim("adClaim", new MyAdditionalClaim("hello"))
             .build();
 
         String jwt = generator.generate(param);
@@ -82,12 +88,59 @@ public class MyVAPIDJWTGeneratorTests {
             .resourceURLString("https://example.com")
             .expiresAfterSeconds(60)
             .subject("mailto:test@example.com")
+            .additionalClaim("adClaim", new MyAdditionalClaim("hello"))
             .build();
 
         String jwt = generator.generate(param);
         verifySign(jwt, keyPair.getPublic());
         assertHeader(jwt);
         assertPayload(jwt);
+    }
+
+    @Test
+    public void generateWithJJwt()
+        throws IOException, JoseException, InvalidAlgorithmParameterException,
+        NoSuchAlgorithmException {
+
+        KeyPair keyPair = generateKeyPair();
+        MyJJwtVAPIDJWTGenerator generator =
+            new MyJJwtVAPIDJWTGenerator((ECPrivateKey) keyPair.getPrivate());
+
+        VAPIDJWTParam param = VAPIDJWTParam.getBuilder()
+            .resourceURLString("https://example.com")
+            .expiresAfterSeconds(60)
+            .subject("mailto:test@example.com")
+            .additionalClaim("adClaim", new MyAdditionalClaim("hello"))
+            .build();
+
+        String jwt = generator.generate(param);
+        verifySign(jwt, keyPair.getPublic());
+        assertHeader(jwt);
+        assertPayload(jwt);
+
+    }
+
+    @Test
+    public void generateWithFusionAuthJwt()
+        throws IOException, JoseException, InvalidAlgorithmParameterException,
+        NoSuchAlgorithmException {
+
+        KeyPair keyPair = generateKeyPair();
+        MyFusionAuthJwtVAPIDJWTGenerator generator =
+            new MyFusionAuthJwtVAPIDJWTGenerator((ECPrivateKey) keyPair.getPrivate());
+
+        VAPIDJWTParam param = VAPIDJWTParam.getBuilder()
+            .resourceURLString("https://example.com")
+            .expiresAfterSeconds(60)
+            .subject("mailto:test@example.com")
+            .additionalClaim("adClaim", new MyAdditionalClaim("hello"))
+            .build();
+
+        String jwt = generator.generate(param);
+        verifySign(jwt, keyPair.getPublic());
+        assertHeader(jwt);
+        assertPayload(jwt);
+
     }
 
     private void assertHeader(String jwt) throws IOException {
@@ -107,6 +160,7 @@ public class MyVAPIDJWTGeneratorTests {
         assertEquals("https://example.com", actual.getAud());
         assertTrue(actual.getExp() > System.currentTimeMillis() / 1000);
         assertEquals("mailto:test@example.com", actual.getSub());
+        assertEquals("hello", actual.getAdClaim().getMyClaim());
     }
 
     private void verifySign(String jwt, PublicKey publicKey) throws JoseException {
@@ -161,6 +215,7 @@ public class MyVAPIDJWTGeneratorTests {
         private String aud;
         private long exp;
         private String sub;
+        private MyAdditionalClaim adClaim;
 
         public String getAud() {
             return aud;
@@ -184,6 +239,39 @@ public class MyVAPIDJWTGeneratorTests {
 
         public void setSub(String sub) {
             this.sub = sub;
+        }
+
+        public MyAdditionalClaim getAdClaim() {
+            return adClaim;
+        }
+
+        public void setAdClaim(MyAdditionalClaim adClaim) {
+            this.adClaim = adClaim;
+        }
+    }
+
+    static class MyAdditionalClaim {
+
+        private String myClaim;
+
+        public MyAdditionalClaim() {
+        }
+
+        public MyAdditionalClaim(String myClaim) {
+            this.myClaim = myClaim;
+        }
+
+        public String getMyClaim() {
+            return myClaim;
+        }
+
+        public void setMyClaim(String myClaim) {
+            this.myClaim = myClaim;
+        }
+
+        @Override
+        public String toString() {
+            return "{\"myClaim\":\"" + myClaim + "\"}";
         }
     }
 }

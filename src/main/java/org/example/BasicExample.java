@@ -1,6 +1,7 @@
 package org.example;
 
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.zerodeplibs.webpush.EncryptedPushMessage;
 import com.zerodeplibs.webpush.MessageEncryption;
@@ -48,12 +49,14 @@ public class BasicExample {
 
     /**
      * An implementation of VAPIDJWTGenerator.
-     *
+     * <p>
      * In this example, we use <a href="https://github.com/auth0/java-jwt">Java JWT - auth0</a>
      * Of course, we can use an arbitrary JWT library.
      *
-     * @see MyJose4jVAPIDJWTGenerator
      * @see MyNimbusJoseJwtVAPIDJWTGenerator
+     * @see MyJJwtVAPIDJWTGenerator
+     * @see MyFusionAuthJwtVAPIDJWTGenerator
+     * @see MyJose4jVAPIDJWTGenerator
      */
     static class MyAuth0VAPIDJWTGenerator implements VAPIDJWTGenerator {
 
@@ -65,11 +68,18 @@ public class BasicExample {
 
         @Override
         public String generate(VAPIDJWTParam vapidjwtParam) {
-            return JWT.create()
+
+            Map<String, Object> addtionalClaims = new HashMap<>();
+            vapidjwtParam.forEachAdditionalClaim(addtionalClaims::put);
+
+            JWTCreator.Builder builder = JWT.create()
                 .withAudience(vapidjwtParam.getOrigin())
-                .withExpiresAt(vapidjwtParam.getExpiresAt())
-                .withSubject(vapidjwtParam.getSubject().orElse("mailto:example@example.com"))
-                .sign(this.jwtAlgorithm);
+                .withExpiresAt(vapidjwtParam.getExpiresAt());
+
+            vapidjwtParam.getSubject().ifPresent(builder::withSubject);
+            builder.withPayload(addtionalClaims);
+
+            return builder.sign(this.jwtAlgorithm);
         }
     }
 
@@ -79,7 +89,7 @@ public class BasicExample {
     /**
      * In this example, we read the key pair for VAPID
      * from a PEM formatted file on the file system.
-     *
+     * <p>
      * You can extract key pairs from various sources.
      * For example, '.der' file(binary content), an octet sequence stored in a database and so on.
      * Please see the javadoc of PrivateKeySources and PublicKeySources.
@@ -93,8 +103,10 @@ public class BasicExample {
             PrivateKeySources.ofPEMFile(new File(privateKeyFilePath).toPath()),
             PublicKeySources.ofPEMFile(new File(publicKeyFilePath).toPath()),
             MyAuth0VAPIDJWTGenerator::new
-            // (privateKey, publicKey) -> new MyJose4jVAPIDJWTGenerator(privateKey)
             // (privateKey, publicKey) -> new MyNimbusJoseJwtVAPIDJWTGenerator(privateKey)
+            // (privateKey, publicKey) -> new MyJJwtVAPIDJWTGenerator(privateKey)
+            // (privateKey, publicKey) -> new MyFusionAuthJwtVAPIDJWTGenerator(privateKey)
+            // (privateKey, publicKey) -> new MyJose4jVAPIDJWTGenerator(privateKey)
         );
     }
 

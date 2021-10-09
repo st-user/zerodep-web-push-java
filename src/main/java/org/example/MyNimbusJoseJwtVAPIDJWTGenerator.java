@@ -10,6 +10,8 @@ import com.nimbusds.jose.crypto.ECDSASigner;
 import com.zerodeplibs.webpush.jwt.VAPIDJWTGenerator;
 import com.zerodeplibs.webpush.jwt.VAPIDJWTParam;
 import java.security.interfaces.ECPrivateKey;
+import java.util.HashMap;
+import java.util.Map;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -22,8 +24,7 @@ public class MyNimbusJoseJwtVAPIDJWTGenerator implements VAPIDJWTGenerator {
     private final JWSHeader header;
 
     public MyNimbusJoseJwtVAPIDJWTGenerator(ECPrivateKey privateKey) {
-        LoggerFactory.getLogger(MyNimbusJoseJwtVAPIDJWTGenerator.class)
-            .info("Using " + MyNimbusJoseJwtVAPIDJWTGenerator.class.getSimpleName());
+        LoggerFactory.getLogger(getClass()).info("Using " + getClass().getSimpleName());
         try {
             this.signer = new ECDSASigner(privateKey);
         } catch (JOSEException e) {
@@ -37,14 +38,14 @@ public class MyNimbusJoseJwtVAPIDJWTGenerator implements VAPIDJWTGenerator {
     @Override
     public String generate(VAPIDJWTParam param) {
 
-        String payload = String.format(
-            "{\"aud\":\"%s\",\"exp\":%d,\"sub\":\"%s\"}",
-            param.getOrigin(),
-            param.getExpiresAtInSeconds(),
-            param.getSubject().orElse("mailto:example@example.com")
-        );
+        Map<String, Object> payloadMap = new HashMap<>();
+        payloadMap.put("aud", param.getOrigin());
+        payloadMap.put("exp", param.getExpiresAtInSeconds());
 
-        JWSObject jwsObject = new JWSObject(this.header, new Payload(payload));
+        param.getSubject().ifPresent(sub -> payloadMap.put("sub", sub));
+        param.forEachAdditionalClaim(payloadMap::put);
+
+        JWSObject jwsObject = new JWSObject(this.header, new Payload(payloadMap));
         try {
             jwsObject.sign(this.signer);
         } catch (JOSEException e) {
