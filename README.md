@@ -60,6 +60,8 @@ for [VAPID](https://datatracker.ietf.org/doc/html/rfc8292).
 - [Java JWT - auth0](https://github.com/auth0/java-jwt)
 - [jose4j](https://bitbucket.org/b_c/jose4j/wiki/Home)
 - [Nimbus JOSE + JWT](https://connect2id.com/products/nimbus-jose-jwt)
+- [FusionAuth JWT](https://github.com/fusionauth/fusionauth-jwt)
+- [Java JWT](https://github.com/jwtk/jjwt)
 
 </details>
 
