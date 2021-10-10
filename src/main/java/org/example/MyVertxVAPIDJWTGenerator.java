@@ -12,6 +12,10 @@ import java.security.interfaces.ECPrivateKey;
 import java.util.Base64;
 import java.util.Collections;
 
+/**
+ * The example implementation of {@link VAPIDJWTGenerator}
+ * utilizing <a href="https://vertx.io/docs/vertx-auth-jwt/java/">JWT Auth - Vert.x</a>.
+ */
 public class MyVertxVAPIDJWTGenerator implements VAPIDJWTGenerator {
 
     private final Vertx vertx;

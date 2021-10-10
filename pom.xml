@@ -6,14 +6,16 @@
 
     <groupId>org.example</groupId>
     <artifactId>zerodep-web-push-java-example-vertx</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.1</version>
 
     <name>zerodep-web-push-java-example-vertx</name>
-    <!-- FIXME change it to the project's website -->
-    <url>http://www.example.com</url>
+    <url>https://github.com/st-user/zerodep-web-push-java-example-vertx</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!--
+            JDK8+ is required.
+        -->
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
@@ -32,18 +34,31 @@
             <version>4.1.5</version>
         </dependency>
 
+        <!--
+            To send HTTP requests to push services,
+            we utilize the Vert.x's HTTP client library.
+        -->
         <dependency>
             <groupId>io.vertx</groupId>
             <artifactId>vertx-web-client</artifactId>
             <version>4.1.5</version>
         </dependency>
 
+        <!--
+            To construct JWT for VAPID,
+            we utilize the Vert.x's JWT library.
+        -->
         <dependency>
             <groupId>io.vertx</groupId>
             <artifactId>vertx-auth-jwt</artifactId>
             <version>4.1.5</version>
         </dependency>
 
+        <!--
+            To map between Vert.x's JSON objects and Java objects
+            (e.g. JsonObject to PushSubscription),
+            we have to use jackson-databind.
+        -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
@@ -77,7 +92,6 @@
             <version>0.7.9</version>
             <scope>test</scope>
         </dependency>
-
 
     </dependencies>
 

@@ -14,10 +14,8 @@ import com.zerodeplibs.webpush.header.Urgency;
 import com.zerodeplibs.webpush.jwt.VAPIDJWTParam;
 import com.zerodeplibs.webpush.key.PrivateKeySources;
 import com.zerodeplibs.webpush.key.PublicKeySources;
-import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
-import io.vertx.core.http.HttpServer;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.handler.BodyHandler;
@@ -30,10 +28,20 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Example {
 
+    /**
+     * In this example, we read the key pair for VAPID
+     * from a PEM formatted file on the file system.
+     * <p>
+     * You can extract key pairs from various sources.
+     * For example, '.der' file(binary content), an octet sequence stored in a database and so on.
+     * Please see the javadoc of PrivateKeySources and PublicKeySources.
+     */
     private static VAPIDKeyPair createVAPIDKeyPair(Vertx vertx) throws IOException {
         return VAPIDKeyPairs.of(
             PrivateKeySources.ofPEMFile(new File("./.keys/my-private_pkcs8.pem").toPath()),
@@ -45,13 +53,18 @@ public class Example {
 
         Vertx vertx = Vertx.vertx();
         WebClient client = WebClient.create(vertx);
-        HttpServer server = vertx.createHttpServer();
         Router router = Router.router(vertx);
         router.route().handler(BodyHandler.create());
 
         VAPIDKeyPair vapidKeyPair = createVAPIDKeyPair(vertx);
         MockSubscriptionStorage mockStorage = new MockSubscriptionStorage();
 
+        /*
+         * # Step 1.
+         * Sends the public key to user agents.
+         *
+         * The user agents create push subscriptions with this public key.
+         */
         router
             .get("/getPublicKey")
             .respond(
@@ -61,6 +74,12 @@ public class Example {
                     .end(Buffer.buffer(vapidKeyPair.extractPublicKeyInUncompressedForm()))
             );
 
+        /*
+         * # Step 2.
+         * Obtains push subscriptions from user agents.
+         *
+         * The application server(this application) requests the delivery of push messages with these subscriptions.
+         */
         router
             .post("/subscribe")
             .handler(ctx -> {
@@ -72,15 +91,19 @@ public class Example {
                 ctx.response().end();
             });
 
+        /*
+         * # Step 3.
+         * Requests the delivery of push messages.
+         *
+         * In this example, for simplicity and testability, we implement this feature as an HTTP endpoint.
+         * However, in real applications, this feature does not have to be an HTTP endpoint.
+         */
         router
             .post("/sendMessage")
             .handler(ctx -> {
 
                 String message = ctx.getBodyAsJson().getString("message");
-                message = message == null ? "" : message.trim();
-                message = message.length() == 0 ? "Default Message." : message;
-
-                vertx.getOrCreateContext().put("messageToSend", message);
+                vertx.getOrCreateContext().put("messageToSend", new SampleMessageData(message));
 
                 new RequestWorker(
                     vertx, client, vapidKeyPair, mockStorage.getSubscriptionsFromStorage()
@@ -93,7 +116,7 @@ public class Example {
 
         router.route("/*").handler(StaticHandler.create());
 
-        server.requestHandler(router).listen(8080, res -> {
+        vertx.createHttpServer().requestHandler(router).listen(8080, res -> {
             System.out.println("Vert.x HTTP server started.");
         });
     }
@@ -105,11 +128,14 @@ public class Example {
         private final VAPIDKeyPair vapidKeyPair;
         private final List<PushSubscription> targetSubscriptions;
 
-        private final AtomicLong requestingCount;
+        private final Map<String, AtomicLong> requestingCountPerOrigin;
 
         private final int requestIntervalMillis;
-        private final int maxConcurrency;
+        private final int maxConcurrencyPerOrigin;
         private final int retryTimerMillis;
+        private final int connectionTimeoutMillis;
+
+        private static final Pattern URL_ORIGIN_PATTERN = Pattern.compile("^(.+://.+?)/.*$");
 
         RequestWorker(
             Vertx vertx,
@@ -122,10 +148,11 @@ public class Example {
             this.vapidKeyPair = vapidKeyPair;
             this.targetSubscriptions = targetSubscriptions.stream().collect(Collectors.toList());
             this.requestIntervalMillis = 100;
-            this.maxConcurrency = 5;
+            this.maxConcurrencyPerOrigin = 5;
             this.retryTimerMillis = 500;
+            this.connectionTimeoutMillis = 10_000;
 
-            this.requestingCount = new AtomicLong();
+            this.requestingCountPerOrigin = new ConcurrentHashMap<>();
         }
 
         void start() {
@@ -134,19 +161,27 @@ public class Example {
 
         private void startInternal(int currentIndex) {
 
-            if (requestingCount.intValue() >= maxConcurrency) {
+            PushSubscription subscription = targetSubscriptions.get(currentIndex);
+
+            AtomicLong requestingCount =
+                requestingCountPerOrigin.computeIfAbsent(extractOrigin(subscription),
+                    k -> new AtomicLong());
+
+            if (requestingCount.intValue() >= maxConcurrencyPerOrigin) {
                 vertx.setTimer(retryTimerMillis, id -> startInternal(currentIndex));
                 return;
             }
-            String message = vertx.getOrCreateContext().get("messageToSend");
-            PushSubscription subscription = targetSubscriptions.get(currentIndex);
+            SampleMessageData messageData = vertx.getOrCreateContext().get("messageToSend");
 
             vertx.executeBlocking(promise -> {
+
+                // In this example, we send push messages in simple text format.
+                // But you can also send them in JSON format.
 
                 MessageEncryption messageEncryption = MessageEncryptions.of();
                 EncryptedPushMessage encryptedPushMessage = messageEncryption.encrypt(
                     UserAgentMessageEncryptionKeyInfo.from(subscription.getKeys()),
-                    PushMessage.ofUTF8(message)
+                    PushMessage.ofUTF8(messageData.getMessage())
                 );
 
                 VAPIDJWTParam vapidjwtParam = VAPIDJWTParam.getBuilder()
@@ -165,6 +200,7 @@ public class Example {
 
                 client
                     .postAbs(subscription.getEndpoint())
+                    .timeout(connectionTimeoutMillis)
                     .putHeader("Authorization", messageAndJWT.jwt)
                     .putHeader("Content-Type", "application/octet-stream")
                     .putHeader("Content-Encoding", encryptedPushMessage.contentEncoding())
@@ -174,7 +210,12 @@ public class Example {
                     .sendBuffer(Buffer.buffer(encryptedPushMessage.toBytes()))
                     .onSuccess(result -> {
                         requestingCount.decrementAndGet();
-                        System.out.println(String.format("Success! code: %d", result.statusCode()));
+                        System.out.println(String.format("status code: %d", result.statusCode()));
+                        // 201 Created : Success!
+                        // 410 Gone : The subscription is no longer valid.
+                        // etc...
+                        // for more information, see the useful link below:
+                        // [Response from push service - The Web Push Protocol ](https://developers.google.com/web/fundamentals/push-notifications/web-push-protocol)
                     })
                     .onFailure(result -> {
                         requestingCount.decrementAndGet();
@@ -182,62 +223,20 @@ public class Example {
                     });
             });
 
-/*
-            Future.succeededFuture()
-                .compose(_o -> {
-
-                    PushMessage pushMessage = PushMessage.ofUTF8(message);
-
-                    MessageEncryption messageEncryption = MessageEncryptions.of();
-                    EncryptedPushMessage encryptedPushMessage = messageEncryption.encrypt(
-                        UserAgentMessageEncryptionKeyInfo.from(subscription.getKeys()),
-                        pushMessage
-                    );
-
-                    return Future.succeededFuture(encryptedPushMessage);
-
-                }).compose(encryptedPushMessage -> {
-
-                    VAPIDJWTParam vapidjwtParam = VAPIDJWTParam.getBuilder()
-                        .resourceURLString(subscription.getEndpoint())
-                        .expiresAfterSeconds((int) TimeUnit.MINUTES.toSeconds(15))
-                        .subject("mailto:example@example.com")
-                        .build();
-
-                    requestingCount.incrementAndGet();
-
-                    return client
-                        .postAbs(subscription.getEndpoint())
-                        .putHeader("Authorization",
-                            vapidKeyPair.generateAuthorizationHeaderValue(vapidjwtParam))
-                        .putHeader("Content-Type", "application/octet-stream")
-                        .putHeader("Content-Encoding", encryptedPushMessage.contentEncoding())
-                        .putHeader("TTL", String.valueOf(TTL.hours(1)))
-                        .putHeader("Urgency", Urgency.normal())
-                        .putHeader("Topic", Topic.ensure("myTopic"))
-                        .sendBuffer(Buffer.buffer(encryptedPushMessage.toBytes()));
-
-                })
-                .onSuccess(result -> {
-
-                    requestingCount.decrementAndGet();
-                    System.out.println(String.format("Success! code: %d", result.statusCode()));
-
-                })
-                .onFailure(result -> {
-
-                    requestingCount.decrementAndGet();
-                    System.err.println(result);
-
-                });
-
-*/
-
             if (currentIndex == targetSubscriptions.size() - 1) {
                 return;
             }
 
             vertx.setTimer(requestIntervalMillis, id -> startInternal(currentIndex + 1));
+        }
+
+        private String extractOrigin(PushSubscription subscription) {
+            Matcher matcher = URL_ORIGIN_PATTERN.matcher(subscription.getEndpoint());
+            if (!matcher.matches()) {
+                throw new IllegalArgumentException(
+                    "This subscription doesn't have origin. " + subscription.getEndpoint());
+            }
+            return matcher.group(1);
         }
 
         private static class MessageAndJWT {
@@ -261,6 +260,20 @@ public class Example {
 
         void saveSubscriptionToStorage(PushSubscription subscription) {
             this.subscriptionMap.put(subscription.getEndpoint(), subscription);
+        }
+    }
+
+    private static class SampleMessageData {
+
+        private final String message;
+
+        SampleMessageData(String message) {
+            message = message == null ? "" : message.trim();
+            this.message = message.length() == 0 ? "Default Message." : message;
+        }
+
+        public String getMessage() {
+            return message;
         }
     }
 }

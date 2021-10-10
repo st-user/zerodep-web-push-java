@@ -27,9 +27,14 @@ $subscribe.addEventListener('click', async () => {
         headers: {
             'content-type': 'application/json'
         }
+    }).then(res => {
+        if (res.ok) {
+            $response.textContent = 'Subscribed.';
+        } else {
+            $response.textContent = 'Something wrong happened when sending the subscription to the application server.';
+        }
     });
 
-    $response.textContent = 'Subscribed.';
 
     toggleControlsState(false);
 });
