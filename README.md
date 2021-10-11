@@ -34,4 +34,7 @@ using [Vert.x](https://vertx.io/docs/).
 
 5. You should see a push notification!
 
+## See also
+
+- [zerodep-web-push-java-example](https://github.com/st-user/zerodep-web-push-java-example)
 
