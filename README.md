@@ -1,7 +1,5 @@
 # zerodep-web-push-java-example-vertx
 
-**This example is currently under development.**
-
 A [zerodep-web-push-java](https://github.com/st-user/zerodep-web-push-java) example
 using [Vert.x](https://vertx.io/docs/).
 

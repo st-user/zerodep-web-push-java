@@ -14,6 +14,7 @@ import com.zerodeplibs.webpush.header.Urgency;
 import com.zerodeplibs.webpush.jwt.VAPIDJWTParam;
 import com.zerodeplibs.webpush.key.PrivateKeySources;
 import com.zerodeplibs.webpush.key.PublicKeySources;
+import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.ext.web.Router;
@@ -27,9 +28,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Example {
@@ -105,9 +103,14 @@ public class Example {
                 String message = ctx.getBodyAsJson().getString("message");
                 vertx.getOrCreateContext().put("messageToSend", new SampleMessageData(message));
 
-                new RequestWorker(
-                    vertx, client, vapidKeyPair, mockStorage.getSubscriptionsFromStorage()
-                ).start();
+                ExamplePushMessageDeliveryRequestProcessor processor =
+                    new ExamplePushMessageDeliveryRequestProcessor(
+                        vertx,
+                        client,
+                        vapidKeyPair,
+                        mockStorage.getSubscriptionsFromStorage()
+                    );
+                processor.start();
 
                 ctx.response()
                     .putHeader("Content-Type", "text/plain")
@@ -121,23 +124,26 @@ public class Example {
         });
     }
 
-    static class RequestWorker {
+    /**
+     * Sends HTTP requests to push services to request the delivery of push messages.
+     * <p>
+     * This class utilizes:
+     * <ul>
+     * <li>{@link Vertx#executeBlocking(Handler, Handler)} for the JWT creation and the message encryption.</li>
+     * <li>{@link WebClient} for sending HTTP request asynchronously.</li>
+     * </ul>
+     */
+    static class ExamplePushMessageDeliveryRequestProcessor {
 
         private final Vertx vertx;
         private final WebClient client;
         private final VAPIDKeyPair vapidKeyPair;
         private final List<PushSubscription> targetSubscriptions;
 
-        private final Map<String, AtomicLong> requestingCountPerOrigin;
-
         private final int requestIntervalMillis;
-        private final int maxConcurrencyPerOrigin;
-        private final int retryTimerMillis;
         private final int connectionTimeoutMillis;
 
-        private static final Pattern URL_ORIGIN_PATTERN = Pattern.compile("^(.+://.+?)/.*$");
-
-        RequestWorker(
+        ExamplePushMessageDeliveryRequestProcessor(
             Vertx vertx,
             WebClient client,
             VAPIDKeyPair vapidKeyPair,
@@ -148,11 +154,7 @@ public class Example {
             this.vapidKeyPair = vapidKeyPair;
             this.targetSubscriptions = targetSubscriptions.stream().collect(Collectors.toList());
             this.requestIntervalMillis = 100;
-            this.maxConcurrencyPerOrigin = 5;
-            this.retryTimerMillis = 500;
             this.connectionTimeoutMillis = 10_000;
-
-            this.requestingCountPerOrigin = new ConcurrentHashMap<>();
         }
 
         void start() {
@@ -162,27 +164,17 @@ public class Example {
         private void startInternal(int currentIndex) {
 
             PushSubscription subscription = targetSubscriptions.get(currentIndex);
-
-            AtomicLong requestingCount =
-                requestingCountPerOrigin.computeIfAbsent(extractOrigin(subscription),
-                    k -> new AtomicLong());
-
-            if (requestingCount.intValue() >= maxConcurrencyPerOrigin) {
-                vertx.setTimer(retryTimerMillis, id -> startInternal(currentIndex));
-                return;
-            }
             SampleMessageData messageData = vertx.getOrCreateContext().get("messageToSend");
 
             vertx.executeBlocking(promise -> {
 
-                // In this example, we send push messages in simple text format.
-                // But you can also send them in JSON format.
-
-                MessageEncryption messageEncryption = MessageEncryptions.of();
-                EncryptedPushMessage encryptedPushMessage = messageEncryption.encrypt(
-                    UserAgentMessageEncryptionKeyInfo.from(subscription.getKeys()),
-                    PushMessage.ofUTF8(messageData.getMessage())
-                );
+                // In some circumstances, the JWT creation and the message encryption
+                // may be considered "blocking" operations.
+                //
+                // On the author's environment, the JWT creation takes about 0.7ms
+                // and the message encryption takes about 1.7ms.
+                //
+                // reference: https://vertx.io/docs/vertx-core/java/#golden_rule
 
                 VAPIDJWTParam vapidjwtParam = VAPIDJWTParam.getBuilder()
                     .resourceURLString(subscription.getEndpoint())
@@ -191,17 +183,26 @@ public class Example {
                     .build();
                 String jwt = vapidKeyPair.generateAuthorizationHeaderValue(vapidjwtParam);
 
-                promise.complete(new MessageAndJWT(encryptedPushMessage, jwt));
+                MessageEncryption messageEncryption = MessageEncryptions.of();
+                EncryptedPushMessage encryptedPushMessage = messageEncryption.encrypt(
+                    UserAgentMessageEncryptionKeyInfo.from(subscription.getKeys()),
+                    // In this example, we send push messages in simple text format.
+                    // But you can also send them in JSON format.
+                    PushMessage.ofUTF8(messageData.getMessage())
+                );
+
+
+                promise.complete(new JWTAndMessage(jwt, encryptedPushMessage));
 
             }, res -> {
 
-                MessageAndJWT messageAndJWT = (MessageAndJWT) res.result();
-                EncryptedPushMessage encryptedPushMessage = messageAndJWT.encryptedPushMessage;
+                JWTAndMessage jwtAndMessage = (JWTAndMessage) res.result();
+                EncryptedPushMessage encryptedPushMessage = jwtAndMessage.encryptedPushMessage;
 
                 client
                     .postAbs(subscription.getEndpoint())
                     .timeout(connectionTimeoutMillis)
-                    .putHeader("Authorization", messageAndJWT.jwt)
+                    .putHeader("Authorization", jwtAndMessage.jwt)
                     .putHeader("Content-Type", "application/octet-stream")
                     .putHeader("Content-Encoding", encryptedPushMessage.contentEncoding())
                     .putHeader("TTL", String.valueOf(TTL.hours(1)))
@@ -209,7 +210,6 @@ public class Example {
                     .putHeader("Topic", Topic.ensure("myTopic"))
                     .sendBuffer(Buffer.buffer(encryptedPushMessage.toBytes()))
                     .onSuccess(result -> {
-                        requestingCount.decrementAndGet();
                         System.out.println(String.format("status code: %d", result.statusCode()));
                         // 201 Created : Success!
                         // 410 Gone : The subscription is no longer valid.
@@ -218,7 +218,6 @@ public class Example {
                         // [Response from push service - The Web Push Protocol ](https://developers.google.com/web/fundamentals/push-notifications/web-push-protocol)
                     })
                     .onFailure(result -> {
-                        requestingCount.decrementAndGet();
                         System.err.println(result);
                     });
             });
@@ -227,26 +226,19 @@ public class Example {
                 return;
             }
 
+            // In order to avoid wasting bandwidth,
+            // we send HTTP requests at some intervals.
             vertx.setTimer(requestIntervalMillis, id -> startInternal(currentIndex + 1));
         }
 
-        private String extractOrigin(PushSubscription subscription) {
-            Matcher matcher = URL_ORIGIN_PATTERN.matcher(subscription.getEndpoint());
-            if (!matcher.matches()) {
-                throw new IllegalArgumentException(
-                    "This subscription doesn't have origin. " + subscription.getEndpoint());
-            }
-            return matcher.group(1);
-        }
+        private static class JWTAndMessage {
 
-        private static class MessageAndJWT {
-
-            final EncryptedPushMessage encryptedPushMessage;
             final String jwt;
+            final EncryptedPushMessage encryptedPushMessage;
 
-            MessageAndJWT(EncryptedPushMessage encryptedPushMessage, String jwt) {
-                this.encryptedPushMessage = encryptedPushMessage;
+            JWTAndMessage(String jwt, EncryptedPushMessage encryptedPushMessage) {
                 this.jwt = jwt;
+                this.encryptedPushMessage = encryptedPushMessage;
             }
         }
     }
