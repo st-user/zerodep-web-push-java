@@ -48,3 +48,7 @@ For example:
 - [Using Secret Manager secrets in Cloud Run (Google Cloud)](https://cloud.google.com/run/docs/configuring/secrets)
 
   > Mount each secret as a volume, which makes the secret available to the container as files.
+
+## See also
+
+- [zerodep-web-push-java-example-vertx](https://github.com/st-user/zerodep-web-push-java-example-vertx)
