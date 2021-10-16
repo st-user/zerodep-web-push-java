@@ -211,6 +211,28 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>com.amashchenko.maven.plugin</groupId>
+                <artifactId>gitflow-maven-plugin</artifactId>
+                <version>1.16.0</version>
+                <configuration>
+                    <verbose>true</verbose>
+                    <installProject>false</installProject>
+                    <commitDevelopmentVersionAtStart>true</commitDevelopmentVersionAtStart>
+                    <versionDigitToIncrement>1</versionDigitToIncrement>
+                    <gitFlowConfig>
+                        <productionBranch>main</productionBranch>
+                        <developmentBranch>dev</developmentBranch>
+                        <featureBranchPrefix>feature-</featureBranchPrefix>
+                        <releaseBranchPrefix>release-</releaseBranchPrefix>
+                        <hotfixBranchPrefix>hotfix-</hotfixBranchPrefix>
+                        <versionTagPrefix>v</versionTagPrefix>
+                        <origin>origin</origin>
+                    </gitFlowConfig>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
 
@@ -288,27 +310,6 @@
                                 </goals>
                             </execution>
                         </executions>
-                    </plugin>
-
-                    <plugin>
-                        <groupId>com.amashchenko.maven.plugin</groupId>
-                        <artifactId>gitflow-maven-plugin</artifactId>
-                        <version>1.16.0</version>
-                        <configuration>
-                            <verbose>true</verbose>
-                            <installProject>false</installProject>
-                            <commitDevelopmentVersionAtStart>true</commitDevelopmentVersionAtStart>
-                            <versionDigitToIncrement>1</versionDigitToIncrement>
-                            <gitFlowConfig>
-                                <productionBranch>main</productionBranch>
-                                <developmentBranch>dev</developmentBranch>
-                                <featureBranchPrefix>feature-</featureBranchPrefix>
-                                <releaseBranchPrefix>release-</releaseBranchPrefix>
-                                <hotfixBranchPrefix>hotfix-</hotfixBranchPrefix>
-                                <versionTagPrefix>v</versionTagPrefix>
-                                <origin>origin</origin>
-                            </gitFlowConfig>
-                        </configuration>
                     </plugin>
 
                 </plugins>
