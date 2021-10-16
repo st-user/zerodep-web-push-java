@@ -1,5 +1,8 @@
 .idea
+zerodep-web-push-java-ext.iml
 zerodep-web-push-java-ext-auth0/target/
 zerodep-web-push-java-ext-auth0/zerodep-web-push-java-ext-auth0.iml
 zerodep-web-push-java-ext-jjwt/target/
 zerodep-web-push-java-ext-jjwt/zerodep-web-push-java-ext-jjwt.iml
+zerodep-web-push-java-ext-nimbus-jose/target/
+zerodep-web-push-java-ext-nimbus-jose/zerodep-web-push-java-ext-nimbus-jose.iml
