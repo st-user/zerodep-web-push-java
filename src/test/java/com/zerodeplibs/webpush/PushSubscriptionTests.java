@@ -116,12 +116,12 @@ public class PushSubscriptionTests {
 
         assertThat(subscription.toString(), equalTo(
             "PushSubscription{"
-            + "endpoint='1'"
-            + ", expirationTime='100'"
-            + ", keys=Keys{"
-            + "p256dh='a'"
-            + ", auth='b'}"
-            + "}"
+                + "endpoint='1'"
+                + ", expirationTime='100'"
+                + ", keys=Keys{"
+                + "p256dh='a'"
+                + ", auth='b'}"
+                + "}"
         ));
     }
 

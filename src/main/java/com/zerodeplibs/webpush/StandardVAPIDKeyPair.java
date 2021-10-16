@@ -2,6 +2,7 @@ package com.zerodeplibs.webpush;
 
 import com.zerodeplibs.webpush.internal.WebPushPreConditions;
 import com.zerodeplibs.webpush.jwt.VAPIDJWTGenerator;
+import com.zerodeplibs.webpush.jwt.VAPIDJWTGeneratorFactory;
 import com.zerodeplibs.webpush.jwt.VAPIDJWTParam;
 import com.zerodeplibs.webpush.key.PrivateKeySource;
 import com.zerodeplibs.webpush.key.PublicKeySource;
@@ -9,7 +10,6 @@ import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
 import java.util.Arrays;
 import java.util.Base64;
-import java.util.function.BiFunction;
 
 /**
  * A standard implementation of the VAPIDKeyPair.
@@ -25,8 +25,7 @@ class StandardVAPIDKeyPair implements VAPIDKeyPair {
 
     StandardVAPIDKeyPair(PrivateKeySource privateKeySource,
                          PublicKeySource publicKeySource,
-                         BiFunction<ECPrivateKey, ECPublicKey, VAPIDJWTGenerator>
-                             jwtGeneratorFactory) {
+                         VAPIDJWTGeneratorFactory jwtGeneratorFactory) {
 
         WebPushPreConditions.checkNotNull(privateKeySource, "privateKeySource");
         WebPushPreConditions.checkNotNull(publicKeySource, "publicKeySource");
@@ -42,7 +41,7 @@ class StandardVAPIDKeyPair implements VAPIDKeyPair {
         this.uncompressedPublicKeyBase64 = Base64.getUrlEncoder().withoutPadding()
             .encodeToString(this.uncompressedPublicKey);
 
-        VAPIDJWTGenerator jwtGenerator = jwtGeneratorFactory.apply(privateKey, publicKey);
+        VAPIDJWTGenerator jwtGenerator = jwtGeneratorFactory.create(privateKey, publicKey);
         WebPushPreConditions.checkNotNull(jwtGenerator,
             "The VAPIDJWTGenerator created by the jwtGeneratorFactory");
 
