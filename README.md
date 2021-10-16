@@ -7,11 +7,14 @@ of `com.zerodeplibs.webpush.jwt.VAPIDJWTGenerator` utilizing third-party JWT lib
 
 Uses [Java JWT - auth0](https://github.com/auth0/java-jwt).
 
+## [zerodep-web-push-java-ext-fusionauth](./zerodep-web-push-java-ext-fusionauth/README.md)
+
+Uses [FusionAuth JWT](https://github.com/fusionauth/fusionauth-jwt).
 
 ## [zerodep-web-push-java-ext-jjwt](./zerodep-web-push-java-ext-jjwt/README.md)
 
 Uses [Java JWT](https://github.com/jwtk/jjwt).
 
-## 
+##  
 
 
