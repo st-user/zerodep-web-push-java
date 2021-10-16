@@ -3,6 +3,11 @@
 Provides an implementation for `com.zerodeplibs.webpush.jwt.VAPIDJWTGenerator`
 utilizing [Java JWT](https://github.com/jwtk/jjwt).
 
+## Requirements
+
+The recommended version
+of [io.jsonwebtoken:jjwt-api](https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api) and the
+other runtime dependencies is 0.11.0 or higher(The latest version is more desirable).
 
 ## Usage
 

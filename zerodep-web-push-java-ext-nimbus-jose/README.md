@@ -5,8 +5,9 @@ utilizing [Nimbus JOSE + JWT](https://connect2id.com/products/nimbus-jose-jwt).
 
 ## Requirements
 
-The version of [com.nimbusds:nimbus-jose-jwt](https://mvnrepository.com/artifact/com.nimbusds/nimbus-jose-jwt) must be
-9.0 or higher(the latest version is recommended).
+The recommended version
+of [com.nimbusds:nimbus-jose-jwt](https://mvnrepository.com/artifact/com.nimbusds/nimbus-jose-jwt)
+is 9.0 or higher(The latest version is more desirable).
 
 ## Usage
 
