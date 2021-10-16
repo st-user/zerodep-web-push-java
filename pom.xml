@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.zerodeplibs</groupId>
+    <artifactId>zerodep-web-push-java-ext</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+
+    <modules>
+        <module>zerodep-web-push-java-ext-auth0</module>
+    </modules>
+
+    <packaging>pom</packaging>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <jackson.version>2.13.0</jackson.version>
+        <junit.version>5.8.1</junit.version>
+    </properties>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+
+                <plugin>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>3.1.0</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.0.2</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.22.1</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>3.0.2</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>2.5.2</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>2.8.2</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>3.7.1</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-project-info-reports-plugin</artifactId>
+                    <version>3.0.0</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>3.1.2</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>com.puppycrawl.tools</groupId>
+                            <artifactId>checkstyle</artifactId>
+                            <version>8.45.1</version>
+                        </dependency>
+                    </dependencies>
+                    <configuration>
+                        <configLocation>checkstyle.xml</configLocation>
+                        <encoding>UTF-8</encoding>
+                        <consoleOutput>true</consoleOutput>
+                        <failsOnError>true</failsOnError>
+                        <failOnViolation>true</failOnViolation>
+                        <violationSeverity>warning</violationSeverity>
+                        <linkXRef>false</linkXRef>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>validate</id>
+                            <phase>validate</phase>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+            </plugins>
+        </pluginManagement>
+
+        <plugins>
+
+            <plugin>
+                <groupId>com.amashchenko.maven.plugin</groupId>
+                <artifactId>gitflow-maven-plugin</artifactId>
+                <version>1.16.0</version>
+                <configuration>
+                    <verbose>true</verbose>
+                    <installProject>false</installProject>
+                    <commitDevelopmentVersionAtStart>true</commitDevelopmentVersionAtStart>
+                    <versionDigitToIncrement>1</versionDigitToIncrement>
+                    <gitFlowConfig>
+                        <productionBranch>main</productionBranch>
+                        <developmentBranch>dev</developmentBranch>
+                        <featureBranchPrefix>feature-</featureBranchPrefix>
+                        <releaseBranchPrefix>release-</releaseBranchPrefix>
+                        <hotfixBranchPrefix>hotfix-</hotfixBranchPrefix>
+                        <versionTagPrefix>v</versionTagPrefix>
+                        <origin>origin</origin>
+                    </gitFlowConfig>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
+    <dependencyManagement>
+        <dependencies>
+
+            <dependency>
+                <groupId>com.zerodeplibs</groupId>
+                <artifactId>zerodep-web-push-java</artifactId>
+                <version>1.1.0-SNAPSHOT</version>
+            </dependency>
+
+            <!--
+                Dependencies for testing.
+             -->
+
+            <dependency>
+                <groupId>org.bitbucket.b_c</groupId>
+                <artifactId>jose4j</artifactId>
+                <version>0.7.9</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${jackson.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${jackson.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-api</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-engine</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.hamcrest</groupId>
+                <artifactId>hamcrest</artifactId>
+                <version>2.2</version>
+                <scope>test</scope>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <profiles>
+        <profile>
+            <id>production-compile</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <pluginManagement>
+                    <plugins>
+
+                        <plugin>
+                            <artifactId>maven-compiler-plugin</artifactId>
+                            <version>3.8.0</version>
+                            <executions>
+                                <execution>
+                                    <id>default-compile</id>
+                                    <configuration>
+                                        <release>9</release>
+                                    </configuration>
+                                </execution>
+                                <execution>
+                                    <id>base-compile</id>
+                                    <goals>
+                                        <goal>compile</goal>
+                                    </goals>
+                                    <configuration>
+                                        <excludes>
+                                            <exclude>module-info.java</exclude>
+                                        </excludes>
+                                    </configuration>
+                                </execution>
+                            </executions>
+                            <configuration>
+                                <release>8</release>
+                            </configuration>
+                        </plugin>
+
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+
+    </profiles>
+</project>

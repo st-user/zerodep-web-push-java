@@ -1,4 +1,12 @@
 # zerodep-web-push-java-ext
-The sub-modules for zerodep-web-push-java.
 
-Currently under development.
+The sub-modules for zerodep-web-push-java that provide implementations
+of `com.zerodeplibs.webpush.jwt.VAPIDJWTGenerator` utilizing third-party JWT libraries.
+
+## [zerodep-web-push-java-ext-auth0](./zerodep-web-push-java-ext-auth0/README.md)
+
+Uses [Java JWT - auth0](https://github.com/auth0/java-jwt).
+
+## 
+
+
