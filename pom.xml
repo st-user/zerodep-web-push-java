@@ -14,6 +14,7 @@
         <module>zerodep-web-push-java-ext-nimbus-jose</module>
         <module>zerodep-web-push-java-ext-fusionauth</module>
         <module>zerodep-web-push-java-ext-jose4j</module>
+        <module>zerodep-web-push-java-ext-vertx</module>
     </modules>
 
     <packaging>pom</packaging>
