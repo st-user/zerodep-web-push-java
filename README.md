@@ -15,6 +15,10 @@ Uses [FusionAuth JWT](https://github.com/fusionauth/fusionauth-jwt).
 
 Uses [Java JWT](https://github.com/jwtk/jjwt).
 
+## [zerodep-web-push-java-ext-jose4j](./zerodep-web-push-java-ext-jose4j/README.md)
+
+Uses [jose4j](https://bitbucket.org/b_c/jose4j/wiki/Home).
+
 ## [zerodep-web-push-java-ext-nimbus-jose](./zerodep-web-push-java-ext-nimbus-jose/README.md)
 
 Uses [Nimbus JOSE + JWT](https://connect2id.com/products/nimbus-jose-jwt).

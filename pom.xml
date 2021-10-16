@@ -13,6 +13,7 @@
         <module>zerodep-web-push-java-ext-jjwt</module>
         <module>zerodep-web-push-java-ext-nimbus-jose</module>
         <module>zerodep-web-push-java-ext-fusionauth</module>
+        <module>zerodep-web-push-java-ext-jose4j</module>
     </modules>
 
     <packaging>pom</packaging>
