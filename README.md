@@ -23,7 +23,7 @@ Uses [jose4j](https://bitbucket.org/b_c/jose4j/wiki/Home).
 
 Uses [Nimbus JOSE + JWT](https://connect2id.com/products/nimbus-jose-jwt).
 
-## [zerodep-web-push-java-ext-vertx](./zerodep-web-push-java-ext-nimbus-vertx/README.md)
+## [zerodep-web-push-java-ext-vertx](./zerodep-web-push-java-ext-vertx/README.md)
 
 Uses [JWT Auth - Vert.x](https://vertx.io/docs/vertx-auth-jwt/java/).
 
