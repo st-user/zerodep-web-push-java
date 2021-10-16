@@ -19,7 +19,7 @@ class JavaJwtVAPIDJWTGenerator implements VAPIDJWTGenerator {
 
     private final ECPrivateKey privateKey;
 
-    public JavaJwtVAPIDJWTGenerator(ECPrivateKey privateKey) {
+    JavaJwtVAPIDJWTGenerator(ECPrivateKey privateKey) {
         this.privateKey = privateKey;
     }
 
