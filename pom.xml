@@ -10,6 +10,7 @@
 
     <modules>
         <module>zerodep-web-push-java-ext-auth0</module>
+        <module>zerodep-web-push-java-ext-jjwt</module>
     </modules>
 
     <packaging>pom</packaging>
