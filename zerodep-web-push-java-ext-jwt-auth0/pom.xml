@@ -87,7 +87,7 @@
                         <configuration>
                             <argLine>
                                 --add-modules com.fasterxml.jackson.databind --add-reads
-                                com.zerodeplibs.webpush.ext.auth0=com.fasterxml.jackson.databind
+                                com.zerodeplibs.webpush.ext.jwt.auth0=com.fasterxml.jackson.databind
                             </argLine>
                         </configuration>
                     </plugin>
