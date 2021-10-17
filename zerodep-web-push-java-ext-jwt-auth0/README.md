@@ -6,7 +6,7 @@ utilizing <a href="https://github.com/auth0/java-jwt">Java JWT - auth0</a>.
 ## Requirements
 
 The version of [com.auth0:java-jwt](https://mvnrepository.com/artifact/com.auth0/java-jwt) must be
-3.14.0 or higher(the latest version is recommended).
+3.17.0 or higher(the latest version is recommended).
 
 ## Usage
 

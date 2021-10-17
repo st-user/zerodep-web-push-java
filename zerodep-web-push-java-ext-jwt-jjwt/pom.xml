@@ -100,41 +100,4 @@
         </plugins>
     </build>
 
-    <profiles>
-
-        <profile>
-            <id>jdk-8-compile</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
-
-            <build>
-                <pluginManagement>
-
-                    <plugins>
-
-                        <plugin>
-                            <artifactId>maven-compiler-plugin</artifactId>
-                            <version>3.8.0</version>
-                            <executions>
-                                <execution>
-                                    <id>default-compile</id>
-                                    <configuration>
-                                        <release>8</release>
-                                        <excludes>
-                                            <exclude>module-info.java</exclude>
-                                        </excludes>
-                                    </configuration>
-                                </execution>
-                            </executions>
-                        </plugin>
-
-                    </plugins>
-
-                </pluginManagement>
-            </build>
-        </profile>
-
-    </profiles>
-
 </project>

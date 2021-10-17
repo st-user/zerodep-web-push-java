@@ -223,6 +223,8 @@
                             </executions>
                             <configuration>
                                 <release>8</release>
+                                <failOnError>true</failOnError>
+                                <failOnWarning>true</failOnWarning>
                             </configuration>
                         </plugin>
 

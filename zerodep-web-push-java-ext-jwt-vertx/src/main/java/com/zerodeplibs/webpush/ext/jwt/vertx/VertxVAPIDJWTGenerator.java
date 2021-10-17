@@ -84,6 +84,7 @@ public class VertxVAPIDJWTGenerator implements VAPIDJWTGenerator {
         return provider.generateToken(payload, jwtOptions);
     }
 
+    @SuppressWarnings("deprecation")
     private PubSecKeyOptions createOptions() {
         if (IS_SET_BUFFER_PRESENT) {
             return Vertx4Support.createOptions(this.privateKey);
