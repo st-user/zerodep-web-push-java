@@ -60,9 +60,13 @@ public class BasicExample {
         return VAPIDKeyPairs.of(
             PrivateKeySources.ofPEMFile(new File(privateKeyFilePath).toPath()),
             PublicKeySources.ofPEMFile(new File(publicKeyFilePath).toPath())
-            // If you want to implement VAPIDJWTGenerator,
-            // the project for its sub-modules is a good example.
-            // For more information, please consult the source codes on https://github.com/st-user/zerodep-web-push-java-ext-jwt
+
+            /*
+             * If you want to implement VAPIDJWTGenerator yourself,
+             * the project for its sub-modules is a good example.
+             * For more information, please consult the source codes on https://github.com/st-user/zerodep-web-push-java-ext-jwt
+             */
+
             // (privateKey, publicKey) -> new MyOwnVAPIDJWTGenerator(privateKey)
         );
     }
