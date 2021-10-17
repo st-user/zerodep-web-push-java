@@ -76,7 +76,7 @@ class Jose4jVAPIDJWTGenerator implements VAPIDJWTGenerator {
         try {
             return jws.getCompactSerialization();
         } catch (JoseException e) {
-            throw new VAPIDJWTCreationException(e);
+            throw VAPIDJWTCreationException.withDefaultMessage(e);
         }
     }
 

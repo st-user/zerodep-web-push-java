@@ -30,7 +30,7 @@ class NimbusJoseVAPIDJWTGenerator implements VAPIDJWTGenerator {
         try {
             this.signer = new ECDSASigner(privateKey);
         } catch (JOSEException e) {
-            throw new VAPIDJWTCreationException(e);
+            throw VAPIDJWTCreationException.withDefaultMessage(e);
         }
         this.header = new JWSHeader.Builder(JWSAlgorithm.ES256)
             .type(JOSEObjectType.JWT)
@@ -51,7 +51,7 @@ class NimbusJoseVAPIDJWTGenerator implements VAPIDJWTGenerator {
         try {
             jwsObject.sign(this.signer);
         } catch (JOSEException e) {
-            throw new VAPIDJWTCreationException(e);
+            throw VAPIDJWTCreationException.withDefaultMessage(e);
         }
 
         return jwsObject.serialize();
