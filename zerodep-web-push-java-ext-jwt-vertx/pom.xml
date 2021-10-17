@@ -76,7 +76,7 @@
                 <configuration>
                     <archive>
                         <manifestEntries>
-                            <Automatic-Module-Name>com.zerodeplibs.webpush.ext.vertx</Automatic-Module-Name>
+                            <Automatic-Module-Name>com.zerodeplibs.webpush.ext.jwt.vertx</Automatic-Module-Name>
                         </manifestEntries>
                     </archive>
                 </configuration>
