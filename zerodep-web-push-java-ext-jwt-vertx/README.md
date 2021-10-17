@@ -41,7 +41,7 @@ TBD
 
 You have to create an instance of `com.zerodeplibs.webpush.jwt.VAPIDJWTGeneratorFactory` manually
 and pass it
-to `com.zerodeplibs.webpush.VAPIDKeyPairs#of(PrivateKeySource, PublicKeySource, VertxVAPIDJWTGeneratorFactory)`
+to `com.zerodeplibs.webpush.VAPIDKeyPairs#of(PrivateKeySource, PublicKeySource, BiFunction)`
 .
 
 For example:

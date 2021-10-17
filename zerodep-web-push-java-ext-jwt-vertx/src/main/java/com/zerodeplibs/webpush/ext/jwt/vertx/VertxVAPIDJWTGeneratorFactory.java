@@ -7,6 +7,7 @@ import io.vertx.ext.auth.jwt.JWTAuth;
 import io.vertx.ext.auth.jwt.JWTAuthOptions;
 import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
+import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 /**
@@ -15,7 +16,8 @@ import java.util.function.Supplier;
  *
  * @author Tomoki Sato
  */
-public class VertxVAPIDJWTGeneratorFactory implements VAPIDJWTGeneratorFactory {
+public class VertxVAPIDJWTGeneratorFactory
+    implements VAPIDJWTGeneratorFactory, BiFunction<ECPrivateKey, ECPublicKey, VAPIDJWTGenerator> {
 
     private final Supplier<Vertx> vertxObtainStrategy;
 
@@ -25,7 +27,9 @@ public class VertxVAPIDJWTGeneratorFactory implements VAPIDJWTGeneratorFactory {
      * <p>
      * The returned generator invokes <code>vertxObtainStrategy#get</code> each time
      * its 'generate' method is called in order to get an instance of Vertx.
+     * </p>
      *
+     * <p>
      * this instance is passed to the JWT authentication provider
      * and used to generate the JWT.
      * </p>
@@ -41,5 +45,11 @@ public class VertxVAPIDJWTGeneratorFactory implements VAPIDJWTGeneratorFactory {
     public VAPIDJWTGenerator create(ECPrivateKey privateKey,
                                     ECPublicKey publicKey) {
         return new VertxVAPIDJWTGenerator(this.vertxObtainStrategy, privateKey);
+    }
+
+    @Override
+    public VAPIDJWTGenerator apply(ECPrivateKey privateKey,
+                                   ECPublicKey publicKey) {
+        return create(privateKey, publicKey);
     }
 }
