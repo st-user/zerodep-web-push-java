@@ -32,6 +32,11 @@
             <groupId>io.vertx</groupId>
             <artifactId>vertx-auth-jwt</artifactId>
             <version>${vertx.version}</version>
+            <!--
+                In order to encourage users to explicitly specified the version,
+                we use the provided scope.
+            -->
+            <scope>provided</scope>
         </dependency>
 
         <!--

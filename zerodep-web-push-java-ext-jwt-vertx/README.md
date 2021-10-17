@@ -27,6 +27,15 @@ Jackson Databind on your classpath.
 
 TBD
 
+<!-- 
+    For version consistency,
+    the dependency on vertx-auth-jwt must be explicitly specified. 
+-->
+<dependency>
+    <groupId>io.vertx</groupId>
+    <artifactId>vertx-auth-jwt</artifactId>
+    <version>${your.vertx.version}</version>
+</dependency>
 
 <!-- If you want to use additional claims -->
 <dependency>
