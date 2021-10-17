@@ -18,7 +18,24 @@ package com.zerodeplibs.webpush.jwt;
  * @see VAPIDJWTGeneratorFactory
  */
 public class VAPIDJWTCreationException extends RuntimeException {
-    public VAPIDJWTCreationException(Throwable cause) {
-        super(cause);
+
+    /**
+     * Creates a new {@link VAPIDJWTCreationException} with the given message and cause.
+     *
+     * @param message a message.
+     * @param cause   the underlying cause.
+     */
+    public VAPIDJWTCreationException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    /**
+     * Creates a new {@link VAPIDJWTCreationException} with the default message and the given cause.
+     *
+     * @param cause the underlying cause.
+     */
+    public static VAPIDJWTCreationException withDefaultMessage(Throwable cause) {
+        return new VAPIDJWTCreationException(
+            "An exception was thrown while creating a JWT. Please check the cause.", cause);
     }
 }

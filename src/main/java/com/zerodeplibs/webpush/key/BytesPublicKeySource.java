@@ -60,7 +60,7 @@ class BytesPublicKeySource implements PublicKeySource {
             this.publicKeyPostProcessor.accept(ecPublicKey);
             this.publicKey = ecPublicKey;
         } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
-            throw new KeyExtractionException(e);
+            throw KeyExtractionException.withDefaultMessage(e);
         }
     }
 

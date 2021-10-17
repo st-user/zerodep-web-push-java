@@ -27,7 +27,7 @@ public class MessageEncryptions {
         try {
             return new Aes128GcmMessageEncryption();
         } catch (NoSuchAlgorithmException e) {
-            throw new MessageEncryptionException(e);
+            throw MessageEncryptionException.withDefaultMessage(e);
         }
     }
 }
