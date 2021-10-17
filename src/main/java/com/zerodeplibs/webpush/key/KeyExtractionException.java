@@ -12,7 +12,12 @@ package com.zerodeplibs.webpush.key;
  * @author Tomoki Sato
  */
 public class KeyExtractionException extends RuntimeException {
-    KeyExtractionException(Throwable cause) {
-        super(cause);
+    KeyExtractionException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    static KeyExtractionException withDefaultMessage(Throwable cause) {
+        return new KeyExtractionException(
+            "An exception was thrown while extracting a key. Please check the cause.", cause);
     }
 }

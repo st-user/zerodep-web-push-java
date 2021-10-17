@@ -14,7 +14,13 @@ import java.security.InvalidAlgorithmParameterException;
  * @author Tomoki Sato
  */
 public class MessageEncryptionException extends RuntimeException {
-    MessageEncryptionException(Throwable cause) {
-        super(cause);
+    MessageEncryptionException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    static MessageEncryptionException withDefaultMessage(Throwable cause) {
+        return new MessageEncryptionException(
+            "An exception was thrown during a cryptographic operation. Please check the cause.",
+            cause);
     }
 }

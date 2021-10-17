@@ -73,10 +73,13 @@ public class VAPIDJWTParamsTests {
         assertNullCheck(() -> VAPIDJWTParam.getBuilder().resourceURLString(null),
             "resourceURLString");
 
-        assertThat(assertThrows(MalformedURLRuntimeException.class,
-                () -> VAPIDJWTParam.getBuilder().resourceURLString("$$$$")).getCause().getClass(),
+        MalformedURLRuntimeException actualException =
+            assertThrows(MalformedURLRuntimeException.class,
+                () -> VAPIDJWTParam.getBuilder().resourceURLString("$$$$"));
+        assertThat(actualException.getMessage(),
             equalTo(
-                MalformedURLException.class));
+                "An exception was thrown while parsing the input string. Please check the cause."));
+        assertThat(actualException.getCause().getClass(), equalTo(MalformedURLException.class));
 
         assertNullCheck(() -> VAPIDJWTParam.getBuilder().resourceURL(null),
             "resourceURL");

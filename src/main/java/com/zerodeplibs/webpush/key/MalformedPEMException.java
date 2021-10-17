@@ -13,7 +13,12 @@ public class MalformedPEMException extends RuntimeException {
         super(message);
     }
 
-    MalformedPEMException(Throwable cause) {
-        super(cause);
+    MalformedPEMException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    static MalformedPEMException withDefaultMessage(Throwable cause) {
+        return new MalformedPEMException(
+            "An exception was thrown while parsing the input text. Please check the cause", cause);
     }
 }

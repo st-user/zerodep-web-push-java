@@ -69,7 +69,7 @@ class Aes128GcmMessageEncryption implements MessageEncryption {
             | NoSuchPaddingException
             | BadPaddingException e) {
 
-            throw new MessageEncryptionException(e);
+            throw MessageEncryptionException.withDefaultMessage(e);
         }
     }
 
@@ -86,7 +86,7 @@ class Aes128GcmMessageEncryption implements MessageEncryption {
             | NoSuchPaddingException
             | IllegalBlockSizeException
             | BadPaddingException e) {
-            throw new MessageEncryptionException(e);
+            throw MessageEncryptionException.withDefaultMessage(e);
         }
     }
 

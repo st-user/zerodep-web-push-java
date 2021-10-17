@@ -176,7 +176,7 @@ public class VAPIDJWTParam {
             try {
                 this.resourceURL(new URL(resourceURLString));
             } catch (MalformedURLException e) {
-                throw new MalformedURLRuntimeException(e);
+                throw MalformedURLRuntimeException.withDefaultMessage(e);
             }
             return this;
         }

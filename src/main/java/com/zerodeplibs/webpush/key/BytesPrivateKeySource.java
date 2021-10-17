@@ -28,7 +28,7 @@ class BytesPrivateKeySource implements PrivateKeySource {
             KeyFactory keyFactory = KeyFactory.getInstance("EC");
             return (ECPrivateKey) keyFactory.generatePrivate(new PKCS8EncodedKeySpec(pkcs8Bytes));
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            throw new KeyExtractionException(e);
+            throw KeyExtractionException.withDefaultMessage(e);
         }
     }
 }

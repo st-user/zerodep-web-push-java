@@ -182,7 +182,7 @@ class StandardPEMParser implements PEMParser {
         try {
             return Base64.getDecoder().decode(base64Content.toString());
         } catch (IllegalArgumentException e) {
-            throw new MalformedPEMException(e);
+            throw MalformedPEMException.withDefaultMessage(e);
         }
     }
 
