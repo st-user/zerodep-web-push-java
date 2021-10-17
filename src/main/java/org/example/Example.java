@@ -8,6 +8,7 @@ import com.zerodeplibs.webpush.PushSubscription;
 import com.zerodeplibs.webpush.UserAgentMessageEncryptionKeyInfo;
 import com.zerodeplibs.webpush.VAPIDKeyPair;
 import com.zerodeplibs.webpush.VAPIDKeyPairs;
+import com.zerodeplibs.webpush.ext.jwt.vertx.VertxVAPIDJWTGeneratorFactory;
 import com.zerodeplibs.webpush.header.TTL;
 import com.zerodeplibs.webpush.header.Topic;
 import com.zerodeplibs.webpush.header.Urgency;
@@ -18,6 +19,7 @@ import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.ext.web.Router;
+import io.vertx.ext.web.client.HttpResponse;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.StaticHandler;
@@ -44,7 +46,7 @@ public class Example {
         return VAPIDKeyPairs.of(
             PrivateKeySources.ofPEMFile(new File("./.keys/my-private_pkcs8.pem").toPath()),
             PublicKeySources.ofPEMFile(new File("./.keys/my-pub.pem").toPath()),
-            (privateKey, publicKey) -> new MyVertxVAPIDJWTGenerator(vertx, privateKey));
+            new VertxVAPIDJWTGeneratorFactory(() -> vertx));
     }
 
     public static void main(String[] args) throws IOException {
@@ -65,9 +67,8 @@ public class Example {
          */
         router
             .get("/getPublicKey")
-            .respond(
-                ctx -> ctx
-                    .response()
+            .handler(ctx ->
+                ctx.response()
                     .putHeader("Content-Type", "application/octet-stream")
                     .end(Buffer.buffer(vapidKeyPair.extractPublicKeyInUncompressedForm()))
             );
@@ -208,18 +209,20 @@ public class Example {
                     .putHeader("TTL", String.valueOf(TTL.hours(1)))
                     .putHeader("Urgency", Urgency.normal())
                     .putHeader("Topic", Topic.ensure("myTopic"))
-                    .sendBuffer(Buffer.buffer(encryptedPushMessage.toBytes()))
-                    .onSuccess(result -> {
-                        System.out.println(String.format("status code: %d", result.statusCode()));
-                        // 201 Created : Success!
-                        // 410 Gone : The subscription is no longer valid.
-                        // etc...
-                        // for more information, see the useful link below:
-                        // [Response from push service - The Web Push Protocol ](https://developers.google.com/web/fundamentals/push-notifications/web-push-protocol)
-                    })
-                    .onFailure(result -> {
-                        System.err.println(result);
-                    });
+                    .sendBuffer(Buffer.buffer(encryptedPushMessage.toBytes()),
+                        httpResponseAsyncResult -> {
+
+                            HttpResponse<Buffer> result = httpResponseAsyncResult.result();
+                            System.out.println(
+                                String.format("status code: %d", result.statusCode()));
+                            // 201 Created : Success!
+                            // 410 Gone : The subscription is no longer valid.
+                            // etc...
+                            // for more information, see the useful link below:
+                            // [Response from push service - The Web Push Protocol ](https://developers.google.com/web/fundamentals/push-notifications/web-push-protocol)
+
+                        });
+
             });
 
             if (currentIndex == targetSubscriptions.size() - 1) {

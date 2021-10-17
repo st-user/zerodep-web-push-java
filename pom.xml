@@ -18,6 +18,12 @@
         -->
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
+        <zerodeplibs.version>1.1.0-SNAPSHOT</zerodeplibs.version>
+        <vertx.version>4.1.5</vertx.version>
+        <!--
+            Also Vert.x 3 is available.
+            <vertx.version>3.9.9</vertx.version>
+         -->
     </properties>
 
     <dependencies>
@@ -25,13 +31,32 @@
         <dependency>
             <groupId>com.zerodeplibs</groupId>
             <artifactId>zerodep-web-push-java</artifactId>
-            <version>1.0.1</version>
+            <version>${zerodeplibs.version}</version>
         </dependency>
 
         <dependency>
+            <groupId>com.zerodeplibs</groupId>
+            <artifactId>zerodep-web-push-java-ext-jwt-vertx</artifactId>
+            <version>${zerodeplibs.version}</version>
+        </dependency>
+
+        <!--
+            For version consistency,
+            the dependency on vertx-auth-jwt must be explicitly specified.
+        -->
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-auth-jwt</artifactId>
+            <version>${vertx.version}</version>
+        </dependency>
+
+        <!--
+            Dependencies for Vert.x
+        -->
+        <dependency>
             <groupId>io.vertx</groupId>
             <artifactId>vertx-web</artifactId>
-            <version>4.1.5</version>
+            <version>${vertx.version}</version>
         </dependency>
 
         <!--
@@ -41,56 +66,22 @@
         <dependency>
             <groupId>io.vertx</groupId>
             <artifactId>vertx-web-client</artifactId>
-            <version>4.1.5</version>
-        </dependency>
-
-        <!--
-            To construct JWT for VAPID,
-            we utilize the Vert.x's JWT library.
-        -->
-        <dependency>
-            <groupId>io.vertx</groupId>
-            <artifactId>vertx-auth-jwt</artifactId>
-            <version>4.1.5</version>
+            <version>${vertx.version}</version>
         </dependency>
 
         <!--
             To map between Vert.x's JSON objects and Java objects
             (e.g. JsonObject to PushSubscription),
             we have to use jackson-databind.
+
+            Also, if you want to use additional claims
+            with 'VAPIDJWTParam.getBuilder#additionalClaim)',
+            This dependency is required.
         -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>2.11.4</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>5.8.1</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.8.1</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest</artifactId>
-            <version>2.2</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.bitbucket.b_c</groupId>
-            <artifactId>jose4j</artifactId>
-            <version>0.7.9</version>
-            <scope>test</scope>
         </dependency>
 
     </dependencies>
