@@ -24,6 +24,7 @@
             JDK8+ is required.
         -->
         <java.version>8</java.version>
+        <zerodeplibs.version>1.1.0-SNAPSHOT</zerodeplibs.version>
     </properties>
 
     <dependencies>
@@ -31,50 +32,78 @@
         <dependency>
             <groupId>com.zerodeplibs</groupId>
             <artifactId>zerodep-web-push-java</artifactId>
-            <version>1.0.1</version>
+            <version>${zerodeplibs.version}</version>
         </dependency>
 
         <!--
-            To show use cases, this project has dependencies on five JWT libraries.
-            However, your project does not have to have dependencies on multiple JWT libraries.
+            When using [Java JWT - auth0](https://github.com/auth0/java-jwt).
         -->
         <dependency>
-            <groupId>com.auth0</groupId>
-            <artifactId>java-jwt</artifactId>
-            <version>3.18.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.bitbucket.b_c</groupId>
-            <artifactId>jose4j</artifactId>
-            <version>0.7.9</version>
-        </dependency>
-        <dependency>
-            <groupId>com.nimbusds</groupId>
-            <artifactId>nimbus-jose-jwt</artifactId>
-            <version>9.15.2</version>
-        </dependency>
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-api</artifactId>
-            <version>0.11.2</version>
-        </dependency>
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-impl</artifactId>
-            <version>0.11.2</version>
+            <groupId>com.zerodeplibs</groupId>
+            <artifactId>zerodep-web-push-java-ext-jwt-auth0</artifactId>
+            <version>${zerodeplibs.version}</version>
             <scope>runtime</scope>
         </dependency>
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-jackson</artifactId>
-            <version>0.11.2</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.fusionauth</groupId>
-            <artifactId>fusionauth-jwt</artifactId>
-            <version>5.0.0</version>
-        </dependency>
+
+
+        <!--
+            When using [FusionAuth JWT](https://github.com/fusionauth/fusionauth-jwt).
+
+            <dependency>
+                <groupId>com.zerodeplibs</groupId>
+                <artifactId>zerodep-web-push-java-ext-jwt-fusionauth</artifactId>
+                <version>${zerodeplibs.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+        -->
+
+        <!--
+            When using [Java JWT](https://github.com/jwtk/jjwt).
+
+            <dependency>
+                <groupId>com.zerodeplibs</groupId>
+                <artifactId>zerodep-web-push-java-ext-jwt-jjwt</artifactId>
+                <version>${zerodeplibs.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+
+            Java JWT's runtime dependencies.
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-impl</artifactId>
+                <version>0.11.2</version>
+                <scope>runtime</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-jackson</artifactId> or jjwt-gson if Gson is preferred
+                <version>0.11.2</version>
+                <scope>runtime</scope>
+            </dependency>
+        -->
+
+        <!--
+            When using [jose4j](https://bitbucket.org/b_c/jose4j/wiki/Home).
+
+            <dependency>
+                <groupId>com.zerodeplibs</groupId>
+                <artifactId>zerodep-web-push-java-ext-jwt-jose4j</artifactId>
+                <version>${zerodeplibs.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+        -->
+
+        <!--
+            [Nimbus JOSE + JWT](https://connect2id.com/products/nimbus-jose-jwt).
+
+            <dependency>
+                <groupId>com.zerodeplibs</groupId>
+                <artifactId>zerodep-web-push-java-ext-jwt-nimbus-jose</artifactId>
+                <version>${zerodeplibs.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+        -->
+
 
         <!--
             This project utilizes OkHttp.
@@ -89,25 +118,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest</artifactId>
-            <version>2.2</version>
-            <scope>test</scope>
         </dependency>
 
     </dependencies>

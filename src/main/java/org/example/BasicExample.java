@@ -1,8 +1,5 @@
 package org.example;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTCreator;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.zerodeplibs.webpush.EncryptedPushMessage;
 import com.zerodeplibs.webpush.MessageEncryption;
 import com.zerodeplibs.webpush.MessageEncryptions;
@@ -14,14 +11,11 @@ import com.zerodeplibs.webpush.VAPIDKeyPairs;
 import com.zerodeplibs.webpush.header.TTL;
 import com.zerodeplibs.webpush.header.Topic;
 import com.zerodeplibs.webpush.header.Urgency;
-import com.zerodeplibs.webpush.jwt.VAPIDJWTGenerator;
 import com.zerodeplibs.webpush.jwt.VAPIDJWTParam;
 import com.zerodeplibs.webpush.key.PrivateKeySources;
 import com.zerodeplibs.webpush.key.PublicKeySources;
 import java.io.File;
 import java.io.IOException;
-import java.security.interfaces.ECPrivateKey;
-import java.security.interfaces.ECPublicKey;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -47,42 +41,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class BasicExample {
 
-    /**
-     * An implementation of VAPIDJWTGenerator.
-     * <p>
-     * In this example, we use <a href="https://github.com/auth0/java-jwt">Java JWT - auth0</a>
-     * Of course, we can use an arbitrary JWT library.
-     *
-     * @see MyNimbusJoseJwtVAPIDJWTGenerator
-     * @see MyJJwtVAPIDJWTGenerator
-     * @see MyFusionAuthJwtVAPIDJWTGenerator
-     * @see MyJose4jVAPIDJWTGenerator
-     */
-    static class MyAuth0VAPIDJWTGenerator implements VAPIDJWTGenerator {
-
-        private final Algorithm jwtAlgorithm;
-
-        MyAuth0VAPIDJWTGenerator(ECPrivateKey privateKey, ECPublicKey publicKey) {
-            this.jwtAlgorithm = Algorithm.ECDSA256(publicKey, privateKey);
-        }
-
-        @Override
-        public String generate(VAPIDJWTParam vapidjwtParam) {
-
-            Map<String, Object> addtionalClaims = new HashMap<>();
-            vapidjwtParam.forEachAdditionalClaim(addtionalClaims::put);
-
-            JWTCreator.Builder builder = JWT.create()
-                .withAudience(vapidjwtParam.getOrigin())
-                .withExpiresAt(vapidjwtParam.getExpiresAt());
-
-            vapidjwtParam.getSubject().ifPresent(builder::withSubject);
-            builder.withPayload(addtionalClaims);
-
-            return builder.sign(this.jwtAlgorithm);
-        }
-    }
-
     @Autowired
     private VAPIDKeyPair vapidKeyPair;
 
@@ -101,12 +59,11 @@ public class BasicExample {
 
         return VAPIDKeyPairs.of(
             PrivateKeySources.ofPEMFile(new File(privateKeyFilePath).toPath()),
-            PublicKeySources.ofPEMFile(new File(publicKeyFilePath).toPath()),
-            MyAuth0VAPIDJWTGenerator::new
-            // (privateKey, publicKey) -> new MyNimbusJoseJwtVAPIDJWTGenerator(privateKey)
-            // (privateKey, publicKey) -> new MyJJwtVAPIDJWTGenerator(privateKey)
-            // (privateKey, publicKey) -> new MyFusionAuthJwtVAPIDJWTGenerator(privateKey)
-            // (privateKey, publicKey) -> new MyJose4jVAPIDJWTGenerator(privateKey)
+            PublicKeySources.ofPEMFile(new File(publicKeyFilePath).toPath())
+            // If you want to implement VAPIDJWTGenerator,
+            // the project for its sub-modules is a good example.
+            // For more information, please consult the source codes on https://github.com/st-user/zerodep-web-push-java-ext-jwt
+            // (privateKey, publicKey) -> new MyOwnVAPIDJWTGenerator(privateKey)
         );
     }
 
