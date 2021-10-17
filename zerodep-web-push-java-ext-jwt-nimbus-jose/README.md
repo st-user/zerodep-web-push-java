@@ -1,4 +1,4 @@
-# zerodep-web-push-java-ext-nimbus-jose
+# zerodep-web-push-java-ext-jwt-nimbus-jose
 
 Provides an implementation for `com.zerodeplibs.webpush.jwt.VAPIDJWTGenerator`
 utilizing [Nimbus JOSE + JWT](https://connect2id.com/products/nimbus-jose-jwt).

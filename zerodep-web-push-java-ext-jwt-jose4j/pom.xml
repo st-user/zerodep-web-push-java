@@ -7,18 +7,18 @@
 
     <parent>
         <groupId>com.zerodeplibs</groupId>
-        <artifactId>zerodep-web-push-java-ext</artifactId>
+        <artifactId>zerodep-web-push-java-ext-jwt</artifactId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <packaging>jar</packaging>
 
-    <artifactId>zeropdep-web-push-java-ext-nimbus-jose</artifactId>
-    <name>zeropdep-web-push-java-ext-nimbus-jose</name>
+    <artifactId>zerodep-web-push-java-ext-jwt-jose4j</artifactId>
+    <name>zerodep-web-push-java-ext-jwt-jose4j</name>
 
     <properties>
-        <nimbus.jose.version>9.15.2</nimbus.jose.version>
+        <jose4j.version>0.7.9</jose4j.version>
     </properties>
 
     <dependencies>
@@ -29,19 +29,15 @@
         </dependency>
 
         <dependency>
-            <groupId>com.nimbusds</groupId>
-            <artifactId>nimbus-jose-jwt</artifactId>
-            <version>${nimbus.jose.version}</version>
+            <groupId>org.bitbucket.b_c</groupId>
+            <artifactId>jose4j</artifactId>
+            <version>${jose4j.version}</version>
+            <scope>compile</scope>
         </dependency>
 
         <!--
             Dependencies for testing.
         -->
-        <dependency>
-            <groupId>org.bitbucket.b_c</groupId>
-            <artifactId>jose4j</artifactId>
-        </dependency>
-
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>

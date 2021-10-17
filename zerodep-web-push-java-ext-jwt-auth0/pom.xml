@@ -7,15 +7,15 @@
 
     <parent>
         <groupId>com.zerodeplibs</groupId>
-        <artifactId>zerodep-web-push-java-ext</artifactId>
+        <artifactId>zerodep-web-push-java-ext-jwt</artifactId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <packaging>jar</packaging>
 
-    <artifactId>zerodep-web-push-java-ext-auth0</artifactId>
-    <name>zerodep-web-push-java-ext-auth0</name>
+    <artifactId>zerodep-web-push-java-ext-jwt-auth0</artifactId>
+    <name>zerodep-web-push-java-ext-jwt-auth0</name>
 
     <properties>
         <auth0.version>3.18.2</auth0.version>

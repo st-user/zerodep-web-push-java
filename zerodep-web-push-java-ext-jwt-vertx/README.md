@@ -1,4 +1,4 @@
-# zerodep-web-push-java-ext-vertx
+# zerodep-web-push-java-ext-jwt-vertx
 
 Provides an implementation for `com.zerodeplibs.webpush.jwt.VAPIDJWTGenerator`
 utilizing [JWT Auth - Vert.x](https://vertx.io/docs/vertx-auth-jwt/java/).

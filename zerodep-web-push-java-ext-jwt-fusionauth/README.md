@@ -1,4 +1,4 @@
-# zerodep-web-push-java-ext-fusionauth
+# zerodep-web-push-java-ext-jwt-fusionauth
 
 Provides an implementation for `com.zerodeplibs.webpush.jwt.VAPIDJWTGenerator`
 utilizing [FusionAuth JWT](https://github.com/fusionauth/fusionauth-jwt).

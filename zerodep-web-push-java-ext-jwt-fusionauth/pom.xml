@@ -7,18 +7,18 @@
 
     <parent>
         <groupId>com.zerodeplibs</groupId>
-        <artifactId>zerodep-web-push-java-ext</artifactId>
+        <artifactId>zerodep-web-push-java-ext-jwt</artifactId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <packaging>jar</packaging>
 
-    <artifactId>zerodep-web-push-java-ext-jose4j</artifactId>
-    <name>zerodep-web-push-java-ext-jose4j</name>
+    <artifactId>zerodep-web-push-java-ext-jwt-fusionauth</artifactId>
+    <name>zerodep-web-push-java-ext-jwt-fusionauth</name>
 
     <properties>
-        <jose4j.version>0.7.9</jose4j.version>
+        <fusionauth.version>5.0.0</fusionauth.version>
     </properties>
 
     <dependencies>
@@ -29,15 +29,19 @@
         </dependency>
 
         <dependency>
-            <groupId>org.bitbucket.b_c</groupId>
-            <artifactId>jose4j</artifactId>
-            <version>${jose4j.version}</version>
-            <scope>compile</scope>
+            <groupId>io.fusionauth</groupId>
+            <artifactId>fusionauth-jwt</artifactId>
+            <version>${fusionauth.version}</version>
         </dependency>
 
         <!--
             Dependencies for testing.
         -->
+        <dependency>
+            <groupId>org.bitbucket.b_c</groupId>
+            <artifactId>jose4j</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
@@ -68,5 +72,30 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>production-compile</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <argLine>
+                                --add-modules com.fasterxml.jackson.databind --add-reads
+                                com.zerodeplibs.webpush.ext.fusionauth=com.fasterxml.jackson.databind
+                            </argLine>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+
+        </profile>
+
+    </profiles>
 
 </project>

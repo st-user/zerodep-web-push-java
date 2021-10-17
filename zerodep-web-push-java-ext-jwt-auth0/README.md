@@ -1,13 +1,12 @@
-# zerodep-web-push-java-ext-jose4j
+# zerodep-web-push-java-ext-jwt-auth0
 
 Provides an implementation for `com.zerodeplibs.webpush.jwt.VAPIDJWTGenerator`
-utilizing [jose4j](https://bitbucket.org/b_c/jose4j/wiki/Home).
+utilizing <a href="https://github.com/auth0/java-jwt">Java JWT - auth0</a>.
 
 ## Requirements
 
-The recommended version
-of [org.bitbucket.b_c:jose4j](https://mvnrepository.com/artifact/org.bitbucket.b_c/jose4j) and the
-other runtime dependencies is 0.7.0 or higher(The latest version is more desirable).
+The version of [com.auth0:java-jwt](https://mvnrepository.com/artifact/com.auth0/java-jwt) must be
+3.14.0 or higher(the latest version is recommended).
 
 ## Usage
 
@@ -56,8 +55,8 @@ String jwt = generator.generate(param);
 .....
 ```
 
-This sub-module supports only `String`, `Boolean`,
-`Integer`, `Long`, `Double`, `java.util.Date` and `java.time.Instant` as a type of additional claims.
+However, the underlying Auth0's library can support only `Map`, `List`, `Boolean`,
+`Integer`, `Long`, `Double`, `String` and `Date` as a type of claim.
 
 So the following example doesn't work.
 
@@ -74,3 +73,5 @@ String jwt = generator.generate(param);// An exception will be thrown.
 
 ```
 
+For more information, please consult the javadoc
+of `com.auth0.jwt.JWTCreator.Builder#withPayload(java.util.Map<String, ?>)`.

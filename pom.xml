@@ -5,16 +5,16 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.zerodeplibs</groupId>
-    <artifactId>zerodep-web-push-java-ext</artifactId>
+    <artifactId>zerodep-web-push-java-ext-jwt</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
     <modules>
-        <module>zerodep-web-push-java-ext-auth0</module>
-        <module>zerodep-web-push-java-ext-jjwt</module>
-        <module>zerodep-web-push-java-ext-nimbus-jose</module>
-        <module>zerodep-web-push-java-ext-fusionauth</module>
-        <module>zerodep-web-push-java-ext-jose4j</module>
-        <module>zerodep-web-push-java-ext-vertx</module>
+        <module>zerodep-web-push-java-ext-jwt-auth0</module>
+        <module>zerodep-web-push-java-ext-jwt-jjwt</module>
+        <module>zerodep-web-push-java-ext-jwt-nimbus-jose</module>
+        <module>zerodep-web-push-java-ext-jwt-fusionauth</module>
+        <module>zerodep-web-push-java-ext-jwt-jose4j</module>
+        <module>zerodep-web-push-java-ext-jwt-vertx</module>
     </modules>
 
     <packaging>pom</packaging>

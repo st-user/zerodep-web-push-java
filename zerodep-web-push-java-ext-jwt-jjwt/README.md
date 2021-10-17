@@ -1,4 +1,4 @@
-# zerodep-web-push-java-ext-jjwt
+# zerodep-web-push-java-ext-jwt-jjwt
 
 Provides an implementation for `com.zerodeplibs.webpush.jwt.VAPIDJWTGenerator`
 utilizing [Java JWT](https://github.com/jwtk/jjwt).
