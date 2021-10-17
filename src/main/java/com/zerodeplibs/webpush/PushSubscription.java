@@ -58,6 +58,8 @@ public class PushSubscription {
     /**
      * Creates a new {@link PushSubscription}.
      * All the fields are deeply copied from <code>another</code>.
+     *
+     * @param another an object from which the fields are copied.
      */
     public PushSubscription(PushSubscription another) {
         this.endpoint = another.getEndpoint();
@@ -84,6 +86,8 @@ public class PushSubscription {
         /**
          * Creates a new {@link Keys}.
          * All the fields are deeply copied from <code>another</code>.
+         *
+         * @param another an object from which the fields are copied.
          */
         public Keys(Keys another) {
             this.p256dh = another.getP256dh();

@@ -33,6 +33,7 @@ public class VAPIDJWTCreationException extends RuntimeException {
      * Creates a new {@link VAPIDJWTCreationException} with the default message and the given cause.
      *
      * @param cause the underlying cause.
+     * @return a new {@link VAPIDJWTCreationException}.
      */
     public static VAPIDJWTCreationException withDefaultMessage(Throwable cause) {
         return new VAPIDJWTCreationException(
