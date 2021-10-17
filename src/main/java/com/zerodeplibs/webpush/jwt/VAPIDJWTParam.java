@@ -283,19 +283,18 @@ public class VAPIDJWTParam {
          * Specifies an additional claim.
          *
          * <p>
-         * Typically, the specified names and values are used as claims in a token's payload.
+         * Typically, the specified entry is used as a claim in a token's payload.
          * </p>
          *
          * <p>
          * The following names are "reserved".
-         * So if one of these names is given, {@link IllegalArgumentException} is thrown.
+         * So if one of these names is given, an {@link IllegalArgumentException} is thrown.
          * </p>
          * <ul>
          * <li>"aud" - this claim should be specified
          * via {@link #resourceURL(URL)} or {@link #resourceURLString(String)}.</li>
          * <li>"exp" - this claim should be specified
-         * via {@link #expiresAt}, {@link #expirationTime(Instant)}
-         * or {@link #expiresAfterSeconds(int)}</li>
+         * via {@link #expirationTime(Instant)} or {@link #expiresAfterSeconds(int)}.</li>
          * <li>"sub" - this claim should be specified
          * via {@link #subject(String)}</li>
          * </ul>
