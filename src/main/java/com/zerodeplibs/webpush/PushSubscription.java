@@ -50,6 +50,22 @@ public class PushSubscription {
     private Keys keys;
 
     /**
+     * Creates a new {@link PushSubscription}.
+     */
+    public PushSubscription() {
+    }
+
+    /**
+     * Creates a new {@link PushSubscription}.
+     * All the fields are deeply copied from <code>another</code>.
+     */
+    public PushSubscription(PushSubscription another) {
+        this.endpoint = another.getEndpoint();
+        this.expirationTime = another.getExpirationTime();
+        this.keys = new Keys(another.keys);
+    }
+
+    /**
      * This class represents a '<a href="https://www.w3.org/TR/push-api/#pushsubscription-interface">keys</a>' field for a <a href="https://www.w3.org/TR/push-api/#push-subscription">push subscription</a>.
      *
      * @author Tomoki Sato
@@ -58,6 +74,21 @@ public class PushSubscription {
 
         private String p256dh;
         private String auth;
+
+        /**
+         * Creates a new {@link Keys}.
+         */
+        public Keys() {
+        }
+
+        /**
+         * Creates a new {@link Keys}.
+         * All the fields are deeply copied from <code>another</code>.
+         */
+        public Keys(Keys another) {
+            this.p256dh = another.getP256dh();
+            this.auth = another.getAuth();
+        }
 
         public String getP256dh() {
             return p256dh;
