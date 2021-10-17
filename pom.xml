@@ -44,6 +44,18 @@
             <version>${zerodeplibs.version}</version>
             <scope>runtime</scope>
         </dependency>
+        <!--
+            If you want to explicitly specify the version:-->
+            <dependency>
+                <groupId>com.auth0</groupId>
+                <artifactId>java-jwt</artifactId>
+                <!--<version>${your.auth0.version}</version>-->
+                <version>3.17.0</version>
+                <scope>runtime</scope>
+            </dependency>
+
+
+
 
 
         <!--
@@ -53,6 +65,14 @@
                 <groupId>com.zerodeplibs</groupId>
                 <artifactId>zerodep-web-push-java-ext-jwt-fusionauth</artifactId>
                 <version>${zerodeplibs.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+
+            If you want to explicitly specify the version:
+            <dependency>
+                <groupId>io.fusionauth</groupId>
+                <artifactId>fusionauth-jwt</artifactId>
+                <version>${your.fusionauth.version}</version>
                 <scope>runtime</scope>
             </dependency>
         -->
@@ -67,17 +87,26 @@
                 <scope>runtime</scope>
             </dependency>
 
+            If you want to explicitly specify the version:
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-api</artifactId>
+                <version>${your.jjwt.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+
             Java JWT's runtime dependencies.
+            (see https://github.com/jwtk/jjwt#jdk-projects).
             <dependency>
                 <groupId>io.jsonwebtoken</groupId>
                 <artifactId>jjwt-impl</artifactId>
-                <version>0.11.2</version>
+                <version>${your.jjwt.version}</version>
                 <scope>runtime</scope>
             </dependency>
             <dependency>
                 <groupId>io.jsonwebtoken</groupId>
                 <artifactId>jjwt-jackson</artifactId> or jjwt-gson if Gson is preferred
-                <version>0.11.2</version>
+                <version>${your.jjwt.version}</version>
                 <scope>runtime</scope>
             </dependency>
         -->
@@ -91,6 +120,14 @@
                 <version>${zerodeplibs.version}</version>
                 <scope>runtime</scope>
             </dependency>
+
+            If you want to explicitly specify the version:
+            <dependency>
+                <groupId>org.bitbucket.b_c</groupId>
+                <artifactId>jose4j</artifactId>
+                <version>${your.jose4j.version}</version>
+                <scope>runtime</scope>
+            </dependency>
         -->
 
         <!--
@@ -100,6 +137,15 @@
                 <groupId>com.zerodeplibs</groupId>
                 <artifactId>zerodep-web-push-java-ext-jwt-nimbus-jose</artifactId>
                 <version>${zerodeplibs.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+
+            If you want to explicitly specify the version:
+
+            <dependency>
+                <groupId>com.nimbusds</groupId>
+                <artifactId>nimbus-jose-jwt</artifactId>
+                <version>${your.nimbus.jose.version}</version>
                 <scope>runtime</scope>
             </dependency>
         -->
