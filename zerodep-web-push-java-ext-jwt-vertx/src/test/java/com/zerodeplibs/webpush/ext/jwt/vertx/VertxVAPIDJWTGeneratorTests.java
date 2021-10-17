@@ -1,8 +1,8 @@
 package com.zerodeplibs.webpush.ext.jwt.vertx;
 
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsEqual.equalTo;
 
 import com.zerodeplibs.webpush.jwt.VAPIDJWTGenerator;
 import com.zerodeplibs.webpush.jwt.VAPIDJWTParam;
@@ -60,21 +60,20 @@ public class VertxVAPIDJWTGeneratorTests {
         JsonObject jsonObject = new JsonObject(Buffer.buffer(decoded));
         TestingJWTHeader actual = jsonObject.mapTo(TestingJWTHeader.class);
 
-        assertEquals("JWT", actual.getTyp());
-        assertEquals("ES256", actual.getAlg());
+        assertThat(actual.getTyp(), equalTo("JWT"));
+        assertThat(actual.getAlg(), equalTo("ES256"));
     }
 
     private void assertPayload(String jwt) throws IOException {
         byte[] decoded = splitAndDecode(1, jwt);
         JsonObject jsonObject = new JsonObject(Buffer.buffer(decoded));
 
-        assertEquals("https://example.com", jsonObject.getString("aud"));
-        assertTrue(jsonObject.getInteger("exp") > System.currentTimeMillis() / 1000);
-        assertEquals("mailto:test@example.com", jsonObject.getString("sub"));
-
+        assertThat(jsonObject.getString("aud"), equalTo("https://example.com"));
+        assertThat(jsonObject.getInteger("exp") > System.currentTimeMillis() / 1000, equalTo(true));
+        assertThat(jsonObject.getString("sub"), equalTo("mailto:test@example.com"));
 
         JsonObject additionalClaims = jsonObject.getJsonObject("adClaim");
-        assertEquals("hello", additionalClaims.getString("myClaim"));
+        assertThat(additionalClaims.getString("myClaim"), equalTo("hello"));
     }
 
     private void verifySign(String jwt, PublicKey publicKey) throws JoseException {
@@ -87,7 +86,7 @@ public class VertxVAPIDJWTGeneratorTests {
         verifier.setCompactSerialization(jwt);
         verifier.setKey(publicKey);
 
-        assertTrue(verifier.verifySignature());
+        assertThat(verifier.verifySignature(), equalTo(true));
     }
 
     private KeyPair generateKeyPair()

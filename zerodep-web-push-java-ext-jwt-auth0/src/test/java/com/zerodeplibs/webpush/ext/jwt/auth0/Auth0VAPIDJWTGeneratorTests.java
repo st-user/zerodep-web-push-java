@@ -1,7 +1,7 @@
 package com.zerodeplibs.webpush.ext.jwt.auth0;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsEqual.equalTo;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zerodeplibs.webpush.jwt.VAPIDJWTParam;
@@ -57,8 +57,8 @@ public class Auth0VAPIDJWTGeneratorTests {
         TestingJWTHeader actual =
             new ObjectMapper().readValue(decoded, TestingJWTHeader.class);
 
-        assertEquals("JWT", actual.getTyp());
-        assertEquals("ES256", actual.getAlg());
+        assertThat(actual.getTyp(), equalTo("JWT"));
+        assertThat(actual.getAlg(), equalTo("ES256"));
     }
 
     private void assertPayload(String jwt) throws IOException {
@@ -66,10 +66,10 @@ public class Auth0VAPIDJWTGeneratorTests {
         TestingJWTPayload actual =
             new ObjectMapper().readValue(decoded, TestingJWTPayload.class);
 
-        assertEquals("https://example.com", actual.getAud());
-        assertTrue(actual.getExp() > System.currentTimeMillis() / 1000);
-        assertEquals("mailto:test@example.com", actual.getSub());
-        assertEquals("hello", actual.getAdClaim().getMyClaim());
+        assertThat(actual.getAud(), equalTo("https://example.com"));
+        assertThat(actual.getExp() > System.currentTimeMillis() / 1000, equalTo(true));
+        assertThat(actual.getSub(), equalTo("mailto:test@example.com"));
+        assertThat(actual.getAdClaim().getMyClaim(), equalTo("hello"));
     }
 
     private void verifySign(String jwt, PublicKey publicKey) throws JoseException {
@@ -82,7 +82,7 @@ public class Auth0VAPIDJWTGeneratorTests {
         verifier.setCompactSerialization(jwt);
         verifier.setKey(publicKey);
 
-        assertTrue(verifier.verifySignature());
+        assertThat(verifier.verifySignature(), equalTo(true));
     }
 
     private KeyPair generateKeyPair()
