@@ -125,6 +125,23 @@ public class PushSubscriptionTests {
         ));
     }
 
+    @Test
+    public void canDeeplyCopyAllPropertiesByUsingCopyConstructor() {
+        PushSubscription original = createInstance(
+            "1",
+            100L,
+            "a",
+            "b"
+        );
+        PushSubscription copied = new PushSubscription(original);
+
+        assertThat(copied, equalTo(original));
+
+        // deeply copied
+        original.getKeys().setAuth("X");
+        assertThat(copied.getKeys().getAuth(), equalTo("b"));
+    }
+
     private PushSubscription createInstance(
         String endpoint,
         Long expirationTime,
