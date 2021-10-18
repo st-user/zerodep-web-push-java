@@ -1,7 +1,7 @@
 # zerodep-web-push-java
 
-A Java [Web Push](https://datatracker.ietf.org/doc/html/rfc8030) server-side library that has no
-dependencies on any specific third-party library.
+A Java [Web Push](https://datatracker.ietf.org/doc/html/rfc8030) server-side library that doesn't
+force your application to have dependencies on specific third-party libraries.
 
 - Provides the functionalities for [VAPID](https://datatracker.ietf.org/doc/html/rfc8292)
 - Provides the functionalities
@@ -13,6 +13,15 @@ This library itself doesn't provide all the functionalities needed for Web Push.
 The JSON Web Token (JWT) functionality and the Http Client functionality usually need to be provided
 externally. However, you can choose arbitrary libraries that suit your project.
 
+**NOTE**
+
+Various sub-modules for JWT are available
+from [zerodep-web-push-java-ext-jwt](https://github.com/st-user/zerodep-web-push-java-ext-jwt).
+
+Though 'zerodep-web-push-java' itself doesn't have any dependency on the other libraries, these
+sub-modules utilize a third-party JWT library. You can choose the one that is suitable for your
+project.
+
 ## The motivation for this project
 
 The motivation for this project is to make it easy to implement Web Push functionality on any
@@ -22,7 +31,8 @@ third-party libraries).
 To achieve this, this project focuses on:
 
 - having no dependencies on any specific third-party library.
-- providing independent classes for each feature. For example, in this library, the `VAPIDKeyPair`
+- providing an independent component for each feature. For example, in this library,
+  the `VAPIDKeyPair`
   interface and the `MessageEncryption` interface are defined and can be used independently.
 
 ## Requirements
@@ -38,30 +48,26 @@ JDK 8+
 <dependency>
   <groupId>com.zerodeplibs</groupId>
   <artifactId>zerodep-web-push-java</artifactId>
-  <version>1.0.1</version>
+  <version>1.1.0</version>
 </dependency>
 
 ```
 
-## Third-party libraries
+## Sub-modules and third-party libraries
 
 In order to implement the complete Web Push functionality with this library, at least the following
-two types of functionalities must be provided from outside this library. Below are some examples of
-third-party libraries.
+two types of functionalities have to be provided from outside this library.
 
-(Off course, it is possible to use the one you make yourself).
+Of course, you can also choose an arbitrary one not listed below.
 
 <details>
     <summary><b>JWT</b></summary>
 
-This kind of library is used to generate JSON Web Token (JWT)
+A JWT library is used to generate JSON Web Token (JWT)
 for [VAPID](https://datatracker.ietf.org/doc/html/rfc8292).
 
-- [Java JWT - auth0](https://github.com/auth0/java-jwt)
-- [jose4j](https://bitbucket.org/b_c/jose4j/wiki/Home)
-- [Nimbus JOSE + JWT](https://connect2id.com/products/nimbus-jose-jwt)
-- [FusionAuth JWT](https://github.com/fusionauth/fusionauth-jwt)
-- [Java JWT](https://github.com/jwtk/jjwt)
+Various sub-modules for JWT are available
+from [zerodep-web-push-java-ext-jwt](https://github.com/st-user/zerodep-web-push-java-ext-jwt).
 
 </details>
 
@@ -69,9 +75,7 @@ for [VAPID](https://datatracker.ietf.org/doc/html/rfc8292).
     <summary><b>HTTP Client</b></summary>
 
 Application servers need to make an HTTP Request in order to request the push service to deliver a
-push message.
-
-This kind of library is used to make HTTP Requests.
+push message. Below are some examples of third-party libraries.
 
 - [OkHttp](https://square.github.io/okhttp/)
 - [Apache HTTPClient](https://hc.apache.org/httpcomponents-client-5.1.x/)
@@ -95,42 +99,6 @@ code: [zerodep-web-push-java-example](https://github.com/st-user/zerodep-web-pus
 @RestController
 public class BasicExample {
 
-    /**
-     * An implementation of VAPIDJWTGenerator.
-     * <p>
-     * In this example, we use <a href="https://github.com/auth0/java-jwt">Java JWT - auth0</a>
-     * Of course, we can use an arbitrary JWT library.
-     *
-     * @see MyNimbusJoseJwtVAPIDJWTGenerator
-     * @see MyJJwtVAPIDJWTGenerator
-     * @see MyFusionAuthJwtVAPIDJWTGenerator
-     * @see MyJose4jVAPIDJWTGenerator
-     */
-    static class MyAuth0VAPIDJWTGenerator implements VAPIDJWTGenerator {
-
-        private final Algorithm jwtAlgorithm;
-
-        MyAuth0VAPIDJWTGenerator(ECPrivateKey privateKey, ECPublicKey publicKey) {
-            this.jwtAlgorithm = Algorithm.ECDSA256(publicKey, privateKey);
-        }
-
-        @Override
-        public String generate(VAPIDJWTParam vapidjwtParam) {
-
-            Map<String, Object> addtionalClaims = new HashMap<>();
-            vapidjwtParam.forEachAdditionalClaim(addtionalClaims::put);
-
-            JWTCreator.Builder builder = JWT.create()
-                .withAudience(vapidjwtParam.getOrigin())
-                .withExpiresAt(vapidjwtParam.getExpiresAt());
-
-            vapidjwtParam.getSubject().ifPresent(builder::withSubject);
-            builder.withPayload(addtionalClaims);
-
-            return builder.sign(this.jwtAlgorithm);
-        }
-    }
-
     @Autowired
     private VAPIDKeyPair vapidKeyPair;
 
@@ -149,12 +117,15 @@ public class BasicExample {
 
         return VAPIDKeyPairs.of(
             PrivateKeySources.ofPEMFile(new File(privateKeyFilePath).toPath()),
-            PublicKeySources.ofPEMFile(new File(publicKeyFilePath).toPath()),
-            MyAuth0VAPIDJWTGenerator::new
-            // (privateKey, publicKey) -> new MyNimbusJoseJwtVAPIDJWTGenerator(privateKey)
-            // (privateKey, publicKey) -> new MyJJwtVAPIDJWTGenerator(privateKey)
-            // (privateKey, publicKey) -> new MyFusionAuthJwtVAPIDJWTGenerator(privateKey)
-            // (privateKey, publicKey) -> new MyJose4jVAPIDJWTGenerator(privateKey)
+            PublicKeySources.ofPEMFile(new File(publicKeyFilePath).toPath())
+
+            /*
+             * If you want to implement VAPIDJWTGenerator yourself,
+             * the project for its sub-modules is a good example.
+             * For more information, please consult the source codes on https://github.com/st-user/zerodep-web-push-java-ext-jwt
+             */
+
+            // (privateKey, publicKey) -> new MyOwnVAPIDJWTGenerator(privateKey)
         );
     }
 
@@ -271,7 +242,7 @@ full source
 code: [zerodep-web-push-java-example-vertx](https://github.com/st-user/zerodep-web-push-java-example-vertx)
 
 <details>
-    <summary><b>Executable application</b></summary>
+    <summary><b>Standalone application for VAPID and Message Encryption</b></summary>
 
 ``` java
 
@@ -289,7 +260,7 @@ public class Example {
         return VAPIDKeyPairs.of(
             PrivateKeySources.ofPEMFile(new File("./.keys/my-private_pkcs8.pem").toPath()),
             PublicKeySources.ofPEMFile(new File("./.keys/my-pub.pem").toPath()),
-            (privateKey, publicKey) -> new MyVertxVAPIDJWTGenerator(vertx, privateKey));
+            new VertxVAPIDJWTGeneratorFactory(() -> vertx));
     }
 
     public static void main(String[] args) throws IOException {
@@ -310,9 +281,8 @@ public class Example {
          */
         router
             .get("/getPublicKey")
-            .respond(
-                ctx -> ctx
-                    .response()
+            .handler(ctx ->
+                ctx.response()
                     .putHeader("Content-Type", "application/octet-stream")
                     .end(Buffer.buffer(vapidKeyPair.extractPublicKeyInUncompressedForm()))
             );
@@ -453,18 +423,20 @@ public class Example {
                     .putHeader("TTL", String.valueOf(TTL.hours(1)))
                     .putHeader("Urgency", Urgency.normal())
                     .putHeader("Topic", Topic.ensure("myTopic"))
-                    .sendBuffer(Buffer.buffer(encryptedPushMessage.toBytes()))
-                    .onSuccess(result -> {
-                        System.out.println(String.format("status code: %d", result.statusCode()));
-                        // 201 Created : Success!
-                        // 410 Gone : The subscription is no longer valid.
-                        // etc...
-                        // for more information, see the useful link below:
-                        // [Response from push service - The Web Push Protocol ](https://developers.google.com/web/fundamentals/push-notifications/web-push-protocol)
-                    })
-                    .onFailure(result -> {
-                        System.err.println(result);
-                    });
+                    .sendBuffer(Buffer.buffer(encryptedPushMessage.toBytes()),
+                        httpResponseAsyncResult -> {
+
+                            HttpResponse<Buffer> result = httpResponseAsyncResult.result();
+                            System.out.println(
+                                String.format("status code: %d", result.statusCode()));
+                            // 201 Created : Success!
+                            // 410 Gone : The subscription is no longer valid.
+                            // etc...
+                            // for more information, see the useful link below:
+                            // [Response from push service - The Web Push Protocol ](https://developers.google.com/web/fundamentals/push-notifications/web-push-protocol)
+
+                        });
+
             });
 
             if (currentIndex == targetSubscriptions.size() - 1) {
@@ -491,12 +463,9 @@ public class Example {
     ... Omitted for simplicity.
 }
 
-
-
 ```
 
 </details>
-
 
 ## MISC
 
