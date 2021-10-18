@@ -24,7 +24,7 @@
             JDK8+ is required.
         -->
         <java.version>8</java.version>
-        <zerodeplibs.version>1.1.0-SNAPSHOT</zerodeplibs.version>
+        <zerodeplibs.version>1.1.0</zerodeplibs.version>
     </properties>
 
     <dependencies>
