@@ -36,5 +36,6 @@ using [Vert.x](https://vertx.io/docs/).
 
 ## See also
 
+- [zerodep-web-push-java-ext-jwt](https://github.com/st-user/zerodep-web-push-java-ext-jwt)
 - [zerodep-web-push-java-example](https://github.com/st-user/zerodep-web-push-java-example)
 
