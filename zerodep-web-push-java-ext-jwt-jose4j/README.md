@@ -15,10 +15,18 @@ other runtime dependencies is 0.7.0 or higher(The latest version is more desirab
 
 You can use this sub-module by adding the dependency to your pom.xml.
 
-```
-
-TBD
-
+``` xml
+<dependency>
+    <groupId>com.zerodeplibs</groupId>
+    <artifactId>zerodep-web-push-java</artifactId>
+    <version>1.1.0</version>
+</dependency>
+<dependency>
+    <groupId>com.zerodeplibs</groupId>
+    <artifactId>zerodep-web-push-java-ext-jwt-jose4j</artifactId>
+    <version>1.1.0</version>
+    <scope>runtime</scope>
+</dependency>
 ```
 
 ### java
@@ -52,7 +60,8 @@ VAPIDJWTParam param = VAPIDJWTParam.getBuilder()
     .additionalClaim("myArbitraryClaim", "valueOfTheClaim") // Specifys an arbitrary claim.
     .build();
 
-String jwt = generator.generate(param);
+// This method internally calls VAPIDJWTGenerator#generate.
+String value = vapidKeyPair.generateAuthorizationHeaderValue(param);
 .....
 ```
 
@@ -70,7 +79,8 @@ VAPIDJWTParam param = VAPIDJWTParam.getBuilder()
     .additionalClaim("myArbitraryClaim", new MyClaim("...."))
     .build();
 
-String jwt = generator.generate(param);// An exception will be thrown.
+// This method internally calls VAPIDJWTGenerator#generate.
+String value = vapidKeyPair.generateAuthorizationHeaderValue(param);// An exception will be thrown.
 
 ```
 

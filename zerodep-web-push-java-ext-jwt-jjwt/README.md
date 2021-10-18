@@ -18,9 +18,19 @@ You can use this sub-module by adding the dependency to your pom.xml.
 Usually, in addition to this, you have to specify Java JWT's `runtime` dependencies(
 see https://github.com/jwtk/jjwt#jdk-projects).
 
-```
-
-TBD
+``` xml
+<dependency>
+    <groupId>com.zerodeplibs</groupId>
+    <artifactId>zerodep-web-push-java</artifactId>
+    <version>1.1.0</version>
+</dependency>
+<!-- Currently zerodep-web-push-java-ext-jwt-jjwt depends on jjwt v0.11.2 -->
+<dependency>
+    <groupId>com.zerodeplibs</groupId>
+    <artifactId>zerodep-web-push-java-ext-jwt-jjwt</artifactId>
+    <version>1.1.0</version>
+    <scope>runtime</scope>
+</dependency>
 
 <!-- Java JWT's runtime dependencies. -->
 <dependency>
@@ -35,7 +45,6 @@ TBD
     <version>0.11.2</version>
     <scope>runtime</scope>
 </dependency>
-
 ```
 
 ### java

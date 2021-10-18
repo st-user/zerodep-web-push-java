@@ -15,10 +15,18 @@ is 9.0 or higher(The latest version is more desirable).
 
 You can use this sub-module by adding the dependency to your pom.xml.
 
-```
-
-TBD
-
+``` xml
+<dependency>
+    <groupId>com.zerodeplibs</groupId>
+    <artifactId>zerodep-web-push-java</artifactId>
+    <version>1.1.0</version>
+</dependency>
+<dependency>
+    <groupId>com.zerodeplibs</groupId>
+    <artifactId>zerodep-web-push-java-ext-jwt-nimbus-jose</artifactId>
+    <version>1.1.0</version>
+    <scope>runtime</scope>
+</dependency>
 ```
 
 ### java

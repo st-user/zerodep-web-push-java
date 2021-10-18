@@ -21,7 +21,7 @@ import java.util.function.Supplier;
  * @author Tomoki Sato
  * @see VertxVAPIDJWTGeneratorFactory
  */
-public class VertxVAPIDJWTGenerator implements VAPIDJWTGenerator {
+class VertxVAPIDJWTGenerator implements VAPIDJWTGenerator {
 
     private static final boolean IS_SET_BUFFER_PRESENT;
 

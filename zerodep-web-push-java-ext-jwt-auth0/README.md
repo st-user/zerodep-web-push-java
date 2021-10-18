@@ -14,10 +14,18 @@ The version of [com.auth0:java-jwt](https://mvnrepository.com/artifact/com.auth0
 
 You can use this sub-module by adding the dependency to your pom.xml.
 
-```
-
-TBD
-
+``` xml
+<dependency>
+    <groupId>com.zerodeplibs</groupId>
+    <artifactId>zerodep-web-push-java</artifactId>
+    <version>1.1.0</version>
+</dependency>
+<dependency>
+    <groupId>com.zerodeplibs</groupId>
+    <artifactId>zerodep-web-push-java-ext-jwt-auth0</artifactId>
+    <version>1.1.0</version>
+    <scope>runtime</scope>
+</dependency>
 ```
 
 ### java
@@ -51,11 +59,12 @@ VAPIDJWTParam param = VAPIDJWTParam.getBuilder()
     .additionalClaim("myArbitraryClaim", "valueOfTheClaim") // Specifys an arbitrary claim.
     .build();
 
-String jwt = generator.generate(param);
+// This method internally calls VAPIDJWTGenerator#generate.
+String value = vapidKeyPair.generateAuthorizationHeaderValue(param); 
 .....
 ```
 
-However, the underlying Auth0's library can support only `Map`, `List`, `Boolean`,
+The underlying Auth0's library can support only `Map`, `List`, `Boolean`,
 `Integer`, `Long`, `Double`, `String` and `Date` as a type of claim.
 
 So the following example doesn't work.
@@ -69,8 +78,8 @@ VAPIDJWTParam param = VAPIDJWTParam.getBuilder()
     .additionalClaim("myArbitraryClaim", new MyClaim("...."))
     .build();
 
-String jwt = generator.generate(param);// An exception will be thrown.
-
+// This method internally calls VAPIDJWTGenerator#generate.
+String value = vapidKeyPair.generateAuthorizationHeaderValue(param);// An exception will be thrown.
 ```
 
 For more information, please consult the javadoc

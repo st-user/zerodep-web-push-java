@@ -1,7 +1,8 @@
 # zerodep-web-push-java-ext-jwt
 
-The sub-modules for zerodep-web-push-java that provide implementations
-of `com.zerodeplibs.webpush.jwt.VAPIDJWTGenerator` utilizing third-party JWT libraries.
+Sub-modules for [zerodep-web-push-java](https://github.com/st-user/zerodep-web-push-java) that
+provide implementations of `com.zerodeplibs.webpush.jwt.VAPIDJWTGenerator` utilizing third-party JWT
+libraries.
 
 ## [zerodep-web-push-java-ext-jwt-auth0](./zerodep-web-push-java-ext-jwt-auth0/README.md)
 
@@ -27,3 +28,13 @@ Uses [Nimbus JOSE + JWT](https://connect2id.com/products/nimbus-jose-jwt).
 
 Uses [JWT Auth - Vert.x](https://vertx.io/docs/vertx-auth-jwt/java/).
 
+## License
+
+MIT
+
+## Contribution
+
+This project follows a [git flow](https://nvie.com/posts/a-successful-git-branching-model/) -style
+model.
+
+Please open pull requests against the `dev` branch.

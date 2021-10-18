@@ -23,9 +23,17 @@ You can use this sub-module by adding the dependency to your pom.xml.
 If you want to use additional claims(`VAPIDJWTParam.getBuilder#additionalClaim`), you have to have
 Jackson Databind on your classpath.
 
-```
-
-TBD
+``` xml
+<dependency>
+    <groupId>com.zerodeplibs</groupId>
+    <artifactId>zerodep-web-push-java</artifactId>
+    <version>1.1.0</version>
+</dependency>
+<dependency>
+    <groupId>com.zerodeplibs</groupId>
+    <artifactId>zerodep-web-push-java-ext-jwt-vertx</artifactId>
+    <version>1.1.0</version>
+</dependency>
 
 <!-- 
     For version consistency,
