@@ -1,0 +1,17 @@
+.idea
+target/
+zerodep-web-push-java-ext-jwt.iml
+zerodep-web-push-java-ext-jwt-auth0/target/
+zerodep-web-push-java-ext-jwt-auth0/zerodep-web-push-java-ext-jwt-auth0.iml
+zerodep-web-push-java-ext-jwt-fusionauth/target/
+zerodep-web-push-java-ext-jwt-fusionauth/zerodep-web-push-java-ext-jwt-fusionauth.iml
+zerodep-web-push-java-ext-jwt-jjwt/target/
+zerodep-web-push-java-ext-jwt-jjwt/zerodep-web-push-java-ext-jwt-jjwt.iml
+zerodep-web-push-java-ext-jwt-jose4j/target/
+zerodep-web-push-java-ext-jwt-jose4j/zerodep-web-push-java-ext-jwt-jose4j.iml
+zerodep-web-push-java-ext-jwt-nimbus-jose/target/
+zerodep-web-push-java-ext-jwt-nimbus-jose/zerodep-web-push-java-ext-jwt-nimbus-jose.iml
+zerodep-web-push-java-ext-jwt-vertx/target/
+zerodep-web-push-java-ext-jwt-vertx/zerodep-web-push-java-ext-jwt-vertx.iml
+
+
