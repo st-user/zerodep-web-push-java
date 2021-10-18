@@ -18,7 +18,7 @@
         -->
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
-        <zerodeplibs.version>1.1.0-SNAPSHOT</zerodeplibs.version>
+        <zerodeplibs.version>1.1.0</zerodeplibs.version>
         <vertx.version>4.1.5</vertx.version>
         <!--
             Also Vert.x 3 is available.
