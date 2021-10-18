@@ -45,14 +45,15 @@
             <scope>runtime</scope>
         </dependency>
         <!--
-            If you want to explicitly specify the version:-->
+            If you want to explicitly specify the version:
             <dependency>
                 <groupId>com.auth0</groupId>
                 <artifactId>java-jwt</artifactId>
-                <!--<version>${your.auth0.version}</version>-->
+                <version>${your.auth0.version}</version>
                 <version>3.17.0</version>
                 <scope>runtime</scope>
             </dependency>
+        -->
 
 
 
