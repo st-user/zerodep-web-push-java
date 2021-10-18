@@ -57,24 +57,39 @@ public class VAPIDJWTParamsTests {
 
         assertThat(param.getOrigin(), equalTo("https://example.com"));
         assertThat(param.getExpiresAt(), equalTo(Date.from(mockForNow.plusSeconds(24 * 60 * 60))));
+
+        VAPIDJWTParam paramWithExpirationTime = new TestingBuilder(mockForNow)
+            .resourceURLString("https://example.com/resource")
+            .expirationTime(mockForNow.plusSeconds(10))// Use #expirationTime
+            .build();
+
+        assertThat(paramWithExpirationTime.getExpiresAt(),
+            equalTo(Date.from(mockForNow.plusSeconds(10))));
     }
 
     @Test
     public void builderShouldThrowExceptionWhenIllegalResourceURLsArePassed() {
 
-        String messageForMultipleCalls = "The methods for specifying "
-            + "a resource URL(resourceURLString/resourceURL) cannot be called more than once.";
-
         assertNullCheck(() -> VAPIDJWTParam.getBuilder().resourceURLString(null),
             "resourceURLString");
 
-        assertThat(assertThrows(MalformedURLRuntimeException.class,
-                () -> VAPIDJWTParam.getBuilder().resourceURLString("$$$$")).getCause().getClass(),
+        MalformedURLRuntimeException actualException =
+            assertThrows(MalformedURLRuntimeException.class,
+                () -> VAPIDJWTParam.getBuilder().resourceURLString("$$$$"));
+        assertThat(actualException.getMessage(),
             equalTo(
-                MalformedURLException.class));
+                "An exception was thrown while parsing the input string. Please check the cause."));
+        assertThat(actualException.getCause().getClass(), equalTo(MalformedURLException.class));
 
         assertNullCheck(() -> VAPIDJWTParam.getBuilder().resourceURL(null),
             "resourceURL");
+    }
+
+    @Test
+    public void builderShouldThrowExceptionWhenResourceURLIsSpecifiedMoreThanOnce() {
+
+        String messageForMultipleCalls = "The methods for specifying "
+            + "a resource URL(resourceURLString/resourceURL) cannot be called more than once.";
 
         assertStateCheck(() -> VAPIDJWTParam.getBuilder()
                 .resourceURLString("http://example.com")
@@ -95,15 +110,26 @@ public class VAPIDJWTParamsTests {
     @Test
     public void builderShouldThrowExceptionWhenIllegalExpirationTimesArePassed() {
 
-        String messageForMultipleCalls = "The methods for specifying "
-            + "expiration time(expiresAfterSeconds/expiresAt) cannot be called more than once.";
-
         assertNullCheck(() -> VAPIDJWTParam.getBuilder().expiresAt(null),
-            "expiresAt");
+            "expirationTime");
+
+    }
+
+    @Test
+    public void builderShouldThrowExceptionWhenExpirationTimeIsSpecifiedMoreThanOnce() {
+
+        String messageForMultipleCalls = "The methods for specifying "
+            +
+            "expiration time(expiresAfterSeconds/expirationTime/expiresAt) cannot be called more than once.";
 
         assertStateCheck(() -> VAPIDJWTParam.getBuilder()
                 .expiresAfterSeconds(1)
                 .expiresAfterSeconds(1),
+            messageForMultipleCalls);
+
+        assertStateCheck(() -> VAPIDJWTParam.getBuilder()
+                .expirationTime(Instant.now())
+                .expirationTime(Instant.now()),
             messageForMultipleCalls);
 
         assertStateCheck(() -> VAPIDJWTParam.getBuilder()
@@ -114,6 +140,11 @@ public class VAPIDJWTParamsTests {
         assertStateCheck(() -> VAPIDJWTParam.getBuilder()
                 .expiresAfterSeconds(1)
                 .expiresAt(new Date()),
+            messageForMultipleCalls);
+
+        assertStateCheck(() -> VAPIDJWTParam.getBuilder()
+                .expiresAfterSeconds(1)
+                .expirationTime(Instant.now()),
             messageForMultipleCalls);
     }
 
@@ -172,6 +203,33 @@ public class VAPIDJWTParamsTests {
     }
 
     @Test
+    public void builderShouldThrowExceptionWhenReservedNameForAdditionalClaimIsGiven() {
+
+        String messageForAud =
+            "The \"aud\" claim should be specified via #resourceURL or #resourceURLString.";
+        String messageForExp =
+            "The \"exp\" claim should be specified via #expiresAt or #expiresAfterSeconds.";
+        String messageForSub = "The \"sub\" claim should be specified via #subject.";
+
+        VAPIDJWTParam.Builder param = VAPIDJWTParam.getBuilder();
+
+        assertThat(
+            assertThrows(IllegalArgumentException.class,
+                () -> param.additionalClaim("aud", "X")).getMessage(),
+            equalTo(messageForAud));
+
+        assertThat(
+            assertThrows(IllegalArgumentException.class,
+                () -> param.additionalClaim("exp", "X")).getMessage(),
+            equalTo(messageForExp));
+
+        assertThat(
+            assertThrows(IllegalArgumentException.class,
+                () -> param.additionalClaim("sub", "X")).getMessage(),
+            equalTo(messageForSub));
+    }
+
+    @Test
     public void twoObjectsShouldBeComparedWithEachOtherBasedOnTheirProperties() {
 
         Instant mockForNow = Instant.now();
@@ -213,10 +271,10 @@ public class VAPIDJWTParamsTests {
         claims.put("a", "b");
         assertThat(param.toString(), equalTo(
             "VAPIDJWTParam{"
-            + "origin='https://example.com'"
-            + ", expiresAt=" +  Date.from(mockForNow.plusSeconds(100))
-            + ", subject='SUBJECT'"
-            + ", additionalClaims=" + claims + "}"
+                + "origin='https://example.com'"
+                + ", expirationTime=" + mockForNow.plusSeconds(100)
+                + ", subject='SUBJECT'"
+                + ", additionalClaims=" + claims + "}"
         ));
 
     }

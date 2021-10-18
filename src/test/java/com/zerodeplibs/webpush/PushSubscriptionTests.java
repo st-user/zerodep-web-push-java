@@ -116,13 +116,30 @@ public class PushSubscriptionTests {
 
         assertThat(subscription.toString(), equalTo(
             "PushSubscription{"
-            + "endpoint='1'"
-            + ", expirationTime='100'"
-            + ", keys=Keys{"
-            + "p256dh='a'"
-            + ", auth='b'}"
-            + "}"
+                + "endpoint='1'"
+                + ", expirationTime='100'"
+                + ", keys=Keys{"
+                + "p256dh='a'"
+                + ", auth='b'}"
+                + "}"
         ));
+    }
+
+    @Test
+    public void canDeeplyCopyAllPropertiesByUsingCopyConstructor() {
+        PushSubscription original = createInstance(
+            "1",
+            100L,
+            "a",
+            "b"
+        );
+        PushSubscription copied = new PushSubscription(original);
+
+        assertThat(copied, equalTo(original));
+
+        // deeply copied
+        original.getKeys().setAuth("X");
+        assertThat(copied.getKeys().getAuth(), equalTo("b"));
     }
 
     private PushSubscription createInstance(

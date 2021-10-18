@@ -6,6 +6,7 @@ import java.net.URL;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -34,14 +35,14 @@ import java.util.function.BiConsumer;
 public class VAPIDJWTParam {
 
     private final String origin;
-    private final Date expiresAt;
+    private final Instant expirationTime;
     private final String subject;
     private final Map<String, Object> additionalClaims;
 
-    private VAPIDJWTParam(String origin, Date expiresAt, String subject,
+    private VAPIDJWTParam(String origin, Instant expirationTime, String subject,
                           Map<String, Object> additionalClaims) {
         this.origin = origin;
-        this.expiresAt = expiresAt;
+        this.expirationTime = expirationTime;
         this.subject = subject;
         this.additionalClaims = additionalClaims;
     }
@@ -56,7 +57,7 @@ public class VAPIDJWTParam {
     }
 
     /**
-     * Gets the additional claim specified at the time of the instantiation
+     * Gets one of the additional claims specified at the time of the instantiation
      * by the given name and type.
      *
      * <b>Example:</b>
@@ -106,14 +107,37 @@ public class VAPIDJWTParam {
     }
 
     /**
+     * Gets the additional claims.
+     * The returned map is unmodifiable.
+     *
+     * @return the additional claims.
+     */
+    public Map<String, Object> getAdditionalClaims() {
+        return this.additionalClaims;
+    }
+
+    /**
      * The builder class for {@link VAPIDJWTParam}.
      *
      * @author Tomoki Sato
      */
     public static class Builder {
 
+        private static final Map<String, String> RESERVED_NAMES_WITH_MESSAGE =
+            Collections.unmodifiableMap(new HashMap<String, String>() {
+                {
+                    put("aud",
+                        "The \"aud\" claim should be specified via "
+                            + "#resourceURL or #resourceURLString.");
+                    put("exp",
+                        "The \"exp\" claim should be specified via "
+                            + "#expiresAt or #expiresAfterSeconds.");
+                    put("sub", "The \"sub\" claim should be specified via #subject.");
+                }
+            });
+
         private URL _resourceURL;
-        private Date _expiresAt;
+        private Instant _expirationTime;
         private String _subject;
 
         private final Map<String, Object> additionalClaims = new LinkedHashMap<>();
@@ -123,7 +147,8 @@ public class VAPIDJWTParam {
                 + "a resource URL(resourceURLString/resourceURL) cannot be called more than once.";
 
         private static final String MSG_EXPIRES_AT_NO_MORE_THAN_ONCE = "The methods for specifying "
-            + "expiration time(expiresAfterSeconds/expiresAt) cannot be called more than once.";
+            + "expiration time(expiresAfterSeconds/expirationTime/expiresAt) "
+            + "cannot be called more than once.";
 
         Builder() {
             // Should be accessed internally.
@@ -151,7 +176,7 @@ public class VAPIDJWTParam {
             try {
                 this.resourceURL(new URL(resourceURLString));
             } catch (MalformedURLException e) {
-                throw new MalformedURLRuntimeException(e);
+                throw MalformedURLRuntimeException.withDefaultMessage(e);
             }
             return this;
         }
@@ -194,7 +219,27 @@ public class VAPIDJWTParam {
          */
         public Builder expiresAfterSeconds(int seconds) {
             // TODO check if no more than 24 hours
-            this.expiresAt(Date.from(now().plusSeconds(seconds)));
+            this.expirationTime(now().plusSeconds(seconds));
+            return this;
+        }
+
+        /**
+         * Specifies the time at which a JWT expires.
+         *
+         * <p>
+         * Typically, the specified expiration time is used as an "exp" (Expiry) claim.
+         * </p>
+         *
+         * @param expirationTime the time at which a JWT expires.
+         * @return this object.
+         * @throws IllegalStateException if the methods for specifying expiration time
+         *                               is called more than once.
+         */
+        public Builder expirationTime(Instant expirationTime) {
+            WebPushPreConditions.checkNotNull(expirationTime, "expirationTime");
+            WebPushPreConditions.checkState(this._expirationTime == null,
+                MSG_EXPIRES_AT_NO_MORE_THAN_ONCE);
+            this._expirationTime = expirationTime;
             return this;
         }
 
@@ -209,12 +254,12 @@ public class VAPIDJWTParam {
          * @return this object.
          * @throws IllegalStateException if the methods for specifying expiration time
          *                               is called more than once.
+         * @deprecated Use {@link #expirationTime(Instant)}}.
          */
+        @Deprecated
         public Builder expiresAt(Date expiresAt) {
-            WebPushPreConditions.checkNotNull(expiresAt, "expiresAt");
-            WebPushPreConditions.checkState(this._expiresAt == null,
-                MSG_EXPIRES_AT_NO_MORE_THAN_ONCE);
-            this._expiresAt = expiresAt;
+            WebPushPreConditions.checkNotNull(expiresAt, "expirationTime");
+            this.expirationTime(expiresAt.toInstant());
             return this;
         }
 
@@ -237,13 +282,35 @@ public class VAPIDJWTParam {
         /**
          * Specifies an additional claim.
          *
+         * <p>
+         * Typically, the specified entry is used as a claim in a token's payload.
+         * </p>
+         *
+         * <p>
+         * The following names are "reserved".
+         * So if one of these names is given, an {@link IllegalArgumentException} is thrown.
+         * </p>
+         * <ul>
+         * <li>"aud" - this claim should be specified
+         * via {@link #resourceURL(URL)} or {@link #resourceURLString(String)}.</li>
+         * <li>"exp" - this claim should be specified
+         * via {@link #expirationTime(Instant)} or {@link #expiresAfterSeconds(int)}.</li>
+         * <li>"sub" - this claim should be specified
+         * via {@link #subject(String)}</li>
+         * </ul>
+         *
          * @param name  the name of an additional claim.
          * @param value the value of an additional claim.
          * @return this object.
+         * @throws IllegalArgumentException if one of the "reserved" names is given.
          */
         public Builder additionalClaim(String name, Object value) {
             WebPushPreConditions.checkNotNull(name, "name");
             WebPushPreConditions.checkNotNull(value, "value");
+
+            String errorMessage = RESERVED_NAMES_WITH_MESSAGE.get(name);
+            WebPushPreConditions.checkArgument(errorMessage == null, errorMessage);
+
             additionalClaims.put(name, value);
             return this;
         }
@@ -258,7 +325,7 @@ public class VAPIDJWTParam {
         public VAPIDJWTParam build() {
             WebPushPreConditions.checkState(this._resourceURL != null,
                 "The resource URL isn't specified.");
-            WebPushPreConditions.checkState(this._expiresAt != null,
+            WebPushPreConditions.checkState(this._expirationTime != null,
                 "The expiration time isn't specified.");
 
             String origin = this._resourceURL.getProtocol() + "://" + this._resourceURL.getHost();
@@ -270,7 +337,7 @@ public class VAPIDJWTParam {
             }
             return new VAPIDJWTParam(
                 origin,
-                _expiresAt,
+                _expirationTime,
                 _subject,
                 Collections.unmodifiableMap(this.additionalClaims));
         }
@@ -301,7 +368,16 @@ public class VAPIDJWTParam {
      * @return the expiration time.
      */
     public Date getExpiresAt() {
-        return expiresAt;
+        return Date.from(getExpirationTime());
+    }
+
+    /**
+     * Gets the expiration time at which a JWT expires.
+     *
+     * @return the expiration time.
+     */
+    public Instant getExpirationTime() {
+        return expirationTime;
     }
 
     /**
@@ -349,7 +425,7 @@ public class VAPIDJWTParam {
         }
         VAPIDJWTParam that = (VAPIDJWTParam) o;
         return getOrigin().equals(that.getOrigin())
-            && getExpiresAt().equals(that.getExpiresAt())
+            && getExpirationTime().equals(that.getExpirationTime())
             && Objects.equals(getSubject(), that.getSubject())
             && additionalClaims.equals(that.additionalClaims);
     }
@@ -363,7 +439,7 @@ public class VAPIDJWTParam {
     public int hashCode() {
         return Objects.hash(
             getOrigin(),
-            getExpiresAt(),
+            getExpirationTime(),
             getSubject(),
             additionalClaims);
     }
@@ -372,7 +448,7 @@ public class VAPIDJWTParam {
     public String toString() {
         return "VAPIDJWTParam{"
             + "origin='" + origin + '\''
-            + ", expiresAt=" + expiresAt
+            + ", expirationTime=" + expirationTime
             + ", subject='" + subject + '\''
             + ", additionalClaims=" + additionalClaims
             + '}';
