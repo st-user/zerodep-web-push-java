@@ -1,7 +1,7 @@
 # zerodep-web-push-java-ext-jwt-auth0
 
 Provides an implementation for `com.zerodeplibs.webpush.jwt.VAPIDJWTGenerator`
-utilizing <a href="https://github.com/auth0/java-jwt">Java JWT - auth0</a>.
+utilizing [Java JWT - auth0](https://github.com/auth0/java-jwt).
 
 ## Requirements
 

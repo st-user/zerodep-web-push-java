@@ -9,13 +9,13 @@
         <groupId>com.zerodeplibs</groupId>
         <artifactId>zerodep-web-push-java-ext-jwt</artifactId>
         <version>1.1.0-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
+        <relativePath/>
     </parent>
 
     <packaging>jar</packaging>
 
     <artifactId>zerodep-web-push-java-ext-jwt-nimbus-jose</artifactId>
-    <name>zerodep-web-push-java-ext-jwt-nimbus-jose</name>
+    <name>${project.groupId}:${project.artifactId}</name>
 
     <properties>
         <nimbus.jose.version>9.15.2</nimbus.jose.version>
