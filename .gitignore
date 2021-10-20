@@ -1,4 +1,5 @@
 .keys
 .idea
 target
-zerodep-web-push-java-example.iml
+*.iml
+.mvn/wrapper/maven-wrapper.jar

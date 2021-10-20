@@ -6,7 +6,6 @@ using [Spring Boot](https://spring.io/projects/spring-boot).
 ## Requirements
 
 - JDK8+
-- Maven 3.1+
 - A library for generating ECDSA key pairs(e.g. [OpenSSL](https://www.openssl.org/))
 
 ## Usage
@@ -22,9 +21,22 @@ using [Spring Boot](https://spring.io/projects/spring-boot).
    openssl pkcs8 -in my-private.pem -topk8 -nocrypt -out my-private_pkcs8.pem
    openssl ec -in my-private.pem -pubout -conv_form uncompressed -out my-pub.pem
    cd ../
-   mvn clean
-   mvn spring-boot:run
    ```
+   
+    **Linux/mac OS**
+
+   ```
+   ./mvnw clean
+   ./mvnw spring-boot:run
+   ```
+
+   **Windows**
+
+   ```
+   ./mvnw.cmd clean
+   ./mvnw.cmd spring-boot:run
+   ```
+
 
 2. Open your browser and access `http://localhost:8080`;
 
