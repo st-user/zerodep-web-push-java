@@ -1,5 +1,6 @@
 .keys
 .idea
 target
-zerodep-web-push-java-example-vertx.iml
 ThisIsLocalWork*
+*.iml
+.mvn/wrapper/maven-wrapper.jar

@@ -6,7 +6,6 @@ using [Vert.x](https://vertx.io/docs/).
 ## Requirements
 
 - JDK8+
-- Maven 3.1+
 - A library for generating ECDSA key pairs(e.g. [OpenSSL](https://www.openssl.org/))
 
 ## Usage
@@ -22,9 +21,22 @@ using [Vert.x](https://vertx.io/docs/).
    openssl pkcs8 -in my-private.pem -topk8 -nocrypt -out my-private_pkcs8.pem
    openssl ec -in my-private.pem -pubout -conv_form uncompressed -out my-pub.pem
    cd ../
-   mvn clean
-   mvn compile exec:java
    ```
+   
+    **Linux/mac OS**
+
+   ```
+   ./mvnw clean
+   ./mvnw compile exec:java
+   ```
+
+   **Windows**
+
+   ```
+   ./mvnw.cmd clean
+   ./mvnw.cmd compile exec:java
+   ```   
+
 
 2. Open your browser and access `http://localhost:8080`;
 
