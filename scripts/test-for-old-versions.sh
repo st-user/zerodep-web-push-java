@@ -23,34 +23,34 @@ then
     SED_CMD=`which sed`
 fi
 
-mvn clean test -pl zerodep-web-push-java-ext-jwt-auth0 -Dauth0.version=$AUTH0_VER
+./mvnw clean test -pl zerodep-web-push-java-ext-jwt-auth0 -Dauth0.version=$AUTH0_VER
 AUTH0_RET=$?
 
-mvn clean test -pl zerodep-web-push-java-ext-jwt-fusionauth -Dfusionauth.version=$FUSION_AUTH_VER
+./mvnw clean test -pl zerodep-web-push-java-ext-jwt-fusionauth -Dfusionauth.version=$FUSION_AUTH_VER
 FUSION_AUTH_RET=$?
 
-mvn clean test -pl zerodep-web-push-java-ext-jwt-jjwt -Djjwt.version=$JJWT_VER
+./mvnw clean test -pl zerodep-web-push-java-ext-jwt-jjwt -Djjwt.version=$JJWT_VER
 JJWT_RET=$?
 
-mvn clean test -pl zerodep-web-push-java-ext-jwt-jose4j -Djose4j.version=$JOSE4J_VER
+./mvnw clean test -pl zerodep-web-push-java-ext-jwt-jose4j -Djose4j.version=$JOSE4J_VER
 JOSE4J_RET=$?
 
-mvn clean test -pl zerodep-web-push-java-ext-jwt-nimbus-jose -Dnimbus.jose.version=$NIMBUS_JOSE_VER
+./mvnw clean test -pl zerodep-web-push-java-ext-jwt-nimbus-jose -Dnimbus.jose.version=$NIMBUS_JOSE_VER
 NIMBUS_JOSE_RET=$?
 
 echo "Starts testing Vert.x v3"
 $SED_CMD -i 's/return Vertx4Support.createOptions/\/\/return Vertx4Support.createOptions/g' zerodep-web-push-java-ext-jwt-vertx/src/main/java/com/zerodeplibs/webpush/ext/jwt/vertx/VertxVAPIDJWTGenerator.java
 
-mvn clean test -pl zerodep-web-push-java-ext-jwt-vertx -Dvertx.version=$VERTX3_VER -Pvertx-3-compile
+./mvnw clean test -pl zerodep-web-push-java-ext-jwt-vertx -Dvertx.version=$VERTX3_VER -Pvertx-3-compile
 VERTX3_RET=$?
 
-mvn clean test -pl zerodep-web-push-java-ext-jwt-vertx -Dvertx.version=$VERTX3_LATEST_VER -Pvertx-3-compile
+./mvnw clean test -pl zerodep-web-push-java-ext-jwt-vertx -Dvertx.version=$VERTX3_LATEST_VER -Pvertx-3-compile
 VERTX3_LATEST_RET=$?
 
 $SED_CMD -i 's/\/\/return Vertx4Support.createOptions/return Vertx4Support.createOptions/g' zerodep-web-push-java-ext-jwt-vertx/src/main/java/com/zerodeplibs/webpush/ext/jwt/vertx/VertxVAPIDJWTGenerator.java
 echo "Ends testing Vert.x v3"
 
-mvn clean test -pl zerodep-web-push-java-ext-jwt-vertx -Dvertx.version=$VERTX_VER
+./mvnw clean test -pl zerodep-web-push-java-ext-jwt-vertx -Dvertx.version=$VERTX_VER
 VERTX_RET=$?
 
 RESULT=`expr $AUTH0_RET + $FUSION_AUTH_RET + $JJWT_RET + $JOSE4J_RET + $NIMBUS_JOSE_RET + $VERTX3_RET + $VERTX3_LATEST_RET + $VERTX_RET`
