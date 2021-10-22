@@ -2,30 +2,77 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>zerodep web push java example for Vert.x</title>
+    <title>zerodep-web-push-java example for Vert.x</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <style type="text/css">
+        .header,
+        #response {
+            with: 100%;
+            text-align: center;
+        }
+        #response,
+        #progress {
+            min-height: 32px;
+        }
+        .subs-container {
+            display: flex;
+            flex-direction: row;
+        }
+        .subs-btn {
+            width: 50%;
+            text-align: right;
+            padding-right: 5%;
+        }
+        .unsubs-btn {
+            width: 50%;
+            text-align: left;
+            padding-left: 5%;
+        }
+        .subs-container button {
+            width: 120px;
+            height: 120px;
+        }
+        .send-area {
+            width: 60%;
+            margin: auto;
+        }
+        .send-btn {
+            text-align: right;
+        }
+    </style>
 </head>
 <body>
-    <h1>zerodep web push java example for Vert.x</h1>
+    <div class="content">
 
-    <div id="response" style="min-height: 32px; font-weight: bold;">
+        <h1 class="header">zerodep-web-push-java example for Vert.x</h1>
+
+        <div id="response" class="has-text-weight-bold">
+        </div>
+
+        <div id="progress">
+            <progress class="progress is-link" max="100"></progress>
+        </div>
+
+        <div class="subs-container">
+            <div class="subs-btn">
+                <button type="button" id="subscribe" class="button is-link">subscribe</button>
+            </div>
+
+            <div class="unsubs-btn">
+                <button type="button" id="unsubscribe" class="button is-link is-light">unsubscribe</button>
+            </div>
+        </div>
+
+
+        <fieldset class="send-area mt-4">
+            <legend>After you successfully subscribed, Input a message and click the 'send' button.</legend>
+            <textarea rows="2" cols="50" id="message" class="textarea is-link"></textarea>
+            <div class="send-btn mt-1">
+                <button type="button" id="sendMessage" class="button is-link">send</button>
+            </div>
+        </fieldset>
+
     </div>
-
-    <div>
-        <button type="button" id="subscribe">subscribe</button>
-    </div>
-
-    <div>
-        <button type="button" id="unsubscribe">unsubscribe</button>
-    </div>
-
-    <div>
-        <button type="button" id="sendMessage">send</button>
-    </div>
-
-    <fieldset>
-        <legend>message</legend>
-        <textarea rows="10" cols="50" id="message"></textarea>
-    </fieldset>
 
     <script src="main.js"></script>
 </body>
