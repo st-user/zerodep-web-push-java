@@ -10,9 +10,9 @@ import java.security.interfaces.ECPublicKey;
 import java.security.spec.ECGenParameterSpec;
 import java.util.Base64;
 
-class MessageEncryptionTestUtil {
+public class MessageEncryptionTestUtil {
 
-    static KeyPair generateKeyPair()
+    public static KeyPair generateKeyPair()
         throws InvalidAlgorithmParameterException, NoSuchAlgorithmException {
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("EC");
         keyPairGenerator.initialize(new ECGenParameterSpec("secp256r1"));
@@ -20,13 +20,13 @@ class MessageEncryptionTestUtil {
         return keyPairGenerator.genKeyPair();
     }
 
-    static String generateP256dhString(ECPublicKey uaPublic) {
+    public static String generateP256dhString(ECPublicKey uaPublic) {
         byte[] uncompressedBytes =
             PublicKeySources.ofECPublicKey(uaPublic).extractBytesInUncompressedForm();
         return toBase64Url(uncompressedBytes);
     }
 
-    static String generateAuthSecretString() {
+    public static String generateAuthSecretString() {
         byte[] authSecret = new byte[16];
         SecureRandom secureRandom = new SecureRandom();
         secureRandom.nextBytes(authSecret);
