@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -40,9 +41,29 @@ public class VAPIDJWTParamsTests {
 
         VAPIDJWTParam paramWithNotDefaultPort = new TestingBuilder(mockForNow)
             .resourceURLString("https://example.com:8080/resource")// Not default port.
-            .expiresAfterSeconds(50)
+            .expirationTime(Instant.now())
             .build();
         assertThat(paramWithNotDefaultPort.getOrigin(), equalTo("https://example.com:8080"));
+
+        VAPIDJWTParam paramWithTimeUnit = new TestingBuilder(mockForNow)
+            .resourceURLString("https://example.com/resource")
+            .expiresAfter(12, TimeUnit.HOURS)
+            .build();
+        assertThat(paramWithTimeUnit.getExpiresAt(),
+            equalTo(Date.from(mockForNow.plusSeconds(12 * 60 * 60))));
+    }
+
+    @Test
+    public void shouldBeCreatedWithDefaultParams() {
+
+        Instant mockForNow = Instant.now();
+
+        VAPIDJWTParam paramWithNotDefaultPort = new TestingBuilder(mockForNow)
+            .resourceURLString("https://example.com/resource")
+            .buildWithDefault();
+
+        assertThat(paramWithNotDefaultPort.getExpirationTime(),
+            equalTo(mockForNow.plus(3, ChronoUnit.MINUTES)));
     }
 
     @Test
@@ -113,6 +134,8 @@ public class VAPIDJWTParamsTests {
         assertNullCheck(() -> VAPIDJWTParam.getBuilder().expiresAt(null),
             "expirationTime");
 
+        assertNullCheck(() -> VAPIDJWTParam.getBuilder().expiresAfter(1, null),
+            "timeUnit");
     }
 
     @Test
@@ -120,7 +143,7 @@ public class VAPIDJWTParamsTests {
 
         String messageForMultipleCalls = "The methods for specifying "
             +
-            "expiration time(expiresAfterSeconds/expirationTime/expiresAt) cannot be called more than once.";
+            "expiration time(expiresAfter/expirationTime/expiresAfterSeconds/expiresAt) cannot be called more than once.";
 
         assertStateCheck(() -> VAPIDJWTParam.getBuilder()
                 .expiresAfterSeconds(1)
@@ -145,6 +168,11 @@ public class VAPIDJWTParamsTests {
         assertStateCheck(() -> VAPIDJWTParam.getBuilder()
                 .expiresAfterSeconds(1)
                 .expirationTime(Instant.now()),
+            messageForMultipleCalls);
+
+        assertStateCheck(() -> VAPIDJWTParam.getBuilder()
+                .expiresAfterSeconds(1)
+                .expiresAfter(1, TimeUnit.HOURS),
             messageForMultipleCalls);
     }
 
@@ -208,7 +236,7 @@ public class VAPIDJWTParamsTests {
         String messageForAud =
             "The \"aud\" claim should be specified via #resourceURL or #resourceURLString.";
         String messageForExp =
-            "The \"exp\" claim should be specified via #expiresAt or #expiresAfterSeconds.";
+            "The \"exp\" claim should be specified via #expiresAt or #expiresAfter.";
         String messageForSub = "The \"sub\" claim should be specified via #subject.";
 
         VAPIDJWTParam.Builder param = VAPIDJWTParam.getBuilder();

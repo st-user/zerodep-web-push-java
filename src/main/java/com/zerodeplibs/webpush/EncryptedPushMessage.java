@@ -37,4 +37,18 @@ public interface EncryptedPushMessage {
      * @return the content encoding of this encrypted push message.
      */
     String contentEncoding();
+
+    /**
+     * Returns the media type of this encrypted push message
+     * (e.g. "application/octet-stream").
+     *
+     * <p>
+     * Typically, the returned value is set to the "Content-Type" HTTP header field.
+     * </p>
+     *
+     * @return the media type of this encrypted push message.
+     */
+    default String mediaType() {
+        return "application/octet-stream";
+    }
 }

@@ -4,6 +4,7 @@ import com.zerodeplibs.webpush.internal.WebPushPreConditions;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -11,6 +12,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 
 /**
@@ -131,7 +133,7 @@ public class VAPIDJWTParam {
                             + "#resourceURL or #resourceURLString.");
                     put("exp",
                         "The \"exp\" claim should be specified via "
-                            + "#expiresAt or #expiresAfterSeconds.");
+                            + "#expiresAt or #expiresAfter.");
                     put("sub", "The \"sub\" claim should be specified via #subject.");
                 }
             });
@@ -147,7 +149,7 @@ public class VAPIDJWTParam {
                 + "a resource URL(resourceURLString/resourceURL) cannot be called more than once.";
 
         private static final String MSG_EXPIRES_AT_NO_MORE_THAN_ONCE = "The methods for specifying "
-            + "expiration time(expiresAfterSeconds/expirationTime/expiresAt) "
+            + "expiration time(expiresAfter/expirationTime/expiresAfterSeconds/expiresAt) "
             + "cannot be called more than once.";
 
         Builder() {
@@ -206,6 +208,26 @@ public class VAPIDJWTParam {
         }
 
         /**
+         * Specifies the time after which a JWT expires.
+         *
+         * <p>
+         * Typically, the specified expiration time is used as an "exp" (Expiry) claim.
+         * </p>
+         *
+         * @param expiresAfter the time after which a JWT expires.
+         * @param timeUnit     the unit of the given <code>expiresAfter</code>.
+         * @return this object.
+         * @throws IllegalStateException if the methods for specifying expiration time
+         *                               is called more than once.
+         */
+        public Builder expiresAfter(int expiresAfter, TimeUnit timeUnit) {
+            WebPushPreConditions.checkNotNull(timeUnit, "timeUnit");
+            // TODO. from JDK9, we can use TimeUnit#toChronoUnit
+            this.expirationTime(now().plusNanos(timeUnit.toNanos(expiresAfter)));
+            return this;
+        }
+
+        /**
          * Specifies the time in seconds after which a JWT expires.
          *
          * <p>
@@ -216,7 +238,9 @@ public class VAPIDJWTParam {
          * @return this object.
          * @throws IllegalStateException if the methods for specifying expiration time
          *                               is called more than once.
+         * @deprecated Use {@link #expiresAfter(int, TimeUnit)}.
          */
+        @Deprecated
         public Builder expiresAfterSeconds(int seconds) {
             // TODO check if no more than 24 hours
             this.expirationTime(now().plusSeconds(seconds));
@@ -342,11 +366,24 @@ public class VAPIDJWTParam {
                 Collections.unmodifiableMap(this.additionalClaims));
         }
 
+        /**
+         * Creates a new {@link VAPIDJWTParam}.
+         * If the expiration time isn't specified, the value is set to 3 minutes.
+         *
+         * @return a new {@link VAPIDJWTParam}.
+         * @throws IllegalStateException if the resource URL isn't specified.
+         */
+        public VAPIDJWTParam buildWithDefault() {
+            if (this._expirationTime == null) {
+                this._expirationTime = now().plus(3, ChronoUnit.MINUTES);
+            }
+            return build();
+        }
+
         // Visible for testing
         Instant now() {
             return Instant.now();
         }
-
     }
 
     /**

@@ -5,7 +5,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * The utility class for the <a href="https://datatracker.ietf.org/doc/html/rfc8030#section-5.4">Topic</a> header field.
+ * The utility class used for setting the <a href="https://datatracker.ietf.org/doc/html/rfc8030#section-5.4">Topic</a> header field.
  *
  * <h3>Example:</h3>
  * <pre class="code">
@@ -18,6 +18,11 @@ import java.util.regex.Pattern;
  * @author Tomoki Sato
  */
 public class Topic {
+
+    /**
+     * The name of the Topic header field.
+     */
+    public static String HEADER_NAME = "Topic";
 
     private Topic() {
     }
