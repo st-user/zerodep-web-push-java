@@ -1,6 +1,6 @@
 #!/bin/sh
 
-mvn clean test
+./mvnw clean test
 COMPILE_RESULT=$?
 
 ##
