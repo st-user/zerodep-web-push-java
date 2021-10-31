@@ -1,5 +1,5 @@
 /**
- * Provides the utility classes for the HTTP header fields
+ * Provides the utility classes that help applications set the HTTP header fields
  * that control the delivery of Push Messages.
  */
 

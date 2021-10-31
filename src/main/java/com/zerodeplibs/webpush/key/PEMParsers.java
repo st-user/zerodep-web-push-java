@@ -3,9 +3,11 @@ package com.zerodeplibs.webpush.key;
 import com.zerodeplibs.webpush.internal.WebPushPreConditions;
 
 /**
+ * <p>
  * Static factory methods for {@link PEMParser}.
+ * </p>
  *
- * <h3>Thread Safety:</h3>
+ * <div><b>Thread Safety:</b></div>
  * <p>
  * The factory methods themselves are thread-safe.
  * The returned objects are also thread-safe because they are immutable.
@@ -19,14 +21,16 @@ public class PEMParsers {
     }
 
     /**
+     * <p>
      * Creates a new {@link PEMParser} with the given label for encapsulation boundaries.
+     * </p>
      *
      * <p>
      * This parser ignores characters outside the encapsulation boundaries
      * (i.e. all the characters before '-----BEGIN .... -----' or after '-----END ..... -----').
      * </p>
      *
-     * <h3>Examples:</h3>
+     * <div><b>Examples:</b></div>
      * <pre>
      *  // Creates a parser for PEM-encoded texts
      *  // in which the private key data starts with '-----BEGIN PRIVATE KEY-----'

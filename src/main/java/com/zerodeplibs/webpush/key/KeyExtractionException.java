@@ -1,8 +1,10 @@
 package com.zerodeplibs.webpush.key;
 
 /**
+ * <p>
  * Wraps checked exceptions such as {@link java.security.spec.InvalidKeySpecException}
  * that occur when extracting private/public keys.
+ * </p>
  *
  * <p>
  * The underlying exception can be obtained

@@ -1,9 +1,11 @@
 package com.zerodeplibs.webpush.jwt;
 
 /**
+ * <p>
  * The interface to a generator that generates JSON Web Token (JWT) used
  * for the Voluntary Application Server Identification
  * (<a href="https://datatracker.ietf.org/doc/html/rfc8292">VAPID</a>).
+ * </p>
  *
  * <p>
  * If you have dependencies on one or more sub-modules for {@link VAPIDJWTGenerator},

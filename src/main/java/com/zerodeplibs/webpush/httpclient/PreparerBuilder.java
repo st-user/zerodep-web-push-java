@@ -19,7 +19,9 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * <p>
  * The builder class of "Preparer".
+ * </p>
  *
  * <p>
  * "Preparer"s are the components which are used
@@ -30,7 +32,7 @@ import java.util.concurrent.TimeUnit;
  * They help applications make an object which is used for such a request by:
  * </p>
  * <ul>
- * <li>extracting a URL of a push service</li>
+ * <li>extracting a URL of a push service from a push subscription</li>
  * <li>generating and setting proper HTTP header fields</li>
  * <li>encrypting a push message and setting it to the request body</li>
  * </ul>
@@ -244,9 +246,11 @@ public abstract class PreparerBuilder<T> {
     }
 
     /**
+     * <p>
      * Creates a new "Preparer"
      * by constructing a {@link RequestPreparationInfo}
      * and then calling {@link #buildInternal(RequestPreparationInfo)}.
+     * </p>
      *
      * <p>
      * To do that, this method internally
@@ -261,7 +265,7 @@ public abstract class PreparerBuilder<T> {
      * If the value isn't specified, the default value below is used.
      * </p>
      * <ul>
-     * <li>The expiration time of the JWT(the "exp" claim): 3 minutes</li>
+     * <li>The expiration time of the JWT for VAPID (the "exp" claim): 3 minutes</li>
      * <li>The TTL header field: 24 hours</li>
      * <li>The Urgency header filed: "normal"</li>
      * </ul>
@@ -332,11 +336,13 @@ public abstract class PreparerBuilder<T> {
     protected abstract T buildInternal(RequestPreparationInfo requestPreparationInfo);
 
     /**
+     * <p>
      * Represents information which is required
      * for an application to request the delivery of a push message.
+     * </p>
      *
      * <p>
-     * Instances of this class are constructed(and therefore hold)
+     * Instances of this class are constructed with (and therefore hold)
      * a push service url, values for HTTP header fields
      * and an encrypted request body(if a push message is specified).
      * </p>
@@ -363,26 +369,64 @@ public abstract class PreparerBuilder<T> {
             this.topic = Optional.ofNullable(topic);
         }
 
+        /**
+         * Gets the endpoint url to which a push message is send.
+         *
+         * @return the endpoint url.
+         */
         protected String getEndpointUrl() {
             return endpointUrl;
         }
 
+        /**
+         * Gets the credential for VAPID.
+         * The returned value should be set to the Authorization HTTP header field.
+         *
+         * @return the credential for VAPID.
+         * @see VAPIDKeyPair#generateAuthorizationHeaderValue(VAPIDJWTParam)
+         */
         protected String getVapidHeader() {
             return vapidHeader;
         }
 
+        /**
+         * Gets the {@link EncryptedPushMessage}.
+         * If a push message is specified at the time of the creation,
+         * an Optional containing the {@link EncryptedPushMessage} is returned.
+         *
+         * @return an {@link Optional} that may or may not contain the {@link EncryptedPushMessage}.
+         */
         protected Optional<EncryptedPushMessage> getEncryptedPushMessage() {
             return encryptedPushMessage;
         }
 
+        /**
+         * Gets the value of TTL.
+         * The returned value should be set to the TTL HTTP header field.
+         *
+         * @return the value of TTL.
+         */
         protected String getTtlString() {
             return ttl.toString();
         }
 
+        /**
+         * Gets the value of Urgency.
+         * The returned value should be set to the Urgency HTTP header field.
+         *
+         * @return the value of Urgency.
+         */
         protected String getUrgency() {
             return urgency;
         }
 
+        /**
+         * Gets the topic.
+         * If a topic is specified at the time of the creation,
+         * an Optional containing the topic is returned.
+         *
+         * @return an {@link Optional} that may or may not contain the topic.
+         */
         protected Optional<String> getTopic() {
             return topic;
         }

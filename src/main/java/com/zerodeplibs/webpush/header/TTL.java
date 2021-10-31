@@ -4,9 +4,11 @@ import com.zerodeplibs.webpush.internal.WebPushPreConditions;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * <p>
  * The utility class used for setting the <a href="https://datatracker.ietf.org/doc/html/rfc8030#section-5.2">TTL</a> header field.
+ * </p>
  *
- * <h3>Example:</h3>
+ * <div><b>Example:</b></div>
  * <pre class="code">
  * // Suggests that the push message is retained for 2 days.
  * myHeader.addHeader("TTL", TTL.days(2));

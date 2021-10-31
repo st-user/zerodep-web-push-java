@@ -32,8 +32,10 @@ public class VertxWebClientRequestPreparer {
     }
 
     /**
+     * <p>
      * Send a request with the given <code>webClient</code>.
      * The <code>handler</code> will receive the response as an {@link HttpResponse}.
+     * </p>
      *
      * <p>
      * In order to set arbitrary parameters to the request object,
@@ -87,9 +89,11 @@ public class VertxWebClientRequestPreparer {
     }
 
     /**
+     * <p>
      * Send a request with the given <code>webClient</code>.
      * If the request succeeds, the response is available as an {@link HttpResponse}
      * through the returned {@link Future}.
+     * </p>
      *
      * <p>
      * In order to set arbitrary parameters to the request object,

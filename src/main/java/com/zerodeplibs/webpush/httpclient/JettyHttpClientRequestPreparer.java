@@ -38,6 +38,7 @@ public class JettyHttpClientRequestPreparer {
     /**
      * Converts this object to a {@link Request}.
      *
+     * @param httpClient an HTTP client object used to create a {@link Request} object.
      * @return a {@link Request}.
      */
     public Request toRequest(HttpClient httpClient) {

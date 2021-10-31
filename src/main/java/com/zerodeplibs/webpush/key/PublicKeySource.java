@@ -3,7 +3,9 @@ package com.zerodeplibs.webpush.key;
 import java.security.interfaces.ECPublicKey;
 
 /**
+ * <p>
  * This class represents a source of an {@link ECPublicKey}.
+ * </p>
  *
  * <p>
  * Depending on the implementation, PublicKeySource validates the public key during extraction.

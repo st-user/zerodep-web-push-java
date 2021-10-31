@@ -1,7 +1,9 @@
 package com.zerodeplibs.webpush;
 
 /**
+ * <p>
  * Implementations of this interface provide the functionality of <a href="https://datatracker.ietf.org/doc/html/rfc8291">Message Encryption for Web Push</a>.
+ * </p>
  *
  * <p>
  * Usually, an instance of this interface

@@ -16,11 +16,13 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 
 /**
+ * <p>
  * This class represents parameters for generating JSON Web Token (JWT) used
  * for the Voluntary Application Server Identification
  * (<a href="https://datatracker.ietf.org/doc/html/rfc8292">VAPID</a>).
+ * </p>
  *
- * <h3>Example:</h3>
+ * <div><b>Example:</b></div>
  * <pre class="code">
  *
  * VAPIDJWTParam param = VAPIDJWTParam.getBuilder()
@@ -59,10 +61,12 @@ public class VAPIDJWTParam {
     }
 
     /**
+     * <p>
      * Gets one of the additional claims specified at the time of the instantiation
      * by the given name and type.
+     * </p>
      *
-     * <b>Example:</b>
+     * <div><b>Example:</b></div>
      *
      * <pre class="code">
      *
@@ -157,7 +161,10 @@ public class VAPIDJWTParam {
         }
 
         /**
+         * <p>
          * Specifies a push resource URL from which the origin is extracted.
+         * </p>
+         *
          * <p>
          * Typically,
          * </p>
@@ -185,7 +192,10 @@ public class VAPIDJWTParam {
 
 
         /**
+         * <p>
          * Specifies a push resource URL from which the origin is extracted.
+         * </p>
+         *
          * <p>
          * Typically,
          * </p>
@@ -208,7 +218,9 @@ public class VAPIDJWTParam {
         }
 
         /**
+         * <p>
          * Specifies the time after which a JWT expires.
+         * </p>
          *
          * <p>
          * Typically, the specified expiration time is used as an "exp" (Expiry) claim.
@@ -228,7 +240,9 @@ public class VAPIDJWTParam {
         }
 
         /**
+         * <p>
          * Specifies the time in seconds after which a JWT expires.
+         * </p>
          *
          * <p>
          * Typically, the specified expiration time is used as an "exp" (Expiry) claim.
@@ -248,7 +262,9 @@ public class VAPIDJWTParam {
         }
 
         /**
+         * <p>
          * Specifies the time at which a JWT expires.
+         * </p>
          *
          * <p>
          * Typically, the specified expiration time is used as an "exp" (Expiry) claim.
@@ -268,7 +284,9 @@ public class VAPIDJWTParam {
         }
 
         /**
+         * <p>
          * Specifies the time at which a JWT expires.
+         * </p>
          *
          * <p>
          * Typically, the specified expiration time is used as an "exp" (Expiry) claim.
@@ -288,7 +306,9 @@ public class VAPIDJWTParam {
         }
 
         /**
+         * <p>
          * Specifies a subject.
+         * </p>
          *
          * <p>
          * Typically, the specified subject is used as a "sub" (Subject) claim.
@@ -304,7 +324,9 @@ public class VAPIDJWTParam {
         }
 
         /**
+         * <p>
          * Specifies an additional claim.
+         * </p>
          *
          * <p>
          * Typically, the specified entry is used as a claim in a token's payload.
@@ -387,7 +409,9 @@ public class VAPIDJWTParam {
     }
 
     /**
+     * <p>
      * Gets the origin extracted from the resource URL.
+     * </p>
      *
      * <p>
      * Typically, the returned value is set to an "aud" claim.
@@ -418,8 +442,10 @@ public class VAPIDJWTParam {
     }
 
     /**
+     * <p>
      * Gets the number of seconds from January 1, 1970, 00:00:00 GMT
      * to the expiration time.
+     * </p>
      *
      * <p>
      * Typically, the returned value is set to an "exp" claim.
@@ -432,9 +458,11 @@ public class VAPIDJWTParam {
     }
 
     /**
+     * <p>
      * Gets the subject.
      * If a subject is specified at the time of the creation,
      * an Optional containing the subject is returned.
+     * </p>
      *
      * <p>
      * Typically, the returned value is set to an "sub" claim.

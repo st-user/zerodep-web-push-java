@@ -7,8 +7,10 @@ import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
 
 /**
+ * <p>
  * Implementations of this interface provide the functionality
  * for creating {@link VAPIDJWTGenerator}.
+ * </p>
  *
  * <p>
  * Typically, an implementation of this interface is provided

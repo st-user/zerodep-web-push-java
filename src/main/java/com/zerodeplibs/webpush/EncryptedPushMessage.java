@@ -16,7 +16,9 @@ public interface EncryptedPushMessage {
     byte[] toBytes();
 
     /**
+     * <p>
      * Returns the length of this encrypted push message.
+     * </p>
      *
      * <p>
      * Typically, the returned value is set to the "Content-Length" HTTP header field.
@@ -27,8 +29,10 @@ public interface EncryptedPushMessage {
     int length();
 
     /**
+     * <p>
      * Returns the content encoding of this encrypted push message
      * (e.g. "aes128gcm").
+     * </p>
      *
      * <p>
      * Typically, the returned value is set to the "Content-Encoding" HTTP header field.
@@ -39,8 +43,10 @@ public interface EncryptedPushMessage {
     String contentEncoding();
 
     /**
+     * <p>
      * Returns the media type of this encrypted push message
      * (e.g. "application/octet-stream").
+     * </p>
      *
      * <p>
      * Typically, the returned value is set to the "Content-Type" HTTP header field.

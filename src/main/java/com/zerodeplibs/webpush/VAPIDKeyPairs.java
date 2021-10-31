@@ -13,9 +13,11 @@ import java.util.ServiceLoader;
 import java.util.function.BiFunction;
 
 /**
+ * <p>
  * Static factory methods for {@link VAPIDKeyPair}.
+ * </p>
  *
- * <h3>Thread Safety:</h3>
+ * <div><b>Thread Safety:</b></div>
  * <p>
  * The factory methods themselves are thread-safe.
  * The returned objects are thread-safe only if an instance
@@ -50,8 +52,10 @@ public class VAPIDKeyPairs {
     }
 
     /**
+     * <p>
      * Creates a new {@link VAPIDKeyPair} with the given private key source and
      * the given public key source.
+     * </p>
      *
      * <p>
      * The implementation of {@link VAPIDJWTGenerator} is provided

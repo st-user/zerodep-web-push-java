@@ -8,7 +8,9 @@ import java.nio.file.Path;
 import java.security.interfaces.ECPublicKey;
 
 /**
+ * <p>
  * Static factory methods for {@link PublicKeySource}.
+ * </p>
  *
  * <p>
  * {@link PublicKeySource} created by the static factory methods
@@ -16,7 +18,7 @@ import java.security.interfaces.ECPublicKey;
  * It uses the validation method described in Section 5.6.2.3 of <a href="https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-56Ar2.pdf">Recommendation for Pair-Wise Key Establishment Schemes Using Discrete Logarithm Cryptography - NIST Special Publication 800-56A Revision 2</a>.
  * </p>
  *
- * <h3>Examples:</h3>
+ * <div><b>Examples:</b></div>
  * <p>
  * The following is an example of commands that uses OpenSSL
  * to generate a file that can be handled with {@link PublicKeySource}s.
@@ -52,7 +54,7 @@ import java.security.interfaces.ECPublicKey;
  *
  * </pre>
  *
- * <h3>Thread Safety:</h3>
+ * <div><b>Thread Safety:</b></div>
  * <p>
  * The factory methods themselves are thread-safe,
  * but the returned objects are <b>NOT</b> thread-safe.
@@ -97,8 +99,10 @@ public class PublicKeySources {
     }
 
     /**
+     * <p>
      * Creates a new {@link PublicKeySource} with the given PEM-encoded text.
      * The underlying octet sequence is assumed to be encoded according to the X.509 standard.
+     * </p>
      *
      * <p>
      * the PEM-encoded text is assumed to contain a public key data
@@ -118,9 +122,11 @@ public class PublicKeySources {
     }
 
     /**
+     * <p>
      * Creates a new {@link PublicKeySource} with the given PEM-encoded text
      * and the given {@link PEMParser}.
      * The underlying octet sequence is assumed to be encoded according to the X.509 standard.
+     * </p>
      *
      * <p>
      * the PEM-encoded text are parsed by the given {@link PEMParser}.
@@ -139,9 +145,11 @@ public class PublicKeySources {
     }
 
     /**
+     * <p>
      * Creates a new {@link PublicKeySource} with the PEM formatted file specified
      * by the given path.
      * The underlying octet sequence is assumed to be encoded according to the X.509 standard.
+     * </p>
      *
      * <p>
      * The PEM formatted file is assumed to contain a public key data
@@ -160,9 +168,11 @@ public class PublicKeySources {
     }
 
     /**
+     * <p>
      * Creates a new {@link PublicKeySource} with the PEM formatted file specified
      * by the given path.
      * The underlying octet sequence is assumed to be encoded according to the X.509 standard.
+     * </p>
      *
      * <p>
      * The contents of the PEM file are parsed by the given {@link PEMParser}.

@@ -6,15 +6,17 @@ import com.zerodeplibs.webpush.key.PrivateKeySource;
 import com.zerodeplibs.webpush.key.PublicKeySource;
 
 /**
+ * <p>
  * This interface represents a signing key pair
  * for the Voluntary Application Server Identification (VAPID) described in <a href="https://datatracker.ietf.org/doc/html/rfc8292">RFC8292</a>.
+ * </p>
  *
  * <p>
  * Usually, an instance of this interface
  * is obtained by a factory method of {@link VAPIDKeyPairs}.
  * </p>
  *
- * <h3>Example:</h3>
+ * <div><b>Example:</b></div>
  * <pre class="code">
  * VAPIDKeyPair vapidKeyPair = VAPIDKeyPairs.of(
  *      PrivateKeySources.ofPEMFile(new File(privateKeyFilePath).toPath()),
@@ -35,7 +37,7 @@ import com.zerodeplibs.webpush.key.PublicKeySource;
  * with the Elliptic Curve Digital Signature Algorithm (ECDSA) over the P-256 curve.
  * </p>
  *
- * <h3>Thread Safety:</h3>
+ * <div><b>Thread Safety:</b></div>
  * <p>
  * Depends on the implementation. See {@link VAPIDKeyPairs}.
  * </p>
@@ -50,8 +52,10 @@ import com.zerodeplibs.webpush.key.PublicKeySource;
 public interface VAPIDKeyPair {
 
     /**
+     * <p>
      * Extracts the octet sequence of the public key in uncompressed form
      * (65-byte array starting with 0x04).
+     * </p>
      *
      * <p>
      * Typically, the value is sent to browsers
