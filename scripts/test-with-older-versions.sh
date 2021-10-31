@@ -11,7 +11,8 @@ COMPILE_RESULT=$?
 OKHTTP_VER=4.8.0
 APACHE_HTTP_CLIENT_VER=5.1
 JETTY_VER=10.0.0
-VERTX_VER=3.9.2
+VERTX_VER=4.0.0
+VERTX3_VER=3.9.2
 VERTX3_LATEST_VER=3.9.9
 
 echo "Starts tests for the older versions."
@@ -25,15 +26,20 @@ echo "Starts tests for the older versions."
 TEST_RESULT=$?
 
 ./mvnw surefire:test \
+    -Dvertx.version=${VERTX3_VER} \
+    -Dtest=VertxWebClientRequestPreparerTests
+TEST_RESULT_VERTX3=$?
+
+./mvnw surefire:test \
     -Dvertx.version=${VERTX3_LATEST_VER} \
     -Dtest=VertxWebClientRequestPreparerTests
 TEST_RESULT_VERTX3_LATEST=$?
 
-RESULT=`expr ${COMPILE_RESULT} + ${TEST_RESULT} + ${TEST_RESULT_VERTX3_LATEST}`
+RESULT=`expr ${COMPILE_RESULT} + ${TEST_RESULT} + ${TEST_RESULT_VERTX3} + ${TEST_RESULT_VERTX3_LATEST}`
 
 if [ ${RESULT} -ne 0 ]
 then
   echo "There are test failures(${RESULT})."
-  echo "Return codes: ${COMPILE_RESULT},${TEST_RESULT},${TEST_RESULT_VERTX3_LATEST}"
+  echo "Return codes: ${COMPILE_RESULT},${TEST_RESULT},${TEST_RESULT_VERTX3},${TEST_RESULT_VERTX3_LATEST}"
   exit 1
 fi
