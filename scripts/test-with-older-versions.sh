@@ -1,6 +1,6 @@
 #!/bin/sh
 
-mvn clean test
+./mvnw clean test
 COMPILE_RESULT=$?
 
 ##
@@ -16,7 +16,7 @@ VERTX3_LATEST_VER=3.9.9
 
 echo "Starts tests for the older versions."
 
-mvn surefire:test \
+./mvnw surefire:test \
     -Dokhttp.version=${OKHTTP_VER} \
     -Dapache.http.client.version=${APACHE_HTTP_CLIENT_VER} \
     -Djetty.client.version=${JETTY_VER} \
@@ -24,7 +24,7 @@ mvn surefire:test \
     -Dtest="com/zerodeplibs/webpush/httpclient/*"
 TEST_RESULT=$?
 
-mvn surefire:test \
+./mvnw surefire:test \
     -Dvertx.version=${VERTX3_LATEST_VER} \
     -Dtest=VertxWebClientRequestPreparerTests
 TEST_RESULT_VERTX3_LATEST=$?

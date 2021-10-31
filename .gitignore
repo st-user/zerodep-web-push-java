@@ -1,4 +1,5 @@
 target/
 .idea/
-zerodep-web-push-java.iml
+*.iml
 .DS_Store
+.mvn/wrapper/maven-wrapper.jar
