@@ -24,6 +24,8 @@
             JDK8+ is required.
         -->
         <java.version>8</java.version>
+
+        <jetty.version>9.4.44.v20210927</jetty.version>
         <zerodeplibs.version>1.1.0</zerodeplibs.version>
     </properties>
 
@@ -32,8 +34,11 @@
         <dependency>
             <groupId>com.zerodeplibs</groupId>
             <artifactId>zerodep-web-push-java</artifactId>
-            <version>${zerodeplibs.version}</version>
+            <!--<version>${zerodeplibs.version}</version>-->
+            <version>1.2.0-SNAPSHOT</version>
         </dependency>
+
+
 
         <!--
             When using [Java JWT - auth0](https://github.com/auth0/java-jwt).
@@ -45,7 +50,9 @@
             <scope>runtime</scope>
         </dependency>
         <!--
+
             If you want to explicitly specify the version:
+
             <dependency>
                 <groupId>com.auth0</groupId>
                 <artifactId>java-jwt</artifactId>
@@ -54,8 +61,6 @@
                 <scope>runtime</scope>
             </dependency>
         -->
-
-
 
 
 
@@ -123,6 +128,7 @@
             </dependency>
 
             If you want to explicitly specify the version:
+
             <dependency>
                 <groupId>org.bitbucket.b_c</groupId>
                 <artifactId>jose4j</artifactId>
@@ -132,7 +138,7 @@
         -->
 
         <!--
-            [Nimbus JOSE + JWT](https://connect2id.com/products/nimbus-jose-jwt).
+            When using [Nimbus JOSE + JWT](https://connect2id.com/products/nimbus-jose-jwt).
 
             <dependency>
                 <groupId>com.zerodeplibs</groupId>
@@ -153,14 +159,30 @@
 
 
         <!--
-            This project utilizes OkHttp.
-            Of course, you can use any http client library in your project.
+            If you want to use [OkHttp](https://square.github.io/okhttp/):
         -->
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
-            <version>4.9.0</version>
+            <version>4.9.2</version>
         </dependency>
+
+        <!--
+            If you want to use [Apache HTTP Client](https://hc.apache.org/httpcomponents-client-5.1.x/):
+        <dependency>
+            <groupId>org.apache.httpcomponents.client5</groupId>
+            <artifactId>httpclient5</artifactId>
+            <version>5.1.1</version>
+        </dependency>
+        -->
+
+        <!--
+            If you want to use [Jetty Client](https://www.eclipse.org/jetty/documentation/jetty-11/programming-guide/index.html#pg-client):
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-client</artifactId>
+        </dependency>
+        -->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

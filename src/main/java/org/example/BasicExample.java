@@ -1,17 +1,9 @@
 package org.example;
 
-import com.zerodeplibs.webpush.EncryptedPushMessage;
-import com.zerodeplibs.webpush.MessageEncryption;
-import com.zerodeplibs.webpush.MessageEncryptions;
-import com.zerodeplibs.webpush.PushMessage;
 import com.zerodeplibs.webpush.PushSubscription;
-import com.zerodeplibs.webpush.UserAgentMessageEncryptionKeyInfo;
 import com.zerodeplibs.webpush.VAPIDKeyPair;
 import com.zerodeplibs.webpush.VAPIDKeyPairs;
-import com.zerodeplibs.webpush.header.TTL;
-import com.zerodeplibs.webpush.header.Topic;
-import com.zerodeplibs.webpush.header.Urgency;
-import com.zerodeplibs.webpush.jwt.VAPIDJWTParam;
+import com.zerodeplibs.webpush.httpclient.OkHttpClientRequestPreparer;
 import com.zerodeplibs.webpush.key.PrivateKeySources;
 import com.zerodeplibs.webpush.key.PublicKeySources;
 import java.io.File;
@@ -101,52 +93,35 @@ public class BasicExample {
      * However, in real applications, this feature does not have to be an HTTP endpoint.
      */
     @PostMapping("/sendMessage")
-    public ResponseEntity<String> sendMessage(@RequestBody Map<String, String> messages)
+    public ResponseEntity<String> sendMessage(@RequestBody MyMessage myMessage)
         throws IOException {
 
-        String message = messages.getOrDefault("message", "").trim();
-        message = message.length() == 0 ? "Default Message." : message;
+        String message = myMessage.getMessage();
 
         OkHttpClient httpClient = new OkHttpClient();
-        MessageEncryption messageEncryption = MessageEncryptions.of();
-
         for (PushSubscription subscription : getSubscriptionsFromStorage()) {
 
-            VAPIDJWTParam vapidjwtParam = VAPIDJWTParam.getBuilder()
-                .resourceURLString(subscription.getEndpoint())
-                .expiresAfterSeconds((int) TimeUnit.MINUTES.toSeconds(15))
-                .subject("mailto:example@example.com")
-                .build();
-
-            PushMessage pushMessage = PushMessage.ofUTF8(message);
+            Request request = OkHttpClientRequestPreparer.getBuilder()
+                .pushSubscription(subscription)
+                .vapidJWTExpiresAfter(15, TimeUnit.MINUTES)
+                .vapidJWTSubject("mailto:example@example.com")
+                .pushMessage(message)
+                .ttl(1, TimeUnit.HOURS)
+                .urgencyLow()
+                .topic("MyTopic")
+                .build(vapidKeyPair)
+                .toRequest();
 
             // In this example, we send push messages in simple text format.
             // But you can also send them in JSON format as follows:
             //
             // ObjectMapper objectMapper = (Create a new one or get from the DI container.)
-            // PushMessage pushMessage = PushMessage.of(objectMapper.writeValueAsBytes(objectForJson));
-
-            EncryptedPushMessage encryptedPushMessage = messageEncryption.encrypt(
-                UserAgentMessageEncryptionKeyInfo.from(subscription.getKeys()),
-                pushMessage
-            );
-
-            Request request = new Request.Builder()
-                .url(subscription.getEndpoint())
-                .addHeader("Authorization",
-                    vapidKeyPair.generateAuthorizationHeaderValue(vapidjwtParam))
-                .addHeader("Content-Type", "application/octet-stream")
-                .addHeader("Content-Encoding", encryptedPushMessage.contentEncoding())
-                .addHeader("TTL", String.valueOf(TTL.hours(1)))
-                .addHeader("Urgency", Urgency.low())
-                .addHeader("Topic", Topic.ensure("myTopic"))
-                // Depending on HTTP Client libraries, you may have to set "Content-Length" manually.
-                // .addHeader("Content-Length", String.valueOf(encryptedPushMessage.length()))
-                .post(okhttp3.RequestBody.create(encryptedPushMessage.toBytes()))
-                .build();
+            // ....
+            // pushMessage(objectMapper.writeValueAsBytes(objectForJson))
+            // ....
 
             try (Response response = httpClient.newCall(request).execute()) {
-                logger.info(String.format("status code: %d", response.code()));
+                logger.info(String.format("[OkHttp] status code: %d", response.code()));
                 // 201 Created : Success!
                 // 410 Gone : The subscription is no longer valid.
                 // etc...
@@ -161,6 +136,129 @@ public class BasicExample {
             .body("The message has been processed.");
     }
 
+
+    // "/sendMessage" endpoint
+    // utilizing [Apache HTTP Client](https://hc.apache.org/httpcomponents-client-5.1.x/).
+    /*
+    @PostMapping("/sendMessage")
+    public ResponseEntity<String> sendMessageWithApacheHttpClient(@RequestBody MyMessage myMessage)
+        throws IOException {
+
+        String message = myMessage.getMessage();
+        try (CloseableHttpClient client = HttpClients.createDefault()) {
+
+            for (PushSubscription subscription : getSubscriptionsFromStorage()) {
+
+                HttpPost httpPost = ApacheHttpClientRequestPreparer.getBuilder()
+                    .pushSubscription(subscription)
+                    .vapidJWTExpiresAfter(15, TimeUnit.MINUTES)
+                    .vapidJWTSubject("mailto:example@example.com")
+                    .pushMessage(message)
+                    .ttl(1, TimeUnit.HOURS)
+                    .urgencyLow()
+                    .topic("MyTopic")
+                    .build(vapidKeyPair)
+                    .toHttpPost();
+
+                try (CloseableHttpResponse response = client.execute(httpPost)) {
+                    logger.info(String.format("[Apache Http Client] status code: %d", response.getCode()));
+                }
+            }
+        }
+
+        return ResponseEntity.ok()
+            .header(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE)
+            .body("The message has been processed.");
+    }
+    */
+
+
+    // "/sendMessage" endpoint
+    // utilizing [Jetty Client](https://www.eclipse.org/jetty/documentation/jetty-11/programming-guide/index.html#pg-client).
+    /*
+    @PostMapping("/sendMessage")
+    public ResponseEntity<String> sendMessageWithJettyHttpClient(@RequestBody MyMessage myMessage)
+        throws Exception {
+
+        String message = myMessage.getMessage();
+
+
+        SslContextFactory.Client sslContextFactory = new SslContextFactory.Client();
+
+        HttpClient httpClient = new HttpClient(sslContextFactory);
+        // HttpClient httpClient = new HttpClient(sslContextFactory); // !! When using Jetty 10 or higher.
+
+        // From version 10, 'HttpClient supports HTTPS requests out-of-the-box like a browser does.'
+        // see also:
+        // https://www.eclipse.org/jetty/documentation/jetty-9/index.html#http-client
+        // https://www.eclipse.org/jetty/documentation/jetty-10/programming-guide/index.html#pg-client-http-configuration-tls
+
+        httpClient.start();
+        for (PushSubscription subscription : getSubscriptionsFromStorage()) {
+
+            org.eclipse.jetty.client.api.Request request =
+                JettyHttpClientRequestPreparer.getBuilder()
+                    .pushSubscription(subscription)
+                    .vapidJWTExpiresAfter(15, TimeUnit.MINUTES)
+                    .vapidJWTSubject("mailto:example@example.com")
+                    .pushMessage(message)
+                    .ttl(1, TimeUnit.HOURS)
+                    .urgencyLow()
+                    .topic("MyTopic")
+                    .build(vapidKeyPair)
+                    .toRequest(httpClient);
+
+            ContentResponse contentResponse = request.send();
+            logger.info(
+                String.format("[Jetty Http Client] status code: %d", contentResponse.getStatus()));
+
+        }
+        new Thread(() -> LifeCycle.stop(httpClient)).start();
+
+        return ResponseEntity.ok()
+            .header(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE)
+            .body("The message has been processed.");
+    }
+    */
+
+
+    // "/sendMessage" endpoint utilizing JDK Http Client(JDK11+).
+    // When using this endpoint, remove the comment outs in 'Jdk11HttpClientRequestPreparer.java'.
+    // 'Jdk11HttpClientRequestPreparer.java' is in the same directory as this class.
+    /*
+    @PostMapping("/sendMessage")
+    public ResponseEntity<String> sendMessageWithJdk11HttpClient(@RequestBody MyMessage myMessage)
+        throws IOException, InterruptedException {
+
+        String message = myMessage.getMessage();
+
+        java.net.http.HttpClient httpClient = java.net.http.HttpClient.newBuilder()
+            .build();
+
+        for (PushSubscription subscription : getSubscriptionsFromStorage()) {
+
+            HttpRequest httpRequest = Jdk11HttpClientRequestPreparer.getBuilder()
+                .pushSubscription(subscription)
+                .vapidJWTExpiresAfter(15, TimeUnit.MINUTES)
+                .vapidJWTSubject("mailto:example@example.com")
+                .pushMessage(message)
+                .ttl(1, TimeUnit.HOURS)
+                .urgencyLow()
+                .topic("MyTopic")
+                .build(vapidKeyPair)
+                .toRequest();
+
+            HttpResponse<String> httpResponse =
+                httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+            logger.info(String.format("[JDK11 Http Client] status code: %d", httpResponse.statusCode()));
+        }
+
+        return ResponseEntity.ok()
+            .header(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE)
+            .body("The message has been processed.");
+    }
+    */
+
     private Collection<PushSubscription> getSubscriptionsFromStorage() {
         return this.subscriptionMap.values();
     }
@@ -171,5 +269,19 @@ public class BasicExample {
 
     private final Logger logger = LoggerFactory.getLogger(BasicExample.class);
     private final Map<String, PushSubscription> subscriptionMap = new HashMap<>();
+
+    static class MyMessage {
+
+        private String message;
+
+        public String getMessage() {
+            String message = this.message == null ? "" : this.message.trim();
+            return message.length() == 0 ? "Default Message." : message;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
+        }
+    }
 
 }
