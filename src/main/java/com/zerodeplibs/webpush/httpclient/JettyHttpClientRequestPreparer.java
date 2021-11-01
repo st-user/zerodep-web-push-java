@@ -5,11 +5,8 @@ import com.zerodeplibs.webpush.header.Topic;
 import com.zerodeplibs.webpush.header.Urgency;
 import java.util.function.BiConsumer;
 import org.eclipse.jetty.client.HttpClient;
-import org.eclipse.jetty.client.HttpRequest;
 import org.eclipse.jetty.client.api.Request;
-import org.eclipse.jetty.client.util.BytesRequestContent;
-import org.eclipse.jetty.http.HttpField;
-import org.eclipse.jetty.http.HttpHeader;
+import org.eclipse.jetty.client.util.BytesContentProvider;
 
 /**
  * The "Preparer" for utilizing <a href="https://www.eclipse.org/jetty/documentation/jetty-11/programming-guide/index.html#pg-client">Eclipse Jetty Client Libraries</a>.
@@ -44,32 +41,21 @@ public class JettyHttpClientRequestPreparer {
     public Request toRequest(HttpClient httpClient) {
 
         Request request = httpClient.POST(requestPreparationInfo.getEndpointUrl());
-        if (request instanceof HttpRequest) {
-
-            setHttpFields((name, value) -> {
-                HttpRequest httpReq = (HttpRequest) request;
-                httpReq.addHeader(new HttpField(name, value));
-            }, request);
-
-        } else {
-            setHttpFields(request::header, request);
-        }
+        setHttpFields(request::header, request);
 
         return request;
     }
 
     private void setHttpFields(BiConsumer<String, String> setHeader, Request request) {
 
-        setHeader.accept(HttpHeader.AUTHORIZATION.asString(),
-            requestPreparationInfo.getVapidHeader());
+        setHeader.accept("Authorization", requestPreparationInfo.getVapidHeader());
         setHeader.accept(TTL.HEADER_NAME, requestPreparationInfo.getTtlString());
         setHeader.accept(Urgency.HEADER_NAME, requestPreparationInfo.getUrgency());
 
         requestPreparationInfo.getEncryptedPushMessage().ifPresent(encryptedPushMessage -> {
-            setHeader.accept(HttpHeader.CONTENT_ENCODING.asString(),
-                encryptedPushMessage.contentEncoding());
-            request.body(new BytesRequestContent(encryptedPushMessage.mediaType(),
-                encryptedPushMessage.toBytes()));
+            setHeader.accept("Content-Encoding", encryptedPushMessage.contentEncoding());
+            request.content(new BytesContentProvider(encryptedPushMessage.mediaType(),
+                encryptedPushMessage.toBytes()), encryptedPushMessage.mediaType());
         });
 
         requestPreparationInfo.getTopic().ifPresent(topic -> {

@@ -349,7 +349,7 @@ public abstract class PreparerBuilder<T> {
      *
      * @author Tomoki Sato
      */
-    protected static class RequestPreparationInfo {
+    public static class RequestPreparationInfo {
 
         private final String endpointUrl;
         private final String vapidHeader;
@@ -374,7 +374,7 @@ public abstract class PreparerBuilder<T> {
          *
          * @return the endpoint url.
          */
-        protected String getEndpointUrl() {
+        public String getEndpointUrl() {
             return endpointUrl;
         }
 
@@ -385,7 +385,7 @@ public abstract class PreparerBuilder<T> {
          * @return the credential for VAPID.
          * @see VAPIDKeyPair#generateAuthorizationHeaderValue(VAPIDJWTParam)
          */
-        protected String getVapidHeader() {
+        public String getVapidHeader() {
             return vapidHeader;
         }
 
@@ -396,7 +396,7 @@ public abstract class PreparerBuilder<T> {
          *
          * @return an {@link Optional} that may or may not contain the {@link EncryptedPushMessage}.
          */
-        protected Optional<EncryptedPushMessage> getEncryptedPushMessage() {
+        public Optional<EncryptedPushMessage> getEncryptedPushMessage() {
             return encryptedPushMessage;
         }
 
@@ -406,7 +406,7 @@ public abstract class PreparerBuilder<T> {
          *
          * @return the value of TTL.
          */
-        protected String getTtlString() {
+        public String getTtlString() {
             return ttl.toString();
         }
 
@@ -416,7 +416,7 @@ public abstract class PreparerBuilder<T> {
          *
          * @return the value of Urgency.
          */
-        protected String getUrgency() {
+        public String getUrgency() {
             return urgency;
         }
 
@@ -427,7 +427,7 @@ public abstract class PreparerBuilder<T> {
          *
          * @return an {@link Optional} that may or may not contain the topic.
          */
-        protected Optional<String> getTopic() {
+        public Optional<String> getTopic() {
             return topic;
         }
     }

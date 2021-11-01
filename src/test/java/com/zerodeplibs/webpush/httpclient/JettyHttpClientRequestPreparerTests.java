@@ -10,6 +10,8 @@ import static org.hamcrest.text.IsEqualIgnoringCase.equalToIgnoringCase;
 
 import com.zerodeplibs.webpush.PushSubscription;
 import com.zerodeplibs.webpush.jwt.VAPIDJWTParam;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.InvalidAlgorithmParameterException;
@@ -57,14 +59,14 @@ public class JettyHttpClientRequestPreparerTests {
 
 
         assertThat(request.getURI().toURL(), equalTo(new URL("https://example.com/test")));
-        assertThat(request.getHeaders().get("Authorization"), equalTo("vapid for test"));
-        assertThat(request.getHeaders().get("Content-Encoding"), equalTo("aes128gcm"));
-        assertThat(request.getHeaders().get("TTL"), equalTo("3600"));
-        assertThat(request.getHeaders().get("Urgency"), equalTo("high"));
-        assertThat(request.getHeaders().get("Topic"), equalTo("MyTopic"));
-        assertThat(request.getBody().getContentType(),
+        assertThat(getHeader(request, "Authorization"), equalTo("vapid for test"));
+        assertThat(getHeader(request, "Content-Type"),
             equalToIgnoringCase("application/octet-stream"));
-        assertThat(request.getBody().getLength(), greaterThan(0L));
+        assertThat(getHeader(request, "Content-Encoding"), equalTo("aes128gcm"));
+        assertThat(getHeader(request, "TTL"), equalTo("3600"));
+        assertThat(getHeader(request, "Urgency"), equalTo("high"));
+        assertThat(getHeader(request, "Topic"), equalTo("MyTopic"));
+        assertThat(request.getContent().getLength(), greaterThan(0L));
     }
 
     @Test
@@ -86,12 +88,26 @@ public class JettyHttpClientRequestPreparerTests {
             .toRequest(new HttpClient());
 
         assertThat(request.getURI().toURL(), equalTo(new URL("https://example.com/test")));
-        assertThat(request.getHeaders().get("Authorization"), equalTo("vapid for test"));
-        assertThat(request.getHeaders().get("Content-Type"), is(nullValue()));
-        assertThat(request.getHeaders().get("Content-Encoding"), is(nullValue()));
-        assertThat(request.getHeaders().get("TTL"), equalTo(String.valueOf(24 * 60 * 60)));
-        assertThat(request.getHeaders().get("Urgency"), equalTo("normal"));
-        assertThat(request.getHeaders().get("Topic"), is(nullValue()));
-        assertThat(request.getBody(), is(nullValue()));
+        assertThat(getHeader(request, "Authorization"), equalTo("vapid for test"));
+        assertThat(getHeader(request, "Content-Type"), is(nullValue()));
+        assertThat(getHeader(request, "Content-Encoding"), is(nullValue()));
+        assertThat(getHeader(request, "TTL"), equalTo(String.valueOf(24 * 60 * 60)));
+        assertThat(getHeader(request, "Urgency"), equalTo("normal"));
+        assertThat(getHeader(request, "Topic"), is(nullValue()));
+        assertThat(request.getContent(), is(nullValue()));
+    }
+
+    private String getHeader(Request request, String name) {
+        try {
+
+            Method getHeaders = request.getClass().getMethod("getHeaders");
+            Object headers = getHeaders.invoke(request);
+            Class<?> headerFieldClass = headers.getClass();
+            Method get = headerFieldClass.getMethod("get", String.class);
+            return (String) get.invoke(headers, name);
+
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
