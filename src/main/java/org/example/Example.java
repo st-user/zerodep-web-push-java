@@ -12,6 +12,7 @@ import com.zerodeplibs.webpush.ext.jwt.vertx.VertxVAPIDJWTGeneratorFactory;
 import com.zerodeplibs.webpush.header.TTL;
 import com.zerodeplibs.webpush.header.Topic;
 import com.zerodeplibs.webpush.header.Urgency;
+import com.zerodeplibs.webpush.httpclient.VertxWebClientRequestPreparer;
 import com.zerodeplibs.webpush.jwt.VAPIDJWTParam;
 import com.zerodeplibs.webpush.key.PrivateKeySources;
 import com.zerodeplibs.webpush.key.PublicKeySources;
@@ -177,51 +178,37 @@ public class Example {
                 //
                 // reference: https://vertx.io/docs/vertx-core/java/#golden_rule
 
-                VAPIDJWTParam vapidjwtParam = VAPIDJWTParam.getBuilder()
-                    .resourceURLString(subscription.getEndpoint())
-                    .expiresAfterSeconds((int) TimeUnit.MINUTES.toSeconds(15))
-                    .subject("mailto:example@example.com")
-                    .build();
-                String jwt = vapidKeyPair.generateAuthorizationHeaderValue(vapidjwtParam);
+                VertxWebClientRequestPreparer requestPreparer = VertxWebClientRequestPreparer.getBuilder()
+                    .pushSubscription(subscription)
+                    .vapidJWTExpiresAfter(15, TimeUnit.MINUTES)
+                    .vapidJWTSubject("mailto:example@example.com")
+                    .pushMessage(messageData.getMessage())
+                    .ttl(1, TimeUnit.HOURS)
+                    .urgencyNormal()
+                    .topic("MyTopic")
+                    .build(vapidKeyPair);
 
-                MessageEncryption messageEncryption = MessageEncryptions.of();
-                EncryptedPushMessage encryptedPushMessage = messageEncryption.encrypt(
-                    UserAgentMessageEncryptionKeyInfo.from(subscription.getKeys()),
-                    // In this example, we send push messages in simple text format.
-                    // But you can also send them in JSON format.
-                    PushMessage.ofUTF8(messageData.getMessage())
-                );
-
-
-                promise.complete(new JWTAndMessage(jwt, encryptedPushMessage));
+                promise.complete(requestPreparer);
 
             }, res -> {
 
-                JWTAndMessage jwtAndMessage = (JWTAndMessage) res.result();
-                EncryptedPushMessage encryptedPushMessage = jwtAndMessage.encryptedPushMessage;
+                VertxWebClientRequestPreparer requestPreparer = (VertxWebClientRequestPreparer)res.result();
+                requestPreparer.sendBuffer(
+                    client,
+                    req -> req.timeout(connectionTimeoutMillis),
+                    httpResponseAsyncResult -> {
 
-                client
-                    .postAbs(subscription.getEndpoint())
-                    .timeout(connectionTimeoutMillis)
-                    .putHeader("Authorization", jwtAndMessage.jwt)
-                    .putHeader("Content-Type", "application/octet-stream")
-                    .putHeader("Content-Encoding", encryptedPushMessage.contentEncoding())
-                    .putHeader("TTL", String.valueOf(TTL.hours(1)))
-                    .putHeader("Urgency", Urgency.normal())
-                    .putHeader("Topic", Topic.ensure("myTopic"))
-                    .sendBuffer(Buffer.buffer(encryptedPushMessage.toBytes()),
-                        httpResponseAsyncResult -> {
+                        HttpResponse<Buffer> result = httpResponseAsyncResult.result();
+                        System.out.println(
+                            String.format("status code: %d", result.statusCode()));
+                        // 201 Created : Success!
+                        // 410 Gone : The subscription is no longer valid.
+                        // etc...
+                        // for more information, see the useful link below:
+                        // [Response from push service - The Web Push Protocol ](https://developers.google.com/web/fundamentals/push-notifications/web-push-protocol)
 
-                            HttpResponse<Buffer> result = httpResponseAsyncResult.result();
-                            System.out.println(
-                                String.format("status code: %d", result.statusCode()));
-                            // 201 Created : Success!
-                            // 410 Gone : The subscription is no longer valid.
-                            // etc...
-                            // for more information, see the useful link below:
-                            // [Response from push service - The Web Push Protocol ](https://developers.google.com/web/fundamentals/push-notifications/web-push-protocol)
-
-                        });
+                    }
+                );
 
             });
 
@@ -232,17 +219,6 @@ public class Example {
             // In order to avoid wasting bandwidth,
             // we send HTTP requests at some intervals.
             vertx.setTimer(requestIntervalMillis, id -> startInternal(currentIndex + 1));
-        }
-
-        private static class JWTAndMessage {
-
-            final String jwt;
-            final EncryptedPushMessage encryptedPushMessage;
-
-            JWTAndMessage(String jwt, EncryptedPushMessage encryptedPushMessage) {
-                this.jwt = jwt;
-                this.encryptedPushMessage = encryptedPushMessage;
-            }
         }
     }
 
