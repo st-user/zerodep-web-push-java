@@ -14,7 +14,7 @@ import java.util.function.BiFunction;
 
 /**
  * <p>
- * Static factory methods for {@link VAPIDKeyPair}.
+ * Static factory methods used to create an instance of {@link VAPIDKeyPair}.
  * </p>
  *
  * <div><b>Thread Safety:</b></div>

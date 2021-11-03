@@ -16,7 +16,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 /**
- * The "Preparer" for utilizing <a href="https://vertx.io/docs/vertx-web-client/java/">Vert.x Web Client</a>.
+ * The "Preparer" used to utilize <a href="https://vertx.io/docs/vertx-web-client/java/">Vert.x Web Client</a>.
  *
  * @author Tomoki Sato
  * @see PreparerBuilder
@@ -120,9 +120,10 @@ public class VertxWebClientRequestPreparer {
     }
 
     /**
-     * Gets a new {@link PreparerBuilder} for {@link VertxWebClientRequestPreparer}.
+     * Gets a new {@link PreparerBuilder} used to construct {@link VertxWebClientRequestPreparer}.
      *
-     * @return a new {@link PreparerBuilder} for {@link VertxWebClientRequestPreparer}.
+     * @return a new {@link PreparerBuilder}
+     *     used to construct {@link VertxWebClientRequestPreparer}.
      */
     public static PreparerBuilder<VertxWebClientRequestPreparer> getBuilder() {
         return new VertxWebClientRequestPreparer.VertxWebClientRequestPreparerBuilder();

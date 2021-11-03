@@ -4,13 +4,13 @@ import java.security.InvalidAlgorithmParameterException;
 
 /**
  * <p>
- * Wraps checked exceptions during message encryption
+ * Wraps checked exceptions that may occur during message encryption
  * such as {@link InvalidAlgorithmParameterException}.
  * </p>
  *
  * <p>
  * The underlying exception can be obtained
- * by calling {@link #getCause()}.
+ * by calling {@link MessageEncryptionException#getCause()}.
  * </p>
  *
  * @author Tomoki Sato

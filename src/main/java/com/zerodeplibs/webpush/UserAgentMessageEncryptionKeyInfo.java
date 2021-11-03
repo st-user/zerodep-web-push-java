@@ -12,11 +12,11 @@ import java.util.Objects;
 
 /**
  * <p>
- * This class represents a user agent side keys for push message encryption.
+ * This class represents keys of a user agent used to encrypting push messages.
  * </p>
  *
  * <p>
- * Typically, an instance of this class is created by using a '<a href="https://www.w3.org/TR/push-api/#pushsubscription-interface">keys</a>' field of a <a href="https://www.w3.org/TR/push-api/#push-subscription">push subscription</a>.
+ * Typically, an instance of this class is created from a '<a href="https://www.w3.org/TR/push-api/#pushsubscription-interface">keys</a>' field of a <a href="https://www.w3.org/TR/push-api/#push-subscription">push subscription</a>.
  * </p>
  *
  * @author Tomoki Sato

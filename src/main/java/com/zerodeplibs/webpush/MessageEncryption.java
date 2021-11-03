@@ -7,7 +7,7 @@ package com.zerodeplibs.webpush;
  *
  * <p>
  * Usually, an instance of this interface
- * is obtained by a factory method of {@link MessageEncryptions}.
+ * is obtained by using a factory method of {@link MessageEncryptions}.
  * </p>
  *
  * @author Tomoki Sato
@@ -16,7 +16,8 @@ package com.zerodeplibs.webpush;
 public interface MessageEncryption {
 
     /**
-     * Encrypts the given pushMessage with the given userAgentMessageEncryptionKeyInfo.
+     * Encrypts the given <code>pushMessage</code>
+     * with the given <code>userAgentMessageEncryptionKeyInfo</code>.
      *
      * @param userAgentMessageEncryptionKeyInfo user agent side keys for encryption.
      * @param pushMessage                       a push message to be encrypted

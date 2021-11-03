@@ -7,7 +7,7 @@ package com.zerodeplibs.webpush.key;
  *
  * <p>
  * Usually, an instance of this interface
- * is obtained by a factory method of {@link PEMParsers}.
+ * is obtained by using a factory method of {@link PEMParsers}.
  * </p>
  *
  * <div><b>WARNING:</b></div>
@@ -28,30 +28,32 @@ package com.zerodeplibs.webpush.key;
 public interface PEMParser {
 
     /**
-     * The format string for encapsulation boundary(BEGIN).
+     * The format string used to make a pre-encapsulation boundary.
      */
     String BEGIN_ENCAPSULATION_BOUNDARIES_FMR = "-----BEGIN %s-----";
 
     /**
-     * The format string for encapsulation boundary(END).
+     * The format string used to make a post-encapsulation boundary.
      */
     String END_ENCAPSULATION_BOUNDARIES_FMR = "-----END %s-----";
 
     /**
-     * The label in encapsulation boundary for PKCS #8 Private Key Info.
+     * The type label in an encapsulation boundary indicating
+     * that the content is a PKCS #8 Private Key Info.
      */
     String PKCS8_PRIVATE_KEY_LABEL = "PRIVATE KEY";
 
     /**
-     * The label in encapsulation boundary for Subject Public Key Info.
+     * The type label in an encapsulation boundary indicating
+     * that the content is a Subject Public Key Info.
      */
     String SUBJECT_PUBLIC_KEY_INFO_LABEL = "PUBLIC KEY";
 
     /**
-     * Parses the given PEM-encoded text and extracts its contents.
+     * Parses the given PEM-encoded text and extracts its content.
      *
      * @param pemText a PEM-encoded text
-     * @return the contents extracted from the given PEM-encoded text.
+     * @return the content extracted from the given PEM-encoded text.
      * @throws MalformedPEMException if the given text
      *                               cannot be parsed as a valid PEM format.
      */

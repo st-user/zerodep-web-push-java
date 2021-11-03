@@ -7,10 +7,10 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 
 /**
- * The "Preparer" for utilizing <a href="https://square.github.io/okhttp/">OkHttp</a>.
+ * The "Preparer" used to utilize <a href="https://square.github.io/okhttp/">OkHttp</a>.
  *
- * @see PreparerBuilder
  * @author Tomoki Sato
+ * @see PreparerBuilder
  */
 public class OkHttpClientRequestPreparer {
 
@@ -22,9 +22,10 @@ public class OkHttpClientRequestPreparer {
     }
 
     /**
-     * Gets a new {@link PreparerBuilder} for {@link OkHttpClientRequestPreparer}.
+     * Gets a new {@link PreparerBuilder} used to construct {@link OkHttpClientRequestPreparer}.
      *
-     * @return a new {@link PreparerBuilder} for {@link OkHttpClientRequestPreparer}.
+     * @return a new {@link PreparerBuilder}
+     *     used to construct {@link OkHttpClientRequestPreparer}.
      */
     public static PreparerBuilder<OkHttpClientRequestPreparer> getBuilder() {
         return new OkHttpRequestPreparerBuilder();

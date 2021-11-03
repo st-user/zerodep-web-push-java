@@ -27,7 +27,7 @@ import java.util.function.BiConsumer;
  *
  * VAPIDJWTParam param = VAPIDJWTParam.getBuilder()
  *      .resourceURLString(subscription.getEndpoint())
- *      .expiresAfterSeconds((int) TimeUnit.MINUTES.toSeconds(15))
+ *      .expiresAfter(15, TimeUnit.MINUTES)
  *      .subject("mailto:example@example.com")
  *      .build();
  *
@@ -62,8 +62,7 @@ public class VAPIDJWTParam {
 
     /**
      * <p>
-     * Gets one of the additional claims specified at the time of the instantiation
-     * by the given name and type.
+     * Gets one of the additional claims by specifying the name and the type of the value.
      * </p>
      *
      * <div><b>Example:</b></div>
@@ -87,7 +86,7 @@ public class VAPIDJWTParam {
      * @param name       the name of the additional claim.
      * @param returnType the type of the additional claim.
      * @param <T>        the type of the additional claim.
-     * @return an {@link Optional} that contains or doesn't contain the additional claim.
+     * @return an {@link Optional} that may or may not contain the additional claim.
      * @see Builder#additionalClaim(String, Object)
      */
     public <T> Optional<T> getAdditionalClaim(String name, Class<T> returnType) {
@@ -468,7 +467,7 @@ public class VAPIDJWTParam {
      * Typically, the returned value is set to an "sub" claim.
      * </p>
      *
-     * @return an {@link Optional} that contains or doesn't contain the subject.
+     * @return an {@link Optional} that may or may not contain the subject.
      */
     public Optional<String> getSubject() {
         return Optional.ofNullable(subject);

@@ -8,7 +8,8 @@ import java.security.interfaces.ECPublicKey;
  * </p>
  *
  * <p>
- * Depending on the implementation, PublicKeySource validates the public key during extraction.
+ * Depending on the implementation,
+ * a PublicKeySource validates the public key that is extracted from the source.
  * </p>
  *
  * <p>
@@ -26,7 +27,7 @@ public interface PublicKeySource {
      * Extracts the {@link ECPublicKey} from the source represented by this object.
      *
      * @return the elliptic curve (EC) public key.
-     * @throws InvalidECPublicKeyException when the extracted
+     * @throws InvalidECPublicKeyException if the extracted
      *                                     public key is invalid(Depending on the implementation).
      */
     ECPublicKey extract();
@@ -35,7 +36,7 @@ public interface PublicKeySource {
      * Extracts the octet sequence of the elliptic curve (EC) public key in uncompressed form.
      *
      * @return the octet sequence of the public key in uncompressed form.
-     * @throws InvalidECPublicKeyException when the extracted
+     * @throws InvalidECPublicKeyException if the extracted
      *                                     public key is invalid(Depending on the implementation).
      */
     byte[] extractBytesInUncompressedForm();

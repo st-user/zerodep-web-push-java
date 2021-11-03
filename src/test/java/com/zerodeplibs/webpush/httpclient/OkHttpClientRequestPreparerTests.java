@@ -151,7 +151,7 @@ public class OkHttpClientRequestPreparerTests {
 
 
         assertStateCheck(() -> builder.build(vapidKeyPair),
-            "The pushSubscription isn't specified.");
+            "The push subscription isn't specified.");
     }
 
 }

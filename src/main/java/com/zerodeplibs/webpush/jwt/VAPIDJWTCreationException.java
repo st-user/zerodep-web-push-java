@@ -2,7 +2,7 @@ package com.zerodeplibs.webpush.jwt;
 
 /**
  * <p>
- * Wraps checked exceptions during JWT creation for VAPID.
+ * Wraps checked exceptions that may occur when a JWT for VAPID is being created.
  * </p>
  *
  * <p>

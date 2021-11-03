@@ -13,7 +13,7 @@ import com.zerodeplibs.webpush.key.PublicKeySource;
  *
  * <p>
  * Usually, an instance of this interface
- * is obtained by a factory method of {@link VAPIDKeyPairs}.
+ * is obtained by using a factory method of {@link VAPIDKeyPairs}.
  * </p>
  *
  * <div><b>Example:</b></div>

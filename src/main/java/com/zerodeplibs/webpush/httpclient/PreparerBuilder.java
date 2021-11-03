@@ -11,6 +11,7 @@ import com.zerodeplibs.webpush.header.TTL;
 import com.zerodeplibs.webpush.header.Topic;
 import com.zerodeplibs.webpush.header.Urgency;
 import com.zerodeplibs.webpush.internal.WebPushPreConditions;
+import com.zerodeplibs.webpush.jwt.MalformedURLRuntimeException;
 import com.zerodeplibs.webpush.jwt.VAPIDJWTParam;
 import com.zerodeplibs.webpush.key.InvalidECPublicKeyException;
 import com.zerodeplibs.webpush.key.MalformedUncompressedBytesException;
@@ -29,12 +30,13 @@ import java.util.concurrent.TimeUnit;
  * </p>
  *
  * <p>
- * They help applications make an object which is used for such a request by:
+ * In order to help applications make an object which is used for such a request,
+ * "Preparer"s
  * </p>
  * <ul>
- * <li>extracting a URL of a push service from a push subscription</li>
- * <li>generating and setting proper HTTP header fields</li>
- * <li>encrypting a push message and setting it to the request body</li>
+ * <li>extract a URL of a push service from a push subscription,</li>
+ * <li>generate and set proper HTTP header fields and</li>
+ * <li>encrypt a push message and set it to the request body.</li>
  * </ul>
  *
  * @param <T> the type of "Preparer" which is build by this builder instance.
@@ -272,24 +274,24 @@ public abstract class PreparerBuilder<T> {
      *
      * @param vapidKeyPair a key pair used to sign the JWT for VAPID.
      * @return a new "Preparer".
-     * @throws IllegalArgumentException            if the 'keys.p256dh' of the pushSubscription
+     * @throws IllegalArgumentException            if the 'keys.p256dh' of the push subscription
      *                                             is invalid as a base64url string
      *                                             or the 'keys.auth'
      *                                             is invalid as a base64url string.
-     * @throws IllegalStateException               if the pushSubscription isn't specified or
-     *                                             the endpoint url of the pushSubscription
-     *                                             is malformed.
+     * @throws IllegalStateException               if the push subscription isn't specified.
      * @throws InvalidECPublicKeyException         if the public key extracted
-     *                                             from the 'keys.p256dh' of the pushSubscription
+     *                                             from the 'keys.p256dh' of the push subscription
      *                                             is invalid.
-     * @throws MalformedUncompressedBytesException if the 'keys.p256dh' of the pushSubscription
+     * @throws MalformedUncompressedBytesException if the 'keys.p256dh' of the push subscription
      *                                             doesn't start with 0x04
      *                                             or the length isn't 65 bytes.
+     * @throws MalformedURLRuntimeException        if the endpoint url of the push subscription
+     *                                             is malformed.
      */
     public T build(VAPIDKeyPair vapidKeyPair) {
 
         WebPushPreConditions.checkState(this.pushSubscription != null,
-            "The pushSubscription isn't specified.");
+            "The push subscription isn't specified.");
 
         setDefault();
 
@@ -401,10 +403,10 @@ public abstract class PreparerBuilder<T> {
         }
 
         /**
-         * Gets the value of TTL.
-         * The returned value should be set to the TTL HTTP header field.
+         * Gets the value of <a href="https://datatracker.ietf.org/doc/html/rfc8030#section-5.2">TTL</a>.
+         * The returned value should be set to the <a href="https://datatracker.ietf.org/doc/html/rfc8030#section-5.2">TTL</a> HTTP header field.
          *
-         * @return the value of TTL.
+         * @return the value of <a href="https://datatracker.ietf.org/doc/html/rfc8030#section-5.2">TTL</a>.
          */
         public String getTtlString() {
             return ttl.toString();
@@ -422,6 +424,7 @@ public abstract class PreparerBuilder<T> {
 
         /**
          * Gets the topic.
+         * The value should be set to the <a href="https://datatracker.ietf.org/doc/html/rfc8030#section-5.4">Topic</a> HTTP header field.
          * If a topic is specified at the time of the creation,
          * an Optional containing the topic is returned.
          *

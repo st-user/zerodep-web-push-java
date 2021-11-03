@@ -10,7 +10,7 @@ import org.apache.hc.core5.http.ContentType;
 import org.apache.hc.core5.http.io.entity.ByteArrayEntity;
 
 /**
- * The "Preparer" for utilizing <a href="https://hc.apache.org/httpcomponents-client-5.1.x/">Apache HTTPClient</a>.
+ * The "Preparer" used to utilize <a href="https://hc.apache.org/httpcomponents-client-5.1.x/">Apache HTTPClient</a>.
  *
  * @author Tomoki Sato
  * @see PreparerBuilder
@@ -25,18 +25,19 @@ public class ApacheHttpClientRequestPreparer {
     }
 
     /**
-     * Gets a new {@link PreparerBuilder} for {@link ApacheHttpClientRequestPreparer}.
+     * Gets a new {@link PreparerBuilder} used to construct {@link ApacheHttpClientRequestPreparer}.
      *
-     * @return a new {@link PreparerBuilder} for {@link ApacheHttpClientRequestPreparer}.
+     * @return a new {@link PreparerBuilder}
+     *     used to construct {@link ApacheHttpClientRequestPreparer}.
      */
     public static PreparerBuilder<ApacheHttpClientRequestPreparer> getBuilder() {
         return new ApacheHttpClientRequestPreparer.ApacheHttpClientRequestPreparerBuilder();
     }
 
     /**
-     * Converts this object to a {@link HttpPost}.
+     * Converts this object to an {@link HttpPost}.
      *
-     * @return a {@link HttpPost}.
+     * @return an {@link HttpPost}.
      */
     public HttpPost toHttpPost() {
 

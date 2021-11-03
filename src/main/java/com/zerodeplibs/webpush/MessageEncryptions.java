@@ -4,7 +4,7 @@ import java.security.NoSuchAlgorithmException;
 
 /**
  * <p>
- * Static factory methods for {@link MessageEncryption}.
+ * Static factory methods used to create an instance of {@link MessageEncryption}.
  * </p>
  *
  * <div><b>Thread Safety:</b></div>

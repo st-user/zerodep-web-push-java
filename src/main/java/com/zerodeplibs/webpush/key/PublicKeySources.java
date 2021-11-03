@@ -9,13 +9,13 @@ import java.security.interfaces.ECPublicKey;
 
 /**
  * <p>
- * Static factory methods for {@link PublicKeySource}.
+ * Static factory methods used to create an instance of {@link PublicKeySource}.
  * </p>
  *
  * <p>
- * {@link PublicKeySource} created by the static factory methods
- * of this class performs public key validation during extraction.
- * It uses the validation method described in Section 5.6.2.3 of <a href="https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-56Ar2.pdf">Recommendation for Pair-Wise Key Establishment Schemes Using Discrete Logarithm Cryptography - NIST Special Publication 800-56A Revision 2</a>.
+ * {@link PublicKeySource}s created by the static factory methods
+ * of this class perform public key validation.
+ * They use the validation method described in Section 5.6.2.3 of <a href="https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-56Ar2.pdf">Recommendation for Pair-Wise Key Establishment Schemes Using Discrete Logarithm Cryptography - NIST Special Publication 800-56A Revision 2</a>.
  * </p>
  *
  * <div><b>Examples:</b></div>
@@ -105,7 +105,7 @@ public class PublicKeySources {
      * </p>
      *
      * <p>
-     * the PEM-encoded text is assumed to contain a public key data
+     * The PEM-encoded text is assumed to contain a public key data
      * that starts with '-----BEGIN PUBLIC KEY-----'
      * and ends with '-----END PUBLIC KEY-----'.
      * </p>
@@ -129,11 +129,11 @@ public class PublicKeySources {
      * </p>
      *
      * <p>
-     * the PEM-encoded text are parsed by the given {@link PEMParser}.
+     * The PEM-encoded text is parsed by the given {@link PEMParser}.
      * </p>
      *
      * @param pemText the PEM-encoded text representing a public key.
-     * @param parser  the parser for parsing the PEM-encoded text.
+     * @param parser  the parser used to parse the PEM-encoded text.
      * @return a new {@link PublicKeySource}.
      * @throws MalformedPEMException if the given text
      *                               cannot be parsed as a valid PEM format.
@@ -160,7 +160,7 @@ public class PublicKeySources {
      * @param path the path to a PEM formatted file.
      * @return a new {@link PublicKeySource}.
      * @throws IOException           if an I/O error occurs.
-     * @throws MalformedPEMException if the contents of the given file
+     * @throws MalformedPEMException if the content of the given file
      *                               cannot be parsed as a valid PEM format.
      */
     public static PublicKeySource ofPEMFile(Path path) throws IOException {
@@ -175,14 +175,14 @@ public class PublicKeySources {
      * </p>
      *
      * <p>
-     * The contents of the PEM file are parsed by the given {@link PEMParser}.
+     * The content of the PEM file is parsed by the given {@link PEMParser}.
      * </p>
      *
      * @param path   the path to a PEM formatted file.
-     * @param parser the parser for parsing the contents of the PEM file.
+     * @param parser the parser used to parse the content of the PEM file.
      * @return a new {@link PublicKeySource}.
      * @throws IOException           if an I/O error occurs.
-     * @throws MalformedPEMException if the contents of the given file
+     * @throws MalformedPEMException if the content of the given file
      *                               cannot be parsed as a valid PEM format.
      */
     public static PublicKeySource ofPEMFile(Path path, PEMParser parser) throws IOException {
@@ -222,7 +222,8 @@ public class PublicKeySources {
     }
 
     /**
-     * The builder class for creating {@link PublicKeySource} from PEM formatted files.
+     * The builder class for creating an instance of {@link PublicKeySource}
+     * from a PEM formatted file.
      *
      * @author Tomoki Sato
      */
@@ -249,9 +250,9 @@ public class PublicKeySources {
         }
 
         /**
-         * Specifies the parser for parsing the contents of the PEM file.
+         * Specifies the parser used to parse the content of the PEM file.
          *
-         * @param parser the parser for parsing the contents of the PEM file.
+         * @param parser the parser used to parse the content of the PEM file.
          * @return this object.
          */
         public PEMFileSourceBuilder parser(PEMParser parser) {
@@ -265,7 +266,7 @@ public class PublicKeySources {
          *
          * @return a new {@link PublicKeySource}.
          * @throws IOException           if an I/O error occurs.
-         * @throws MalformedPEMException if the contents of the file
+         * @throws MalformedPEMException if the content of the file
          *                               cannot be parsed as a valid PEM format.
          */
         public PublicKeySource build() throws IOException {

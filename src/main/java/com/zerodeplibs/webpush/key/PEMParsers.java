@@ -4,7 +4,7 @@ import com.zerodeplibs.webpush.internal.WebPushPreConditions;
 
 /**
  * <p>
- * Static factory methods for {@link PEMParser}.
+ * Static factory methods used to create an instance of {@link PEMParser}.
  * </p>
  *
  * <div><b>Thread Safety:</b></div>
@@ -22,7 +22,10 @@ public class PEMParsers {
 
     /**
      * <p>
-     * Creates a new {@link PEMParser} with the given label for encapsulation boundaries.
+     * Creates a new {@link PEMParser} with the given type label.
+     * For example, when extracting the content between '-----BEGIN PRIVATE KEY-----'
+     * and '-----END PRIVATE KEY-----',
+     * pass 'PRIVATE KEY' to the <code>label</code> argument.
      * </p>
      *
      * <p>
@@ -48,7 +51,7 @@ public class PEMParsers {
      * encoded in <a href="https://datatracker.ietf.org/doc/html/rfc7468#section-3">the 'Standard' format described in RFC7468</a>.
      * </p>
      *
-     * @param label a label for encapsulation boundaries.
+     * @param label a type label.
      * @return a new {@link PEMParser}.
      * @throws IllegalArgumentException if the format of the given label is invalid.
      */

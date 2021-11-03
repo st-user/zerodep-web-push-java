@@ -9,7 +9,7 @@ import org.eclipse.jetty.client.api.Request;
 import org.eclipse.jetty.client.util.BytesContentProvider;
 
 /**
- * The "Preparer" for utilizing <a href="https://www.eclipse.org/jetty/documentation/jetty-11/programming-guide/index.html#pg-client">Eclipse Jetty Client Libraries</a>.
+ * The "Preparer" used to utilize <a href="https://www.eclipse.org/jetty/documentation/jetty-11/programming-guide/index.html#pg-client">Eclipse Jetty Client Libraries</a>.
  *
  * @author Tomoki Sato
  * @see PreparerBuilder
@@ -24,9 +24,10 @@ public class JettyHttpClientRequestPreparer {
     }
 
     /**
-     * Gets a new {@link PreparerBuilder} for {@link JettyHttpClientRequestPreparer}.
+     * Gets a new {@link PreparerBuilder} used to construct {@link JettyHttpClientRequestPreparer}.
      *
-     * @return a new {@link PreparerBuilder} for {@link JettyHttpClientRequestPreparer}.
+     * @return a new {@link PreparerBuilder}
+     *     used to construct {@link JettyHttpClientRequestPreparer}.
      */
     public static PreparerBuilder<JettyHttpClientRequestPreparer> getBuilder() {
         return new JettyHttpClientRequestPreparer.JettyHttpClientRequestPreparerBuilder();

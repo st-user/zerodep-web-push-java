@@ -2,8 +2,8 @@ package com.zerodeplibs.webpush.key;
 
 /**
  * <p>
- * This Exception is thrown by {@link PublicKeySource} during extraction
- * to indicate that the public key is invalid.
+ * This Exception is thrown by {@link PublicKeySource} when the source is extracting a public key
+ * if the public key is invalid.
  * </p>
  *
  * <p>

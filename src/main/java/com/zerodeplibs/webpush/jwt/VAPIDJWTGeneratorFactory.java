@@ -16,9 +16,10 @@ import java.security.interfaces.ECPublicKey;
  * Typically, an implementation of this interface is provided
  * by a sub-module for {@link VAPIDJWTGenerator}.
  * If you have dependencies on one or more of the sub-modules,
- * the instance can be loaded via {@link java.util.ServiceLoader}.
- * So, in this case, you don't have to instantiate {@link VAPIDJWTGeneratorFactory}
- * and {@link VAPIDJWTGenerator} directly.
+ * the instance of {@link VAPIDJWTGeneratorFactory}
+ * can be loaded via {@link java.util.ServiceLoader}.
+ * So, in this case, you don't have to instantiate a {@link VAPIDJWTGeneratorFactory}
+ * and a {@link VAPIDJWTGenerator} directly.
  * </p>
  *
  * @author Tomoki Sato
