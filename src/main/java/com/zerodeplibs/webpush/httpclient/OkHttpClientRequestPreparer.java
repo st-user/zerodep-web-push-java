@@ -58,6 +58,9 @@ public class OkHttpClientRequestPreparer {
                 .post(RequestBody.create(encryptedPushMessage.toBytes()));
         });
 
+        if (!requestPreparationInfo.getEncryptedPushMessage().isPresent()) {
+            builder.post(RequestBody.create(new byte[0]));
+        }
 
         requestPreparationInfo.getTopic().ifPresent(topic -> {
             builder.addHeader(Topic.HEADER_NAME, topic);

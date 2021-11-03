@@ -95,7 +95,7 @@ public class VertxWebClientRequestPreparer {
         if (encryptedPushMessage.isPresent()) {
             request.sendBuffer(Buffer.buffer(encryptedPushMessage.get().toBytes()), handler);
         } else {
-            request.send(handler);
+            request.sendBuffer(Buffer.buffer(), handler);
         }
     }
 

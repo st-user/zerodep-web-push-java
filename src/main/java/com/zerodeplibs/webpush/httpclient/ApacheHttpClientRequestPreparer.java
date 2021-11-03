@@ -59,6 +59,11 @@ public class ApacheHttpClientRequestPreparer {
                 encryptedPushMessage.contentEncoding()));
         });
 
+        if (!requestPreparationInfo.getEncryptedPushMessage().isPresent()) {
+            httpPost.setEntity(
+                new ByteArrayEntity(new byte[0], ContentType.APPLICATION_OCTET_STREAM));
+        }
+
         requestPreparationInfo.getTopic().ifPresent(topic -> {
             httpPost.addHeader(Topic.HEADER_NAME, topic);
         });
@@ -85,6 +90,10 @@ public class ApacheHttpClientRequestPreparer {
                 .setBody(encryptedPushMessage.toBytes(),
                     ContentType.create(encryptedPushMessage.mediaType()));
         });
+
+        if (!requestPreparationInfo.getEncryptedPushMessage().isPresent()) {
+            builder.setBody(new byte[0], ContentType.APPLICATION_OCTET_STREAM);
+        }
 
         requestPreparationInfo.getTopic().ifPresent(topic -> {
             builder.addHeader(Topic.HEADER_NAME, topic);

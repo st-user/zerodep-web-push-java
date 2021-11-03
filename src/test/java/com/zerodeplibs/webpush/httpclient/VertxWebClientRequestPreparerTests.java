@@ -123,7 +123,7 @@ public class VertxWebClientRequestPreparerTests {
         assertThat(webClient.request.headers.get("TTL"), equalTo(String.valueOf(24 * 60 * 60)));
         assertThat(webClient.request.headers.get("Urgency"), equalTo("normal"));
         assertThat(webClient.request.headers.get("Topic"), is(nullValue()));
-        assertThat(webClient.request.body, is(nullValue()));
+        assertThat(webClient.request.body.length(), equalTo(0));
 
         HttpResponse<Buffer> result = httpResponseFuture.result();
         assertThat(result.statusCode(), equalTo(200));

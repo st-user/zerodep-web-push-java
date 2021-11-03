@@ -13,7 +13,6 @@ import static org.hamcrest.text.IsEqualIgnoringCase.equalToIgnoringCase;
 import com.zerodeplibs.webpush.PushSubscription;
 import com.zerodeplibs.webpush.jwt.VAPIDJWTParam;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
@@ -58,7 +57,7 @@ public class OkHttpClientRequestPreparerTests {
             .build(vapidKeyPair)
             .toRequest();
 
-
+        assertThat(request.method(), equalToIgnoringCase("POST"));
         assertThat(request.url().url(), equalTo(new URL("https://example.com/test")));
         assertThat(request.header("Authorization"), equalTo("vapid for test"));
         assertThat(request.header("Content-Type"), equalToIgnoringCase("Application/octet-stream"));
@@ -72,7 +71,7 @@ public class OkHttpClientRequestPreparerTests {
 
     @Test
     public void buildWithDefaultValues()
-        throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, MalformedURLException {
+        throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, IOException {
 
         String endpoint = "https://example.com/test";
 
@@ -86,6 +85,7 @@ public class OkHttpClientRequestPreparerTests {
             .build(vapidKeyPair)
             .toRequest();
 
+        assertThat(request.method(), equalToIgnoringCase("POST"));
         assertThat(request.url().url(), equalTo(new URL("https://example.com/test")));
         assertThat(request.header("Authorization"), equalTo("vapid for test"));
         assertThat(request.header("Content-Type"), is(nullValue()));
@@ -93,7 +93,7 @@ public class OkHttpClientRequestPreparerTests {
         assertThat(request.header("TTL"), equalTo(String.valueOf(24 * 60 * 60)));
         assertThat(request.header("Urgency"), equalTo("normal"));
         assertThat(request.header("Topic"), is(nullValue()));
-        assertThat(request.body(), is(nullValue()));
+        assertThat(request.body().contentLength(), equalTo(0L));
     }
 
     @Test

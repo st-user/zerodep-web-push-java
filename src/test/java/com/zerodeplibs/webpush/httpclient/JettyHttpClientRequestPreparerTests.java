@@ -58,7 +58,7 @@ public class JettyHttpClientRequestPreparerTests {
             .build(vapidKeyPair)
             .toRequest(new HttpClient());
 
-
+        assertThat(request.getMethod(), equalToIgnoringCase("POST"));
         assertThat(request.getURI().toURL(), equalTo(new URL("https://example.com/test")));
         assertThat(getHeader(request, "Authorization"), equalTo("vapid for test"));
         assertThat(getHeader(request, "Content-Type"),
@@ -88,6 +88,7 @@ public class JettyHttpClientRequestPreparerTests {
             .build(vapidKeyPair)
             .toRequest(new HttpClient());
 
+        assertThat(request.getMethod(), equalToIgnoringCase("POST"));
         assertThat(request.getURI().toURL(), equalTo(new URL("https://example.com/test")));
         assertThat(getHeader(request, "Authorization"), equalTo("vapid for test"));
         assertThat(getHeader(request, "Content-Type"), is(nullValue()));
