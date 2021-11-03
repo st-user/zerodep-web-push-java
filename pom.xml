@@ -19,9 +19,10 @@
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <zerodeplibs.version>1.1.0</zerodeplibs.version>
-        <vertx.version>4.1.5</vertx.version>
+        <vertx.version>4.2.0</vertx.version>
         <!--
             Also Vert.x 3 is available.
+            See also 'maven-compiler-plugin' configuration.
             <vertx.version>3.9.9</vertx.version>
          -->
     </properties>
@@ -101,6 +102,20 @@
                 <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.8.0</version>
+                    <!--
+                        When having 'module-info.java' and using Vert.x '3',
+                        you have to add the following 'add-reads' argument
+                        in order for 'com.zerodeplibs.webpush' to read the Vert.x's module.
+                    -->
+                    <!--
+                    <configuration>
+                        <compilerArgs>
+                            <arg>&#45;&#45;add-reads</arg>
+                            <arg>com.zerodeplibs.webpush=vertx.web.client</arg>
+                        </compilerArgs>
+                    </configuration>
+                    -->
+
                 </plugin>
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
