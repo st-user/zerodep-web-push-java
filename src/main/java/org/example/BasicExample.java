@@ -245,7 +245,7 @@ public class BasicExample {
         SslContextFactory.Client sslContextFactory = new SslContextFactory.Client();
 
         HttpClient httpClient = new HttpClient(sslContextFactory);
-        // HttpClient httpClient = new HttpClient(sslContextFactory); // !! When using Jetty 10 or higher.
+        // HttpClient httpClient = new HttpClient(); // !! When using Jetty 10 or higher.
 
         // From version 10, 'HttpClient supports HTTPS requests out-of-the-box like a browser does.'
         // see also:
