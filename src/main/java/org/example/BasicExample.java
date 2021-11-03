@@ -172,6 +172,65 @@ public class BasicExample {
     }
     */
 
+    // The asynchronous version of "/sendMessage" endpoint
+    // utilizing [Apache HTTP Client](https://hc.apache.org/httpcomponents-client-5.1.x/).
+    /*
+    @PostMapping("/sendMessage")
+    public ResponseEntity<String> sendMessageWithApacheHttpClientAsync(
+        @RequestBody MyMessage myMessage)
+        throws IOException, ExecutionException, InterruptedException {
+
+        String message = myMessage.getMessage();
+        try (CloseableHttpAsyncClient client = HttpAsyncClients.custom()
+            .setVersionPolicy(HttpVersionPolicy.FORCE_HTTP_1)
+            .build()) {
+
+            client.start();
+
+            for (PushSubscription subscription : getSubscriptionsFromStorage()) {
+
+                SimpleHttpRequest request = ApacheHttpClientRequestPreparer.getBuilder()
+                    .pushSubscription(subscription)
+                    .vapidJWTExpiresAfter(15, TimeUnit.MINUTES)
+                    .vapidJWTSubject("mailto:example@example.com")
+                    .pushMessage(message)
+                    .ttl(1, TimeUnit.HOURS)
+                    .urgencyLow()
+                    .topic("MyTopic")
+                    .build(vapidKeyPair)
+                    .toSimpleHttpRequest();
+
+                client.execute(
+                    SimpleRequestProducer.create(request),
+                    SimpleResponseConsumer.create(),
+                    new FutureCallback<SimpleHttpResponse>() {
+                        @Override
+                        public void completed(SimpleHttpResponse response) {
+                            logger.info(String.format("[Apache Http Client(async)] status code: %d",
+                                response.getCode()));
+                        }
+
+                        @Override
+                        public void failed(Exception e) {
+                            logger.error("failed", e);
+                        }
+
+                        @Override
+                        public void cancelled() {
+                            logger.warn("cancelled");
+                        }
+                    }).get();
+
+            }
+
+        }
+
+        return ResponseEntity.ok()
+            .header(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE)
+            .body("The message has been processed.");
+    }
+    */
+
 
     // "/sendMessage" endpoint
     // utilizing [Jetty Client](https://www.eclipse.org/jetty/documentation/jetty-11/programming-guide/index.html#pg-client).
