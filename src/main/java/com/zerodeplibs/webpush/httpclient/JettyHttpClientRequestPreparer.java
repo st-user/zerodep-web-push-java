@@ -3,13 +3,21 @@ package com.zerodeplibs.webpush.httpclient;
 import com.zerodeplibs.webpush.header.TTL;
 import com.zerodeplibs.webpush.header.Topic;
 import com.zerodeplibs.webpush.header.Urgency;
+import com.zerodeplibs.webpush.internal.WebPushPreConditions;
 import java.util.function.BiConsumer;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.api.Request;
 import org.eclipse.jetty.client.util.BytesContentProvider;
 
 /**
+ * <p>
  * The "Preparer" used to utilize <a href="https://www.eclipse.org/jetty/documentation/jetty-11/programming-guide/index.html#pg-client">Eclipse Jetty Client Libraries</a>.
+ * </p>
+ *
+ * <div><b>Thread Safety:</b></div>
+ * <p>
+ * Objects of this class are immutable. So they can be accessed safely from multiple threads.
+ * </p>
  *
  * @author Tomoki Sato
  * @see PreparerBuilder
@@ -40,6 +48,8 @@ public class JettyHttpClientRequestPreparer {
      * @return a {@link Request}.
      */
     public Request toRequest(HttpClient httpClient) {
+
+        WebPushPreConditions.checkNotNull(httpClient, "httpClient");
 
         Request request = httpClient.POST(requestPreparationInfo.getEndpointUrl());
         setHttpFields(request::header, request);

@@ -10,7 +10,14 @@ import org.apache.hc.core5.http.ContentType;
 import org.apache.hc.core5.http.io.entity.ByteArrayEntity;
 
 /**
+ * <p>
  * The "Preparer" used to utilize <a href="https://hc.apache.org/httpcomponents-client-5.1.x/">Apache HTTPClient</a>.
+ * </p>
+ *
+ * <div><b>Thread Safety:</b></div>
+ * <p>
+ * Objects of this class are immutable. So they can be accessed safely from multiple threads.
+ * </p>
  *
  * @author Tomoki Sato
  * @see PreparerBuilder

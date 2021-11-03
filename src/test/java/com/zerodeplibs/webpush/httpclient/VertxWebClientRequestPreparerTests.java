@@ -1,5 +1,6 @@
 package com.zerodeplibs.webpush.httpclient;
 
+import static com.zerodeplibs.webpush.TestAssertionUtil.assertNullCheck;
 import static com.zerodeplibs.webpush.httpclient.PreparerTestUtil.createPushSubscription;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -127,6 +128,32 @@ public class VertxWebClientRequestPreparerTests {
         HttpResponse<Buffer> result = httpResponseFuture.result();
         assertThat(result.statusCode(), equalTo(200));
         assertThat(result.statusMessage(), equalTo("a push service response"));
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenIllegalObjectsArePassedToTheArgumentsOfSendBuffer()
+        throws InvalidAlgorithmParameterException, NoSuchAlgorithmException {
+
+        PushSubscription pushSubscription = createPushSubscription("https://example.com/test");
+
+        PreparerTestUtil.TestingVAPIDKeyPair vapidKeyPair =
+            new PreparerTestUtil.TestingVAPIDKeyPair(null);
+
+        VertxWebClientRequestPreparer preparer = VertxWebClientRequestPreparer.getBuilder()
+            .pushSubscription(pushSubscription)
+            .build(vapidKeyPair);
+
+        assertNullCheck(() -> preparer.sendBuffer(null, null, null),
+            "webClient");
+
+        Vertx vertx = Vertx.vertx();
+        TestingWebClient webClient = new TestingWebClient(vertx.createHttpClient());
+
+        assertNullCheck(() -> preparer.sendBuffer(webClient, null, null),
+            "requestConsumer");
+
+        assertNullCheck(() -> preparer.sendBuffer(webClient, r -> {
+        }, null), "handler");
     }
 
     private static class TestingWebClient extends WebClientBase {

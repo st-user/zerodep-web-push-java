@@ -4,6 +4,7 @@ import com.zerodeplibs.webpush.EncryptedPushMessage;
 import com.zerodeplibs.webpush.header.TTL;
 import com.zerodeplibs.webpush.header.Topic;
 import com.zerodeplibs.webpush.header.Urgency;
+import com.zerodeplibs.webpush.internal.WebPushPreConditions;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
@@ -16,7 +17,14 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 /**
+ * <p>
  * The "Preparer" used to utilize <a href="https://vertx.io/docs/vertx-web-client/java/">Vert.x Web Client</a>.
+ * </p>
+ *
+ * <div><b>Thread Safety:</b></div>
+ * <p>
+ * Objects of this class are immutable. So they can be accessed safely from multiple threads.
+ * </p>
  *
  * @author Tomoki Sato
  * @see PreparerBuilder
@@ -60,6 +68,9 @@ public class VertxWebClientRequestPreparer {
                            Consumer<HttpRequest<Buffer>> requestConsumer,
                            Handler<AsyncResult<HttpResponse<Buffer>>> handler) {
 
+        WebPushPreConditions.checkNotNull(webClient, "webClient");
+        WebPushPreConditions.checkNotNull(requestConsumer, "requestConsumer");
+        WebPushPreConditions.checkNotNull(handler, "handler");
 
         HttpRequest<Buffer> request = webClient.postAbs(requestPreparationInfo.getEndpointUrl());
 

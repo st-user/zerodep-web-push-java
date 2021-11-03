@@ -85,6 +85,7 @@ class Aes128GcmEncryptedMessage implements EncryptedPushMessage {
     public String toString() {
         return "Aes128GcmEncryptedMessage{"
             + "contentEncoding='" + contentEncoding() + '\''
-            + ", length='" + length() + "'}";
+            + ", length='" + length() + '\''
+            + ", mediaType='" + mediaType() + "'}";
     }
 }

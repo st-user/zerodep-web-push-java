@@ -16,6 +16,7 @@ import com.zerodeplibs.webpush.jwt.VAPIDJWTParam;
 import com.zerodeplibs.webpush.key.InvalidECPublicKeyException;
 import com.zerodeplibs.webpush.key.MalformedUncompressedBytesException;
 import java.time.Instant;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -50,6 +51,12 @@ public abstract class PreparerBuilder<T> {
     private Long ttl;
     private String urgency;
     private String topic;
+
+    /**
+     * Creates a new {@link PreparerBuilder}.
+     */
+    protected PreparerBuilder() {
+    }
 
     /**
      * Specifies a {@link PushSubscription}.
@@ -290,6 +297,8 @@ public abstract class PreparerBuilder<T> {
      */
     public T build(VAPIDKeyPair vapidKeyPair) {
 
+        WebPushPreConditions.checkNotNull(vapidKeyPair, "vapidKeyPair");
+
         WebPushPreConditions.checkState(this.pushSubscription != null,
             "The push subscription isn't specified.");
 
@@ -347,6 +356,11 @@ public abstract class PreparerBuilder<T> {
      * Instances of this class are constructed with (and therefore hold)
      * a push service url, values for HTTP header fields
      * and an encrypted request body(if a push message is specified).
+     * </p>
+     *
+     * <div><b>Thread Safety:</b></div>
+     * <p>
+     * Objects of this class are immutable. So they are thread-safe.
      * </p>
      *
      * @author Tomoki Sato
@@ -432,6 +446,64 @@ public abstract class PreparerBuilder<T> {
          */
         public Optional<String> getTopic() {
             return topic;
+        }
+
+        /**
+         * Compares the given object with this object based on their properties.
+         *
+         * @param o an object.
+         * @return true if the given object is equal to this object
+         */
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            RequestPreparationInfo that = (RequestPreparationInfo) o;
+            return endpointUrl.equals(that.endpointUrl)
+                && vapidHeader.equals(that.vapidHeader)
+                && encryptedPushMessage.equals(that.encryptedPushMessage)
+                && ttl.equals(that.ttl)
+                && urgency.equals(that.urgency)
+                && topic.equals(that.topic);
+        }
+
+        /**
+         * Returns the hash code value for this object based on its properties.
+         *
+         * @return the hash code value for this object.
+         */
+        @Override
+        public int hashCode() {
+            return Objects.hash(
+                endpointUrl,
+                vapidHeader,
+                encryptedPushMessage,
+                ttl,
+                urgency,
+                topic);
+        }
+
+        @Override
+        public String toString() {
+            StringBuilder sb = new StringBuilder();
+            sb.append("RequestPreparationInfo{");
+            sb.append("endpointUrl='").append(endpointUrl).append('\'');
+            sb.append(", vapidHeader='").append(vapidHeader).append('\'');
+
+            encryptedPushMessage.ifPresent(enc ->
+                sb.append(", encryptedPushMessage=").append(enc)
+            );
+            sb.append(", ttl=").append(ttl);
+            sb.append(", urgency='").append(urgency).append('\'');
+
+            topic.ifPresent(t -> sb.append(", topic='").append(t).append('\''));
+            sb.append('}');
+
+            return sb.toString();
         }
     }
 }

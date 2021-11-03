@@ -32,7 +32,9 @@ public class EncryptedPushMessageTests {
         assertThat(message.toString(), equalTo(
             "Aes128GcmEncryptedMessage{"
                 + "contentEncoding='aes128gcm'"
-                + ", length='2'}"
+                + ", length='2'"
+                + ", mediaType='application/octet-stream'"
+                + "}"
         ));
     }
 }

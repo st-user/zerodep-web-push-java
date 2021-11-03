@@ -1,5 +1,6 @@
 package com.zerodeplibs.webpush.httpclient;
 
+import static com.zerodeplibs.webpush.TestAssertionUtil.assertNullCheck;
 import static com.zerodeplibs.webpush.httpclient.PreparerTestUtil.createPushSubscription;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -109,5 +110,20 @@ public class JettyHttpClientRequestPreparerTests {
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenIllegalHTTPClientsArePassed()
+        throws InvalidAlgorithmParameterException, NoSuchAlgorithmException {
+
+        PushSubscription pushSubscription = createPushSubscription("https://example.com/test");
+        PreparerTestUtil.TestingVAPIDKeyPair vapidKeyPair =
+            new PreparerTestUtil.TestingVAPIDKeyPair(null);
+
+        JettyHttpClientRequestPreparer preparer = JettyHttpClientRequestPreparer.getBuilder()
+            .pushSubscription(pushSubscription)
+            .build(vapidKeyPair);
+
+        assertNullCheck(() -> preparer.toRequest(null), "httpClient");
     }
 }

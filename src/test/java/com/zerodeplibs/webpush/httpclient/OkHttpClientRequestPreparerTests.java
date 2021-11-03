@@ -154,4 +154,9 @@ public class OkHttpClientRequestPreparerTests {
             "The push subscription isn't specified.");
     }
 
+    @Test
+    public void shouldThrowExceptionWhenBuildingWithIllegalVAPIDKeyPairs() {
+        PreparerBuilder<OkHttpClientRequestPreparer> builder = OkHttpClientRequestPreparer.getBuilder();
+        assertNullCheck(() -> builder.build(null), "vapidKeyPair");
+    }
 }
