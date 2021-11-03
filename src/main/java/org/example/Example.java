@@ -1,19 +1,10 @@
 package org.example;
 
-import com.zerodeplibs.webpush.EncryptedPushMessage;
-import com.zerodeplibs.webpush.MessageEncryption;
-import com.zerodeplibs.webpush.MessageEncryptions;
-import com.zerodeplibs.webpush.PushMessage;
 import com.zerodeplibs.webpush.PushSubscription;
-import com.zerodeplibs.webpush.UserAgentMessageEncryptionKeyInfo;
 import com.zerodeplibs.webpush.VAPIDKeyPair;
 import com.zerodeplibs.webpush.VAPIDKeyPairs;
 import com.zerodeplibs.webpush.ext.jwt.vertx.VertxVAPIDJWTGeneratorFactory;
-import com.zerodeplibs.webpush.header.TTL;
-import com.zerodeplibs.webpush.header.Topic;
-import com.zerodeplibs.webpush.header.Urgency;
 import com.zerodeplibs.webpush.httpclient.VertxWebClientRequestPreparer;
-import com.zerodeplibs.webpush.jwt.VAPIDJWTParam;
 import com.zerodeplibs.webpush.key.PrivateKeySources;
 import com.zerodeplibs.webpush.key.PublicKeySources;
 import io.vertx.core.Handler;
@@ -178,21 +169,23 @@ public class Example {
                 //
                 // reference: https://vertx.io/docs/vertx-core/java/#golden_rule
 
-                VertxWebClientRequestPreparer requestPreparer = VertxWebClientRequestPreparer.getBuilder()
-                    .pushSubscription(subscription)
-                    .vapidJWTExpiresAfter(15, TimeUnit.MINUTES)
-                    .vapidJWTSubject("mailto:example@example.com")
-                    .pushMessage(messageData.getMessage())
-                    .ttl(1, TimeUnit.HOURS)
-                    .urgencyNormal()
-                    .topic("MyTopic")
-                    .build(vapidKeyPair);
+                VertxWebClientRequestPreparer requestPreparer =
+                    VertxWebClientRequestPreparer.getBuilder()
+                        .pushSubscription(subscription)
+                        .vapidJWTExpiresAfter(15, TimeUnit.MINUTES)
+                        .vapidJWTSubject("mailto:example@example.com")
+                        .pushMessage(messageData.getMessage())
+                        .ttl(1, TimeUnit.HOURS)
+                        .urgencyNormal()
+                        .topic("MyTopic")
+                        .build(vapidKeyPair);
 
                 promise.complete(requestPreparer);
 
             }, res -> {
 
-                VertxWebClientRequestPreparer requestPreparer = (VertxWebClientRequestPreparer)res.result();
+                VertxWebClientRequestPreparer requestPreparer =
+                    (VertxWebClientRequestPreparer) res.result();
                 requestPreparer.sendBuffer(
                     client,
                     req -> req.timeout(connectionTimeoutMillis),
