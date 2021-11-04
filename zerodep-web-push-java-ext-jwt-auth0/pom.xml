@@ -8,13 +8,17 @@
     <parent>
         <groupId>com.zerodeplibs</groupId>
         <artifactId>zerodep-web-push-java-ext-jwt</artifactId>
-        <version>1.1.0</version>
+        <version>1.2.0</version>
     </parent>
 
     <packaging>jar</packaging>
 
     <artifactId>zerodep-web-push-java-ext-jwt-auth0</artifactId>
     <name>${project.groupId}:${project.artifactId}</name>
+    <description>A sub-module for zerodep-web-push-java. This module provides the JSON Web Token(JWT) generator
+        used for VAPID utilizing [Java JWT - auth0].
+    </description>
+    <url>https://github.com/st-user/zerodep-web-push-java-ext-jwt</url>
 
     <properties>
         <auth0.version>3.18.2</auth0.version>
@@ -69,32 +73,18 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
             </plugin>
+
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <argLine>
+                        --add-modules com.fasterxml.jackson.databind --add-reads
+                        com.zerodeplibs.webpush.ext.jwt.auth0=com.fasterxml.jackson.databind
+                    </argLine>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
 
-    <profiles>
-
-        <profile>
-            <id>production-compile</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <configuration>
-                            <argLine>
-                                --add-modules com.fasterxml.jackson.databind --add-reads
-                                com.zerodeplibs.webpush.ext.jwt.auth0=com.fasterxml.jackson.databind
-                            </argLine>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-
-        </profile>
-
-    </profiles>
 </project>

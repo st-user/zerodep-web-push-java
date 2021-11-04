@@ -8,16 +8,20 @@
     <parent>
         <groupId>com.zerodeplibs</groupId>
         <artifactId>zerodep-web-push-java-ext-jwt</artifactId>
-        <version>1.1.0</version>
+        <version>1.2.0</version>
     </parent>
 
     <packaging>jar</packaging>
 
     <artifactId>zerodep-web-push-java-ext-jwt-vertx</artifactId>
     <name>${project.groupId}:${project.artifactId}</name>
+    <description>A sub-module for zerodep-web-push-java. This module provides the JSON Web Token(JWT) generator
+        used for VAPID utilizing [JWT Auth - Vert.x].
+    </description>
+    <url>https://github.com/st-user/zerodep-web-push-java-ext-jwt</url>
 
     <properties>
-        <vertx.version>4.1.5</vertx.version>
+        <vertx.version>4.2.1</vertx.version>
     </properties>
 
     <dependencies>
@@ -87,52 +91,5 @@
             </plugin>
         </plugins>
     </build>
-
-    <profiles>
-        <profile>
-            <id>vertx-3-compile</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
-
-            <build>
-                <plugins>
-
-                    <plugin>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <version>3.8.0</version>
-                        <executions>
-                            <execution>
-                                <id>default-compile</id>
-                                <configuration>
-                                    <release>9</release>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>base-compile</id>
-                                <goals>
-                                    <goal>compile</goal>
-                                </goals>
-                                <configuration>
-                                    <excludes>
-                                        <exclude>module-info.java</exclude>
-                                        <exclude>com/zerodeplibs/webpush/ext/jwt/vertx/Vertx4Support.java</exclude>
-                                    </excludes>
-                                </configuration>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <excludes>
-                                <exclude>com/zerodeplibs/webpush/ext/jwt/vertx/Vertx4Support.java</exclude>
-                            </excludes>
-                            <release>8</release>
-                        </configuration>
-                    </plugin>
-
-                </plugins>
-            </build>
-
-        </profile>
-    </profiles>
 
 </project>
