@@ -44,7 +44,7 @@
         <okhttp.version>4.9.2</okhttp.version>
         <apache.http.client.version>5.1.1</apache.http.client.version>
         <jetty.client.version>9.4.44.v20210927</jetty.client.version>
-        <vertx.version>4.2.0</vertx.version>
+        <vertx.version>4.2.1</vertx.version>
     </properties>
 
     <dependencies>
