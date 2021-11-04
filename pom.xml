@@ -18,8 +18,8 @@
         -->
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
-        <zerodeplibs.version>1.1.0</zerodeplibs.version>
-        <vertx.version>4.2.0</vertx.version>
+        <zerodeplibs.version>1.2.0</zerodeplibs.version>
+        <vertx.version>4.2.1</vertx.version>
         <!--
             Also Vert.x 3 is available.
             See also 'maven-compiler-plugin' configuration.
@@ -32,8 +32,7 @@
         <dependency>
             <groupId>com.zerodeplibs</groupId>
             <artifactId>zerodep-web-push-java</artifactId>
-            <!--<version>${zerodeplibs.version}</version>-->
-            <version>1.2.0-SNAPSHOT</version>
+            <version>${zerodeplibs.version}</version>
         </dependency>
 
         <dependency>
