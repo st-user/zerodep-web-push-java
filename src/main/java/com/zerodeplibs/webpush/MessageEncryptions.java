@@ -3,9 +3,11 @@ package com.zerodeplibs.webpush;
 import java.security.NoSuchAlgorithmException;
 
 /**
- * Static factory methods for {@link MessageEncryption}.
+ * <p>
+ * Static factory methods used to create an instance of {@link MessageEncryption}.
+ * </p>
  *
- * <h3>Thread Safety:</h3>
+ * <div><b>Thread Safety:</b></div>
  * <p>
  * The factory methods themselves are thread-safe,
  * but the returned objects are <b>NOT</b> thread-safe.

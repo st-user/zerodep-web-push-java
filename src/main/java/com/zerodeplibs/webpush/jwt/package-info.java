@@ -1,5 +1,5 @@
 /**
- * Provides the classes and interfaces for JSON Web Token (JWT) used
+ * Provides the classes and interfaces used to generate JSON Web Token (JWT)
  * for the Voluntary Application Server Identification
  * (<a href="https://datatracker.ietf.org/doc/html/rfc8292">VAPID</a>).
  */

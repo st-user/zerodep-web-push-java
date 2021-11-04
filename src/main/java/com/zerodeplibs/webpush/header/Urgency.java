@@ -1,9 +1,11 @@
 package com.zerodeplibs.webpush.header;
 
 /**
- * The utility class for the <a href="https://datatracker.ietf.org/doc/html/rfc8030#section-5.3">Urgency</a> header field.
+ * <p>
+ * The utility class used for setting the <a href="https://datatracker.ietf.org/doc/html/rfc8030#section-5.3">Urgency</a> header field.
+ * </p>
  *
- * <h3>Example:</h3>
+ * <div><b>Example:</b></div>
  * <pre class="code">
  * // Sets the urgency header field
  * myHeader.addHeader("Urgency", Urgency.veryLow());
@@ -12,6 +14,11 @@ package com.zerodeplibs.webpush.header;
  * @author Tomoki Sato
  */
 public class Urgency {
+
+    /**
+     * The name of the Urgency header field.
+     */
+    public static String HEADER_NAME = "Urgency";
 
     private Urgency() {
     }
@@ -53,14 +60,30 @@ public class Urgency {
     }
 
     /**
-     * This enum represents the options for the <a href="https://datatracker.ietf.org/doc/html/rfc8030#section-5.3">Urgency</a> header field.
+     * This enum represents an available value for the <a href="https://datatracker.ietf.org/doc/html/rfc8030#section-5.3">Urgency</a> header field.
      *
      * @author Tomoki Sato
      */
     public enum UrgencyOption {
+
+        /**
+         * "very-low" urgency.
+         */
         VERY_LOW("very-low"),
+
+        /**
+         * "low" urgency.
+         */
         LOW("low"),
+
+        /**
+         * "normal" urgency.
+         */
         NORMAL("normal"),
+
+        /**
+         * "high" urgency.
+         */
         HIGH("high");
 
         private final String value;

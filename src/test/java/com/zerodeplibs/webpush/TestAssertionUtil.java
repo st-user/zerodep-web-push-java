@@ -14,7 +14,7 @@ public interface TestAssertionUtil {
         return String.format(NULL_CHECK_FMT, name);
     }
 
-    static void assertNullCheck(Executable checker, String parameterName) {
+    public static void assertNullCheck(Executable checker, String parameterName) {
         assertThat(assertThrows(NullPointerException.class, checker).getMessage(),
             equalTo(TestAssertionUtil.nullMsg(parameterName)));
     }

@@ -3,12 +3,14 @@ package com.zerodeplibs.webpush;
 import java.security.InvalidAlgorithmParameterException;
 
 /**
- * Wraps checked exceptions during message encryption
+ * <p>
+ * Wraps checked exceptions that may occur during message encryption
  * such as {@link InvalidAlgorithmParameterException}.
+ * </p>
  *
  * <p>
  * The underlying exception can be obtained
- * by calling {@link #getCause()}.
+ * by calling {@link MessageEncryptionException#getCause()}.
  * </p>
  *
  * @author Tomoki Sato

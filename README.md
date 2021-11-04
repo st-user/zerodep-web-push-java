@@ -10,17 +10,22 @@ force your application to have dependencies on specific third-party libraries.
 
 This library itself doesn't provide all the functionalities needed for Web Push.
 
-The JSON Web Token (JWT) functionality and the Http Client functionality usually need to be provided
+The JSON Web Token (JWT) functionality and the Http Client functionality need to be provided
 externally. However, you can choose arbitrary libraries that suit your project.
 
 **NOTE**
 
-Various sub-modules for JWT are available
-from [zerodep-web-push-java-ext-jwt](https://github.com/st-user/zerodep-web-push-java-ext-jwt).
+- Sub-modules that help applications utilize a third-party JWT library are available
+  from [zerodep-web-push-java-ext-jwt](https://github.com/st-user/zerodep-web-push-java-ext-jwt).
 
-Though 'zerodep-web-push-java' itself doesn't have any dependency on the other libraries, these
-sub-modules utilize a third-party JWT library. You can choose the one that is suitable for your
-project.
+- Components that help applications utilize a third-party HTTP Client library are available in '
+  zerodep-web-push-java' out of the box.
+
+If your application can utilize these sub-modules/components, they make it easier for you to
+implement the related features.
+
+These sub-modules and components are optional, so they don't force your application to have
+dependencies on specific third-party libraries.
 
 ## The motivation for this project
 
@@ -37,7 +42,7 @@ To achieve this, this project focuses on:
 
 ## Requirements
 
-JDK 8+
+Java 8+
 
 (To build from source, JDK 9+)
 
@@ -58,28 +63,52 @@ JDK 8+
 In order to implement the complete Web Push functionality with this library, at least the following
 two types of functionalities have to be provided from outside this library.
 
-Of course, you can also choose an arbitrary one not listed below.
-
 <details>
     <summary><b>JWT</b></summary>
 
 A JWT library is used to generate JSON Web Token (JWT)
 for [VAPID](https://datatracker.ietf.org/doc/html/rfc8292).
 
-Various sub-modules for JWT are available
+Sub-modules for this functionality are available
 from [zerodep-web-push-java-ext-jwt](https://github.com/st-user/zerodep-web-push-java-ext-jwt).
+
+These sub-modules are optional, so you can also implement such functionality by yourself by using classes and interfaces
+in `com.zerodeplibs.webpush.jwt` package.
 
 </details>
 
 <details>
     <summary><b>HTTP Client</b></summary>
 
-Application servers need to make an HTTP Request in order to request the push service to deliver a
-push message. Below are some examples of third-party libraries.
+Application servers need to send HTTP requests to push services in order to request the delivery of push
+messages. Helper components for this functionality are available from
+the `com.zerodeplibs.webpush.httpclient` package. Each of these helper components
+utilizes a third-party HTTP Client library. Supported libraries are listed below.
 
 - [OkHttp](https://square.github.io/okhttp/)
+
+  Version 4.9.0 or higher. The latest version is recommended.
+
 - [Apache HTTPClient](https://hc.apache.org/httpcomponents-client-5.1.x/)
-- [Java HTTP Client(JDK 11+)](https://docs.oracle.com/en/java/javase/11/docs/api/java.net.http/java/net/http/HttpClient.html)
+
+  Version 5.1 or higher. The latest version is recommended.
+
+- [Eclipse Jetty Client Libraries](https://www.eclipse.org/jetty/documentation/jetty-11/programming-guide/index.html#pg-client)
+
+    - Jetty 9: 9.4.33.v20201020 or higher.
+    - Jetty 10: 10.0.0 or higher.
+    - Jetty 11: 11.0.0 or higher.
+
+  The latest versions are recommended.
+
+- [Vert.x Web Client](https://vertx.io/docs/vertx-web-client/java/)
+
+    - Vert.x 3: 3.9.2 or higher.
+    - Vert.x 4: 4.0.0 or higher.
+
+  The latest versions are recommended.
+
+These components and their dependencies are optional, so you can also implement such functionality by yourself by using classes in `com.zerodeplibs.webpush.httpclient` package.
 
 </details>
 
@@ -516,10 +545,10 @@ javax.crypto.Mac.getInstance("HmacSHA256")
 javax.crypto.Cipher.getInstance("AES/GCM/NoPadding")
 ```
 
-By default, the providers shipped with the JDK will be used(e.g. `SunEC`, `SunJCE`).
+By default, the providers shipped with the JDK will be used(e.g. `SunEC` and `SunJCE`).
 
 Of course, any provider that supports these algorithms is available(
-e.g. [Bouncy Castle](https://bouncycastle.org/)). This is because this library has no dependencies
+e.g. [Bouncy Castle](https://bouncycastle.org/)). This is because 'zerodep-web-push-java' has no dependencies
 on any specific provider.
 
 </details>

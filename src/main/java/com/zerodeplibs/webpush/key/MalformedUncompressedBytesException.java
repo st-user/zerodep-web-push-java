@@ -1,8 +1,8 @@
 package com.zerodeplibs.webpush.key;
 
 /**
- * This exception is thrown to indicate that the input octet sequence
- * for an EC public key isn't valid uncompressed form.
+ * This exception is thrown to indicate that an input octet sequence
+ * isn't valid uncompressed form[X9.62].
  *
  * @author Tomoki Sato
  */

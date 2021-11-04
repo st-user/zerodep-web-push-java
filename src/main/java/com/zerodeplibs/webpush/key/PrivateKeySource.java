@@ -3,7 +3,9 @@ package com.zerodeplibs.webpush.key;
 import java.security.interfaces.ECPrivateKey;
 
 /**
+ * <p>
  * This class represents a source of an {@link ECPrivateKey}.
+ * </p>
  *
  * <p>
  * Typically, to create a PrivateKeySource,

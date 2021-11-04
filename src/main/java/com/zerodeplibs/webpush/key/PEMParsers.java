@@ -3,9 +3,11 @@ package com.zerodeplibs.webpush.key;
 import com.zerodeplibs.webpush.internal.WebPushPreConditions;
 
 /**
- * Static factory methods for {@link PEMParser}.
+ * <p>
+ * Static factory methods used to create an instance of {@link PEMParser}.
+ * </p>
  *
- * <h3>Thread Safety:</h3>
+ * <div><b>Thread Safety:</b></div>
  * <p>
  * The factory methods themselves are thread-safe.
  * The returned objects are also thread-safe because they are immutable.
@@ -19,14 +21,19 @@ public class PEMParsers {
     }
 
     /**
-     * Creates a new {@link PEMParser} with the given label for encapsulation boundaries.
+     * <p>
+     * Creates a new {@link PEMParser} with the given type label.
+     * For example, when extracting the content between '-----BEGIN PRIVATE KEY-----'
+     * and '-----END PRIVATE KEY-----',
+     * pass 'PRIVATE KEY' to the <code>label</code> argument.
+     * </p>
      *
      * <p>
      * This parser ignores characters outside the encapsulation boundaries
      * (i.e. all the characters before '-----BEGIN .... -----' or after '-----END ..... -----').
      * </p>
      *
-     * <h3>Examples:</h3>
+     * <div><b>Examples:</b></div>
      * <pre>
      *  // Creates a parser for PEM-encoded texts
      *  // in which the private key data starts with '-----BEGIN PRIVATE KEY-----'
@@ -44,7 +51,7 @@ public class PEMParsers {
      * encoded in <a href="https://datatracker.ietf.org/doc/html/rfc7468#section-3">the 'Standard' format described in RFC7468</a>.
      * </p>
      *
-     * @param label a label for encapsulation boundaries.
+     * @param label a type label.
      * @return a new {@link PEMParser}.
      * @throws IllegalArgumentException if the format of the given label is invalid.
      */

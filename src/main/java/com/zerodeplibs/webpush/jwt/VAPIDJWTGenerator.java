@@ -1,17 +1,19 @@
 package com.zerodeplibs.webpush.jwt;
 
 /**
+ * <p>
  * The interface to a generator that generates JSON Web Token (JWT) used
  * for the Voluntary Application Server Identification
  * (<a href="https://datatracker.ietf.org/doc/html/rfc8292">VAPID</a>).
- *
- * <p>
- * If you have dependencies on one or more sub-modules for {@link VAPIDJWTGenerator},
- * an implementation can be provided by the sub-module(s).
  * </p>
  *
  * <p>
- * of course, you can use arbitrary 3rd party libraries to implement this interface.
+ * If you have dependencies on one or more sub-modules for {@link VAPIDJWTGenerator},
+ * the implementation can be provided by the sub-module(s).
+ * </p>
+ *
+ * <p>
+ * Of course, you can use arbitrary 3rd party libraries to implement this interface.
  * For example, if you want to use <a href="https://github.com/auth0/java-jwt">Auth0 Java JWT library</a>,
  * The implementation will be something like below.
  * </p>

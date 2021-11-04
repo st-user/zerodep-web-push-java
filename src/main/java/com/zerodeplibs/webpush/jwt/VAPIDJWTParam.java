@@ -4,6 +4,7 @@ import com.zerodeplibs.webpush.internal.WebPushPreConditions;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -11,19 +12,22 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 
 /**
+ * <p>
  * This class represents parameters for generating JSON Web Token (JWT) used
  * for the Voluntary Application Server Identification
  * (<a href="https://datatracker.ietf.org/doc/html/rfc8292">VAPID</a>).
+ * </p>
  *
- * <h3>Example:</h3>
+ * <div><b>Example:</b></div>
  * <pre class="code">
  *
  * VAPIDJWTParam param = VAPIDJWTParam.getBuilder()
  *      .resourceURLString(subscription.getEndpoint())
- *      .expiresAfterSeconds((int) TimeUnit.MINUTES.toSeconds(15))
+ *      .expiresAfter(15, TimeUnit.MINUTES)
  *      .subject("mailto:example@example.com")
  *      .build();
  *
@@ -57,10 +61,11 @@ public class VAPIDJWTParam {
     }
 
     /**
-     * Gets one of the additional claims specified at the time of the instantiation
-     * by the given name and type.
+     * <p>
+     * Gets one of the additional claims by specifying the name and the type of the value.
+     * </p>
      *
-     * <b>Example:</b>
+     * <div><b>Example:</b></div>
      *
      * <pre class="code">
      *
@@ -81,7 +86,7 @@ public class VAPIDJWTParam {
      * @param name       the name of the additional claim.
      * @param returnType the type of the additional claim.
      * @param <T>        the type of the additional claim.
-     * @return an {@link Optional} that contains or doesn't contain the additional claim.
+     * @return an {@link Optional} that may or may not contain the additional claim.
      * @see Builder#additionalClaim(String, Object)
      */
     public <T> Optional<T> getAdditionalClaim(String name, Class<T> returnType) {
@@ -131,7 +136,7 @@ public class VAPIDJWTParam {
                             + "#resourceURL or #resourceURLString.");
                     put("exp",
                         "The \"exp\" claim should be specified via "
-                            + "#expiresAt or #expiresAfterSeconds.");
+                            + "#expiresAt or #expiresAfter.");
                     put("sub", "The \"sub\" claim should be specified via #subject.");
                 }
             });
@@ -147,7 +152,7 @@ public class VAPIDJWTParam {
                 + "a resource URL(resourceURLString/resourceURL) cannot be called more than once.";
 
         private static final String MSG_EXPIRES_AT_NO_MORE_THAN_ONCE = "The methods for specifying "
-            + "expiration time(expiresAfterSeconds/expirationTime/expiresAt) "
+            + "expiration time(expiresAfter/expirationTime/expiresAfterSeconds/expiresAt) "
             + "cannot be called more than once.";
 
         Builder() {
@@ -155,7 +160,10 @@ public class VAPIDJWTParam {
         }
 
         /**
+         * <p>
          * Specifies a push resource URL from which the origin is extracted.
+         * </p>
+         *
          * <p>
          * Typically,
          * </p>
@@ -183,7 +191,10 @@ public class VAPIDJWTParam {
 
 
         /**
+         * <p>
          * Specifies a push resource URL from which the origin is extracted.
+         * </p>
+         *
          * <p>
          * Typically,
          * </p>
@@ -206,7 +217,31 @@ public class VAPIDJWTParam {
         }
 
         /**
+         * <p>
+         * Specifies the time after which a JWT expires.
+         * </p>
+         *
+         * <p>
+         * Typically, the specified expiration time is used as an "exp" (Expiry) claim.
+         * </p>
+         *
+         * @param expiresAfter the time after which a JWT expires.
+         * @param timeUnit     the unit of the given <code>expiresAfter</code>.
+         * @return this object.
+         * @throws IllegalStateException if the methods for specifying expiration time
+         *                               is called more than once.
+         */
+        public Builder expiresAfter(int expiresAfter, TimeUnit timeUnit) {
+            WebPushPreConditions.checkNotNull(timeUnit, "timeUnit");
+            // TODO. from JDK9, we can use TimeUnit#toChronoUnit
+            this.expirationTime(now().plusNanos(timeUnit.toNanos(expiresAfter)));
+            return this;
+        }
+
+        /**
+         * <p>
          * Specifies the time in seconds after which a JWT expires.
+         * </p>
          *
          * <p>
          * Typically, the specified expiration time is used as an "exp" (Expiry) claim.
@@ -216,7 +251,9 @@ public class VAPIDJWTParam {
          * @return this object.
          * @throws IllegalStateException if the methods for specifying expiration time
          *                               is called more than once.
+         * @deprecated Use {@link #expiresAfter(int, TimeUnit)}.
          */
+        @Deprecated
         public Builder expiresAfterSeconds(int seconds) {
             // TODO check if no more than 24 hours
             this.expirationTime(now().plusSeconds(seconds));
@@ -224,7 +261,9 @@ public class VAPIDJWTParam {
         }
 
         /**
+         * <p>
          * Specifies the time at which a JWT expires.
+         * </p>
          *
          * <p>
          * Typically, the specified expiration time is used as an "exp" (Expiry) claim.
@@ -244,7 +283,9 @@ public class VAPIDJWTParam {
         }
 
         /**
+         * <p>
          * Specifies the time at which a JWT expires.
+         * </p>
          *
          * <p>
          * Typically, the specified expiration time is used as an "exp" (Expiry) claim.
@@ -264,7 +305,9 @@ public class VAPIDJWTParam {
         }
 
         /**
+         * <p>
          * Specifies a subject.
+         * </p>
          *
          * <p>
          * Typically, the specified subject is used as a "sub" (Subject) claim.
@@ -280,7 +323,9 @@ public class VAPIDJWTParam {
         }
 
         /**
+         * <p>
          * Specifies an additional claim.
+         * </p>
          *
          * <p>
          * Typically, the specified entry is used as a claim in a token's payload.
@@ -342,15 +387,30 @@ public class VAPIDJWTParam {
                 Collections.unmodifiableMap(this.additionalClaims));
         }
 
+        /**
+         * Creates a new {@link VAPIDJWTParam}.
+         * If the expiration time isn't specified, the value is set to 3 minutes.
+         *
+         * @return a new {@link VAPIDJWTParam}.
+         * @throws IllegalStateException if the resource URL isn't specified.
+         */
+        public VAPIDJWTParam buildWithDefault() {
+            if (this._expirationTime == null) {
+                this._expirationTime = now().plus(3, ChronoUnit.MINUTES);
+            }
+            return build();
+        }
+
         // Visible for testing
         Instant now() {
             return Instant.now();
         }
-
     }
 
     /**
+     * <p>
      * Gets the origin extracted from the resource URL.
+     * </p>
      *
      * <p>
      * Typically, the returned value is set to an "aud" claim.
@@ -381,8 +441,10 @@ public class VAPIDJWTParam {
     }
 
     /**
+     * <p>
      * Gets the number of seconds from January 1, 1970, 00:00:00 GMT
      * to the expiration time.
+     * </p>
      *
      * <p>
      * Typically, the returned value is set to an "exp" claim.
@@ -395,15 +457,17 @@ public class VAPIDJWTParam {
     }
 
     /**
+     * <p>
      * Gets the subject.
      * If a subject is specified at the time of the creation,
      * an Optional containing the subject is returned.
+     * </p>
      *
      * <p>
      * Typically, the returned value is set to an "sub" claim.
      * </p>
      *
-     * @return an {@link Optional} that contains or doesn't contain the subject.
+     * @return an {@link Optional} that may or may not contain the subject.
      */
     public Optional<String> getSubject() {
         return Optional.ofNullable(subject);

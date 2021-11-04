@@ -8,9 +8,11 @@ import java.nio.file.Path;
 import java.security.interfaces.ECPrivateKey;
 
 /**
- * Static factory methods for {@link PrivateKeySource}.
+ * <p>
+ * Static factory methods used to create an instance of {@link PrivateKeySource}.
+ * </p>
  *
- * <h3>Examples:</h3>
+ * <div><b>Examples:</b></div>
  * <p>
  * The following is an example of commands that uses OpenSSL
  * to generate a file that can be handled with {@link PrivateKeySource}s.
@@ -47,7 +49,7 @@ import java.security.interfaces.ECPrivateKey;
  *
  * </pre>
  *
- * <h3>Thread Safety:</h3>
+ * <div><b>Thread Safety:</b></div>
  * <p>
  * The factory methods themselves are thread-safe,
  * but the returned objects are <b>NOT</b> thread-safe.
@@ -81,7 +83,7 @@ public class PrivateKeySources {
      * The underlying octet sequence is assumed to be encoded according to the PKCS#8 standard.
      *
      * <p>
-     * the PEM-encoded text is assumed to contain a private key data
+     * The PEM-encoded text is assumed to contain a private key data
      * that starts with '-----BEGIN PRIVATE KEY-----'
      * and ends with '-----END PRIVATE KEY-----'.
      * </p>
@@ -102,11 +104,11 @@ public class PrivateKeySources {
      * The underlying octet sequence is assumed to be encoded according to the PKCS#8 standard.
      *
      * <p>
-     * the PEM-encoded text are parsed by the given {@link PEMParser}.
+     * The PEM-encoded text is parsed by the given {@link PEMParser}.
      * </p>
      *
      * @param pemText the PEM-encoded text representing a private key.
-     * @param parser  the parser for parsing the PEM-encoded text.
+     * @param parser  the parser used to parse the PEM-encoded text.
      * @return a new {@link PrivateKeySource}.
      * @throws MalformedPEMException if the given text
      *                               cannot be parsed as a valid PEM format.
@@ -131,7 +133,7 @@ public class PrivateKeySources {
      * @param path the path to a PEM formatted file.
      * @return a new {@link PrivateKeySource}.
      * @throws IOException           if an I/O error occurs.
-     * @throws MalformedPEMException if the contents of the given file
+     * @throws MalformedPEMException if the content of the given file
      *                               cannot be parsed as a valid PEM format.
      */
     public static PrivateKeySource ofPEMFile(Path path) throws IOException {
@@ -144,14 +146,14 @@ public class PrivateKeySources {
      * The underlying octet sequence is assumed to be encoded according to the PKCS#8 standard.
      *
      * <p>
-     * The contents of the PEM file are parsed by the given {@link PEMParser}.
+     * The content of the PEM file is parsed by the given {@link PEMParser}.
      * </p>
      *
      * @param path   the path to a PEM formatted file.
-     * @param parser a parser for parsing the contents of the PEM file.
+     * @param parser a parser used to parse the content of the PEM file.
      * @return a new {@link PrivateKeySource}.
      * @throws IOException           if an I/O error occurs.
-     * @throws MalformedPEMException if the contents of the given file
+     * @throws MalformedPEMException if the content of the given file
      *                               cannot be parsed as a valid PEM format.
      */
     public static PrivateKeySource ofPEMFile(Path path, PEMParser parser) throws IOException {
@@ -191,7 +193,8 @@ public class PrivateKeySources {
     }
 
     /**
-     * The builder class for creating {@link PrivateKeySource} from PEM formatted files.
+     * The builder class for creating an instance of {@link PrivateKeySource}
+     * from a PEM formatted file.
      *
      * @author Tomoki Sato
      */
@@ -218,9 +221,9 @@ public class PrivateKeySources {
         }
 
         /**
-         * Specifies the parser for parsing the contents of the PEM file.
+         * Specifies the parser used to parse the content of the PEM file.
          *
-         * @param parser the parser for parsing the contents of the PEM file.
+         * @param parser the parser used to parse the content of the PEM file.
          * @return this object.
          */
         public PEMFileSourceBuilder parser(PEMParser parser) {
@@ -234,7 +237,7 @@ public class PrivateKeySources {
          *
          * @return a new {@link PrivateKeySource}.
          * @throws IOException           if an I/O error occurs.
-         * @throws MalformedPEMException if the contents of the file
+         * @throws MalformedPEMException if the content of the file
          *                               cannot be parsed as a valid PEM format.
          */
         public PrivateKeySource build() throws IOException {
