@@ -15,6 +15,10 @@
 
     <artifactId>zerodep-web-push-java-ext-jwt-fusionauth</artifactId>
     <name>${project.groupId}:${project.artifactId}</name>
+    <description>A sub-module for zerodep-web-push-java. This module provides the JSON Web Token(JWT) generator
+        used for VAPID utilizing [FusionAuth JWT].
+    </description>
+    <url>https://github.com/st-user/zerodep-web-push-java-ext-jwt</url>
 
     <properties>
         <fusionauth.version>5.0.0</fusionauth.version>

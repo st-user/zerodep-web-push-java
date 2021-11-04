@@ -15,6 +15,10 @@
 
     <artifactId>zerodep-web-push-java-ext-jwt-jjwt</artifactId>
     <name>${project.groupId}:${project.artifactId}</name>
+    <description>A sub-module for zerodep-web-push-java. This module provides the JSON Web Token(JWT) generator
+        used for VAPID utilizing [Java JWT].
+    </description>
+    <url>https://github.com/st-user/zerodep-web-push-java-ext-jwt</url>
 
     <properties>
         <jjwt.version>0.11.2</jjwt.version>

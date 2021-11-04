@@ -15,6 +15,10 @@
 
     <artifactId>zerodep-web-push-java-ext-jwt-nimbus-jose</artifactId>
     <name>${project.groupId}:${project.artifactId}</name>
+    <description>A sub-module for zerodep-web-push-java. This module provides the JSON Web Token(JWT) generator
+        used for VAPID utilizing [Nimbus JOSE + JWT].
+    </description>
+    <url>https://github.com/st-user/zerodep-web-push-java-ext-jwt</url>
 
     <properties>
         <nimbus.jose.version>9.15.2</nimbus.jose.version>
