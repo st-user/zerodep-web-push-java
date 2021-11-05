@@ -41,7 +41,10 @@
 
 
         <!--
-            When using [Java JWT - auth0](https://github.com/auth0/java-jwt).
+
+            ////// Optional sub-module for JWT library /////
+
+            [Java JWT - auth0](https://github.com/auth0/java-jwt).
         -->
         <dependency>
             <groupId>com.zerodeplibs</groupId>
@@ -62,10 +65,11 @@
             </dependency>
         -->
 
-
-
         <!--
-            When using [FusionAuth JWT](https://github.com/fusionauth/fusionauth-jwt).
+
+            ////// Optional sub-module for JWT library /////
+
+            [FusionAuth JWT](https://github.com/fusionauth/fusionauth-jwt).
 
             <dependency>
                 <groupId>com.zerodeplibs</groupId>
@@ -84,7 +88,10 @@
         -->
 
         <!--
-            When using [Java JWT](https://github.com/jwtk/jjwt).
+
+            ////// Optional sub-module for JWT library /////
+
+            Java JWT](https://github.com/jwtk/jjwt).
 
             <dependency>
                 <groupId>com.zerodeplibs</groupId>
@@ -93,7 +100,6 @@
                 <scope>runtime</scope>
             </dependency>
 
-            If you want to explicitly specify the version:
             <dependency>
                 <groupId>io.jsonwebtoken</groupId>
                 <artifactId>jjwt-api</artifactId>
@@ -118,7 +124,10 @@
         -->
 
         <!--
-            When using [jose4j](https://bitbucket.org/b_c/jose4j/wiki/Home).
+
+            ////// Optional sub-module for JWT library /////
+
+            [jose4j](https://bitbucket.org/b_c/jose4j/wiki/Home).
 
             <dependency>
                 <groupId>com.zerodeplibs</groupId>
@@ -138,7 +147,10 @@
         -->
 
         <!--
-            When using [Nimbus JOSE + JWT](https://connect2id.com/products/nimbus-jose-jwt).
+
+            ////// Optional sub-module for JWT library /////
+
+            [Nimbus JOSE + JWT](https://connect2id.com/products/nimbus-jose-jwt).
 
             <dependency>
                 <groupId>com.zerodeplibs</groupId>
@@ -158,8 +170,16 @@
         -->
 
 
+
+
+
+
+
         <!--
-            If you want to use [OkHttp](https://square.github.io/okhttp/):
+
+            ////// Optional HTTP Client library /////
+
+            [OkHttp](https://square.github.io/okhttp/):
         -->
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
@@ -168,7 +188,10 @@
         </dependency>
 
         <!--
-            If you want to use [Apache HTTP Client](https://hc.apache.org/httpcomponents-client-5.1.x/):
+
+            ////// Optional HTTP Client library /////
+
+            [Apache HTTP Client](https://hc.apache.org/httpcomponents-client-5.1.x/):
         <dependency>
             <groupId>org.apache.httpcomponents.client5</groupId>
             <artifactId>httpclient5</artifactId>
@@ -177,7 +200,10 @@
         -->
 
         <!--
-            If you want to use [Jetty Client](https://www.eclipse.org/jetty/documentation/jetty-11/programming-guide/index.html#pg-client):
+
+            ////// Optional HTTP Client library /////
+
+            [Jetty Client](https://www.eclipse.org/jetty/documentation/jetty-11/programming-guide/index.html#pg-client):
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-client</artifactId>

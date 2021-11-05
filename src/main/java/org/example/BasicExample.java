@@ -281,7 +281,7 @@ public class BasicExample {
     */
 
 
-    // "/sendMessage" endpoint utilizing JDK Http Client(JDK11+).
+    // "/sendMessage" endpoint utilizing JDK Http Client(JDK11+ required).
     // When using this endpoint, remove the comment outs in 'Jdk11HttpClientRequestPreparer.java'.
     // 'Jdk11HttpClientRequestPreparer.java' is in the same directory as this class.
     /*
