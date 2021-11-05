@@ -188,52 +188,35 @@ public class BasicExample {
      * However, in real applications, this feature does not have to be an HTTP endpoint.
      */
     @PostMapping("/sendMessage")
-    public ResponseEntity<String> sendMessage(@RequestBody Map<String, String> messages)
+    public ResponseEntity<String> sendMessage(@RequestBody MyMessage myMessage)
         throws IOException {
 
-        String message = messages.getOrDefault("message", "").trim();
-        message = message.length() == 0 ? "Default Message." : message;
+        String message = myMessage.getMessage();
 
         OkHttpClient httpClient = new OkHttpClient();
-        MessageEncryption messageEncryption = MessageEncryptions.of();
-
         for (PushSubscription subscription : getSubscriptionsFromStorage()) {
 
-            VAPIDJWTParam vapidjwtParam = VAPIDJWTParam.getBuilder()
-                .resourceURLString(subscription.getEndpoint())
-                .expiresAfterSeconds((int) TimeUnit.MINUTES.toSeconds(15))
-                .subject("mailto:example@example.com")
-                .build();
-
-            PushMessage pushMessage = PushMessage.ofUTF8(message);
+            Request request = OkHttpClientRequestPreparer.getBuilder()
+                .pushSubscription(subscription)
+                .vapidJWTExpiresAfter(15, TimeUnit.MINUTES)
+                .vapidJWTSubject("mailto:example@example.com")
+                .pushMessage(message)
+                .ttl(1, TimeUnit.HOURS)
+                .urgencyLow()
+                .topic("MyTopic")
+                .build(vapidKeyPair)
+                .toRequest();
 
             // In this example, we send push messages in simple text format.
             // But you can also send them in JSON format as follows:
             //
             // ObjectMapper objectMapper = (Create a new one or get from the DI container.)
-            // PushMessage pushMessage = PushMessage.of(objectMapper.writeValueAsBytes(objectForJson));
-
-            EncryptedPushMessage encryptedPushMessage = messageEncryption.encrypt(
-                UserAgentMessageEncryptionKeyInfo.from(subscription.getKeys()),
-                pushMessage
-            );
-
-            Request request = new Request.Builder()
-                .url(subscription.getEndpoint())
-                .addHeader("Authorization",
-                    vapidKeyPair.generateAuthorizationHeaderValue(vapidjwtParam))
-                .addHeader("Content-Type", "application/octet-stream")
-                .addHeader("Content-Encoding", encryptedPushMessage.contentEncoding())
-                .addHeader("TTL", String.valueOf(TTL.hours(1)))
-                .addHeader("Urgency", Urgency.low())
-                .addHeader("Topic", Topic.ensure("myTopic"))
-                // Depending on HTTP Client libraries, you may have to set "Content-Length" manually.
-                // .addHeader("Content-Length", String.valueOf(encryptedPushMessage.length()))
-                .post(okhttp3.RequestBody.create(encryptedPushMessage.toBytes()))
-                .build();
+            // ....
+            // pushMessage(objectMapper.writeValueAsBytes(objectForJson))
+            // ....
 
             try (Response response = httpClient.newCall(request).execute()) {
-                logger.info(String.format("status code: %d", response.code()));
+                logger.info(String.format("[OkHttp] status code: %d", response.code()));
                 // 201 Created : Success!
                 // 410 Gone : The subscription is no longer valid.
                 // etc...
@@ -247,6 +230,8 @@ public class BasicExample {
             .header(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE)
             .body("The message has been processed.");
     }
+
+    ... Omitted for simplicity.
 
     private Collection<PushSubscription> getSubscriptionsFromStorage() {
         return this.subscriptionMap.values();
@@ -420,51 +405,39 @@ public class Example {
                 //
                 // reference: https://vertx.io/docs/vertx-core/java/#golden_rule
 
-                VAPIDJWTParam vapidjwtParam = VAPIDJWTParam.getBuilder()
-                    .resourceURLString(subscription.getEndpoint())
-                    .expiresAfterSeconds((int) TimeUnit.MINUTES.toSeconds(15))
-                    .subject("mailto:example@example.com")
-                    .build();
-                String jwt = vapidKeyPair.generateAuthorizationHeaderValue(vapidjwtParam);
+                VertxWebClientRequestPreparer requestPreparer =
+                    VertxWebClientRequestPreparer.getBuilder()
+                        .pushSubscription(subscription)
+                        .vapidJWTExpiresAfter(15, TimeUnit.MINUTES)
+                        .vapidJWTSubject("mailto:example@example.com")
+                        .pushMessage(messageData.getMessage())
+                        .ttl(1, TimeUnit.HOURS)
+                        .urgencyNormal()
+                        .topic("MyTopic")
+                        .build(vapidKeyPair);
 
-                MessageEncryption messageEncryption = MessageEncryptions.of();
-                EncryptedPushMessage encryptedPushMessage = messageEncryption.encrypt(
-                    UserAgentMessageEncryptionKeyInfo.from(subscription.getKeys()),
-                    // In this example, we send push messages in simple text format.
-                    // But you can also send them in JSON format.
-                    PushMessage.ofUTF8(messageData.getMessage())
-                );
-
-
-                promise.complete(new JWTAndMessage(jwt, encryptedPushMessage));
+                promise.complete(requestPreparer);
 
             }, res -> {
 
-                JWTAndMessage jwtAndMessage = (JWTAndMessage) res.result();
-                EncryptedPushMessage encryptedPushMessage = jwtAndMessage.encryptedPushMessage;
+                VertxWebClientRequestPreparer requestPreparer =
+                    (VertxWebClientRequestPreparer) res.result();
+                requestPreparer.sendBuffer(
+                    client,
+                    req -> req.timeout(connectionTimeoutMillis),
+                    httpResponseAsyncResult -> {
 
-                client
-                    .postAbs(subscription.getEndpoint())
-                    .timeout(connectionTimeoutMillis)
-                    .putHeader("Authorization", jwtAndMessage.jwt)
-                    .putHeader("Content-Type", "application/octet-stream")
-                    .putHeader("Content-Encoding", encryptedPushMessage.contentEncoding())
-                    .putHeader("TTL", String.valueOf(TTL.hours(1)))
-                    .putHeader("Urgency", Urgency.normal())
-                    .putHeader("Topic", Topic.ensure("myTopic"))
-                    .sendBuffer(Buffer.buffer(encryptedPushMessage.toBytes()),
-                        httpResponseAsyncResult -> {
+                        HttpResponse<Buffer> result = httpResponseAsyncResult.result();
+                        System.out.println(
+                            String.format("status code: %d", result.statusCode()));
+                        // 201 Created : Success!
+                        // 410 Gone : The subscription is no longer valid.
+                        // etc...
+                        // for more information, see the useful link below:
+                        // [Response from push service - The Web Push Protocol ](https://developers.google.com/web/fundamentals/push-notifications/web-push-protocol)
 
-                            HttpResponse<Buffer> result = httpResponseAsyncResult.result();
-                            System.out.println(
-                                String.format("status code: %d", result.statusCode()));
-                            // 201 Created : Success!
-                            // 410 Gone : The subscription is no longer valid.
-                            // etc...
-                            // for more information, see the useful link below:
-                            // [Response from push service - The Web Push Protocol ](https://developers.google.com/web/fundamentals/push-notifications/web-push-protocol)
-
-                        });
+                    }
+                );
 
             });
 
@@ -476,20 +449,10 @@ public class Example {
             // we send HTTP requests at some intervals.
             vertx.setTimer(requestIntervalMillis, id -> startInternal(currentIndex + 1));
         }
-
-        private static class JWTAndMessage {
-
-            final String jwt;
-            final EncryptedPushMessage encryptedPushMessage;
-
-            JWTAndMessage(String jwt, EncryptedPushMessage encryptedPushMessage) {
-                this.jwt = jwt;
-                this.encryptedPushMessage = encryptedPushMessage;
-            }
-        }
     }
-
+    
     ... Omitted for simplicity.
+    
 }
 
 ```
