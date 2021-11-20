@@ -31,13 +31,17 @@ import java.util.concurrent.TimeUnit;
  * </p>
  *
  * <p>
- * In order to help applications make an object which is used for such a request,
- * "Preparer"s
+ * Typically, a subclass of this class provides methods
+ * creating an object that represents an HTTP request.
+ * In order to do this, "Preparer"s
  * </p>
  * <ul>
- * <li>extract a URL of a push service from a push subscription,</li>
- * <li>generate and set proper HTTP header fields and</li>
- * <li>encrypt a push message and set it to the request body.</li>
+ * <li>extract and set a URL of a push service from a given push subscription,</li>
+ * <li>
+ * generate and set proper HTTP header fields(e.g. the "Authorization" header field)
+ * with given information and
+ * </li>
+ * <li>encrypt a given push message and put it into the request body.</li>
  * </ul>
  *
  * @param <T> the type of "Preparer" which is build by this builder instance.
@@ -85,11 +89,11 @@ public abstract class PreparerBuilder<T> {
     /**
      * Specifies the time after which a JWT for VAPID expires.
      *
-     * @param expiresAfter the time after which a JWT expires.
+     * @param expiresAfter the time after which a JWT for VAPID expires.
      * @param timeUnit     the unit of the given <code>expiresAfter</code>.
      * @return this object.
      * @throws IllegalStateException if the methods for specifying expiration time
-     *                               is called more than once.
+     *                               are called more than once.
      * @see VAPIDJWTParam.Builder#expiresAfter(int, TimeUnit)
      */
     public PreparerBuilder<T> vapidJWTExpiresAfter(int expiresAfter, TimeUnit timeUnit) {
@@ -98,12 +102,12 @@ public abstract class PreparerBuilder<T> {
     }
 
     /**
-     * Specifies the time at which a JWT expires.
+     * Specifies the time at which a JWT for VAPID expires.
      *
-     * @param expirationTime the time at which a JWT expires.
+     * @param expirationTime the time at which a JWT for VAPID expires.
      * @return this object.
      * @throws IllegalStateException if the methods for specifying expiration time
-     *                               is called more than once.
+     *                               are called more than once.
      * @see VAPIDJWTParam.Builder#expirationTime(Instant)
      */
     public PreparerBuilder<T> vapidJWTExpirationTime(Instant expirationTime) {
@@ -266,7 +270,7 @@ public abstract class PreparerBuilder<T> {
      * </p>
      * <ul>
      * <li>generates a JWT for VAPID with the given <code>vapidKeyPair</code></li>
-     * <li>performs message encryption(if the push message is specified)</li>
+     * <li>performs message encryption(if the push message exists)</li>
      * </ul>
      *
      * <p>
@@ -360,7 +364,7 @@ public abstract class PreparerBuilder<T> {
      *
      * <div><b>Thread Safety:</b></div>
      * <p>
-     * Objects of this class are immutable. So they are thread-safe.
+     * Instances of this class are immutable. So they are thread-safe.
      * </p>
      *
      * @author Tomoki Sato
@@ -396,7 +400,7 @@ public abstract class PreparerBuilder<T> {
 
         /**
          * Gets the credential for VAPID.
-         * The returned value should be set to the Authorization HTTP header field.
+         * The returned value should be used to set the Authorization HTTP header field.
          *
          * @return the credential for VAPID.
          * @see VAPIDKeyPair#generateAuthorizationHeaderValue(VAPIDJWTParam)
@@ -418,7 +422,7 @@ public abstract class PreparerBuilder<T> {
 
         /**
          * Gets the value of <a href="https://datatracker.ietf.org/doc/html/rfc8030#section-5.2">TTL</a>.
-         * The returned value should be set to the <a href="https://datatracker.ietf.org/doc/html/rfc8030#section-5.2">TTL</a> HTTP header field.
+         * The returned value should be used to set the <a href="https://datatracker.ietf.org/doc/html/rfc8030#section-5.2">TTL</a> HTTP header field.
          *
          * @return the value of <a href="https://datatracker.ietf.org/doc/html/rfc8030#section-5.2">TTL</a>.
          */
@@ -428,7 +432,7 @@ public abstract class PreparerBuilder<T> {
 
         /**
          * Gets the value of Urgency.
-         * The returned value should be set to the Urgency HTTP header field.
+         * The returned value should be used to set the Urgency HTTP header field.
          *
          * @return the value of Urgency.
          */
@@ -438,7 +442,7 @@ public abstract class PreparerBuilder<T> {
 
         /**
          * Gets the topic.
-         * The value should be set to the <a href="https://datatracker.ietf.org/doc/html/rfc8030#section-5.4">Topic</a> HTTP header field.
+         * The value should be used to set the <a href="https://datatracker.ietf.org/doc/html/rfc8030#section-5.4">Topic</a> HTTP header field.
          * If a topic is specified at the time of the creation,
          * an Optional containing the topic is returned.
          *

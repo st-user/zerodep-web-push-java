@@ -10,6 +10,13 @@ package com.zerodeplibs.webpush;
  * is obtained by using a factory method of {@link MessageEncryptions}.
  * </p>
  *
+ * <div><b>Thread Safety:</b></div>
+ * <p>
+ * Depends on implementations.
+ * Typically, an implementation of this interface is not thread-safe.
+ * See {@link MessageEncryptions}.
+ * </p>
+ *
  * @author Tomoki Sato
  * @see MessageEncryptions
  */

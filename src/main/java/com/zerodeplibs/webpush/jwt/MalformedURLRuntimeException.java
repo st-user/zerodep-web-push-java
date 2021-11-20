@@ -1,7 +1,7 @@
 package com.zerodeplibs.webpush.jwt;
 
 /**
- * A RuntimeException that wraps MalformedURLException.
+ * A subclass of {@link RuntimeException} that wraps {@link java.net.MalformedURLException}.
  *
  * @author Tomoki Sato
  */

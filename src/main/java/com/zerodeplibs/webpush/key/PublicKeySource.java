@@ -4,17 +4,22 @@ import java.security.interfaces.ECPublicKey;
 
 /**
  * <p>
- * This class represents a source of an {@link ECPublicKey}.
+ * Implementations of this interface represent a source of an {@link ECPublicKey}.
  * </p>
  *
  * <p>
- * Depending on the implementation,
- * a PublicKeySource validates the public key that is extracted from the source.
+ * A PublicKeySource validates the extracted public key depending on its implementation.
  * </p>
  *
  * <p>
  * Typically, to create a PublicKeySource,
  * a factory method defined in {@link PublicKeySources} is used.
+ * </p>
+ *
+ * <div><b>Thread Safety:</b></div>
+ * <p>
+ * Depends on implementations.
+ * Typically, an implementation of this interface is not thread-safe.
  * </p>
  *
  * @author Tomoki Sato

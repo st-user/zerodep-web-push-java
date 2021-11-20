@@ -39,7 +39,7 @@ import com.zerodeplibs.webpush.key.PublicKeySource;
  *
  * <div><b>Thread Safety:</b></div>
  * <p>
- * Depends on the implementation. See {@link VAPIDKeyPairs}.
+ * Depends on implementations. See {@link VAPIDKeyPairs}.
  * </p>
  *
  * @author Tomoki Sato
@@ -58,8 +58,8 @@ public interface VAPIDKeyPair {
      * </p>
      *
      * <p>
-     * Typically, the value is sent to browsers
-     * and used to set the 'applicationServerKey' fields when calling 'pushManager.subscribe()'.
+     * Typically, the extracted octet sequence is sent to browsers
+     * and used to set the 'applicationServerKey' field.
      * </p>
      *
      * @return the octet sequence of the public key in uncompressed form.

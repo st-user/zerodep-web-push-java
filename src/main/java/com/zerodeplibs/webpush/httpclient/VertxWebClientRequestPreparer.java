@@ -23,7 +23,7 @@ import java.util.function.Consumer;
  *
  * <div><b>Thread Safety:</b></div>
  * <p>
- * Objects of this class are immutable. So they can be accessed safely from multiple threads.
+ * Instances of this class are immutable. So they can be accessed safely from multiple threads.
  * </p>
  *
  * @author Tomoki Sato
@@ -46,8 +46,8 @@ public class VertxWebClientRequestPreparer {
      * </p>
      *
      * <p>
-     * In order to set arbitrary parameters to the request object,
-     * pass a <code>requestConsumer</code> argument like:
+     * In order to construct the request object with arbitrary parameters,
+     * pass a consumer to the <code>requestConsumer</code> argument like:
      * </p>
      * <pre class="code">
      * preparer.sendBuffer(
@@ -60,7 +60,7 @@ public class VertxWebClientRequestPreparer {
      * </pre>
      *
      * @param webClient       the web client used to create an HTTP request.
-     * @param requestConsumer the consumer used to set parameters to the request object.
+     * @param requestConsumer the consumer used to set arbitrary parameters.
      * @param handler         the handler receiving the response.
      * @see HttpRequest#sendBuffer(Buffer, Handler)
      */
@@ -107,8 +107,8 @@ public class VertxWebClientRequestPreparer {
      * </p>
      *
      * <p>
-     * In order to set arbitrary parameters to the request object,
-     * pass a <code>requestConsumer</code> argument like:
+     * In order to construct the request object with arbitrary parameters,
+     * pass a consumer to the <code>requestConsumer</code> argument like:
      * </p>
      * <pre class="code">
      * preparer.sendBuffer(
@@ -120,7 +120,7 @@ public class VertxWebClientRequestPreparer {
      * </pre>
      *
      * @param webClient       the web client used to create an HTTP request.
-     * @param requestConsumer the consumer used to set parameters to the request object.
+     * @param requestConsumer the consumer used to set arbitrary parameters.
      * @return the future result of the request.
      */
     public Future<HttpResponse<Buffer>> sendBuffer(WebClient webClient,
