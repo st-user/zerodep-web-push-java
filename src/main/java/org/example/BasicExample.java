@@ -37,12 +37,12 @@ public class BasicExample {
     private VAPIDKeyPair vapidKeyPair;
 
     /**
-     * In this example, we read the key pair for VAPID
+     * In this example, we read a key pair for VAPID
      * from a PEM formatted file on the file system.
      * <p>
-     * You can extract key pairs from various sources.
-     * For example, '.der' file(binary content), an octet sequence stored in a database and so on.
-     * Please see the javadoc of PrivateKeySources and PublicKeySources.
+     * You can extract key pairs from various sources:
+     * '.der' file(binary content), an octet sequence stored in a database and so on.
+     * For more information, please see the javadoc of PrivateKeySources and PublicKeySources.
      */
     @Bean
     public VAPIDKeyPair vaidKeyPair(
@@ -54,7 +54,7 @@ public class BasicExample {
             PublicKeySources.ofPEMFile(new File(publicKeyFilePath).toPath())
 
             /*
-             * If you want to implement VAPIDJWTGenerator yourself,
+             * If you want to make your own VAPIDJWTGenerator,
              * the project for its sub-modules is a good example.
              * For more information, please consult the source codes on https://github.com/st-user/zerodep-web-push-java-ext-jwt
              */
@@ -67,7 +67,7 @@ public class BasicExample {
      * # Step 1.
      * Sends the public key to user agents.
      * <p>
-     * The user agents create push subscriptions with this public key.
+     * The user agents create a push subscription with this public key.
      */
     @GetMapping("/getPublicKey")
     public byte[] getPublicKey() {
@@ -89,8 +89,8 @@ public class BasicExample {
      * # Step 3.
      * Requests the delivery of push messages.
      * <p>
-     * In this example, for simplicity and testability, we implement this feature as an HTTP endpoint.
-     * However, in real applications, this feature does not have to be an HTTP endpoint.
+     * In this example, for simplicity and testability, we use an HTTP endpoint for this purpose.
+     * However, in real applications, this feature doesn't have to be provided as an HTTP endpoint.
      */
     @PostMapping("/sendMessage")
     public ResponseEntity<String> sendMessage(@RequestBody MyMessage myMessage)
@@ -113,7 +113,7 @@ public class BasicExample {
                 .toRequest();
 
             // In this example, we send push messages in simple text format.
-            // But you can also send them in JSON format as follows:
+            // You can also send them in JSON format as follows:
             //
             // ObjectMapper objectMapper = (Create a new one or get from the DI container.)
             // ....
