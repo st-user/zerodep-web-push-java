@@ -22,13 +22,13 @@ see https://github.com/jwtk/jjwt#jdk-projects).
 <dependency>
     <groupId>com.zerodeplibs</groupId>
     <artifactId>zerodep-web-push-java</artifactId>
-    <version>1.2.0</version>
+    <version>1.3.0</version>
 </dependency>
 <!-- Currently zerodep-web-push-java-ext-jwt-jjwt depends on jjwt v0.11.2 -->
 <dependency>
     <groupId>com.zerodeplibs</groupId>
     <artifactId>zerodep-web-push-java-ext-jwt-jjwt</artifactId>
-    <version>1.2.0</version>
+    <version>1.3.0</version>
     <scope>runtime</scope>
 </dependency>
 
@@ -60,3 +60,10 @@ VAPIDKeyPairs.of(
 );
 
 ```
+
+## MISC
+
+### Thread-safety
+
+The implementations of this sub-module are thread-safe.
+
