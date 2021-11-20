@@ -84,3 +84,9 @@ String value = vapidKeyPair.generateAuthorizationHeaderValue(param);// An except
 
 For more information, please consult the javadoc
 of `com.auth0.jwt.JWTCreator.Builder#withPayload(java.util.Map<String, ?>)`.
+
+## MISC
+
+### Thread-safety
+
+The implementations of this sub-module are thread-safe.

@@ -84,3 +84,9 @@ String value = vapidKeyPair.generateAuthorizationHeaderValue(param);// An except
 
 ```
 
+## MISC
+
+### Thread-safety
+
+The implementations of this sub-module are thread-safe.
+

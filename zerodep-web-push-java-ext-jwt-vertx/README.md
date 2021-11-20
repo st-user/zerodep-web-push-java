@@ -75,3 +75,9 @@ VAPIDKeyPairs.of(
 
 ```
 
+## MISC
+
+### Thread-safety
+
+The implementations of this sub-module are thread-safe when a given `vertxObtainStrategy` is
+thread-safe.

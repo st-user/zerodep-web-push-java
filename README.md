@@ -32,6 +32,17 @@ Uses [JWT Auth - Vert.x](https://vertx.io/docs/vertx-auth-jwt/java/).
 
 MIT
 
+## MISC
+
+### Thread-safety
+
+- The classes of the sub-modules other
+  than [zerodep-web-push-java-ext-jwt-vertx](./zerodep-web-push-java-ext-jwt-vertx/README.md) are
+  always thread-safe.
+- The classes
+  of [zerodep-web-push-java-ext-jwt-vertx](./zerodep-web-push-java-ext-jwt-vertx/README.md) are
+  thread-safe when a given `vertxObtainStrategy` is thread-safe.
+
 ## Contribution
 
 This project follows a [git flow](https://nvie.com/posts/a-successful-git-branching-model/) -style
