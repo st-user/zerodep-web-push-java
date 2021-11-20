@@ -4,13 +4,14 @@ import java.security.NoSuchAlgorithmException;
 
 /**
  * <p>
- * Static factory methods used to create an instance of {@link MessageEncryption}.
+ * Static factory methods used to create instances of {@link MessageEncryption}.
  * </p>
  *
  * <div><b>Thread Safety:</b></div>
  * <p>
- * The factory methods themselves are thread-safe,
- * but the returned objects are <b>NOT</b> thread-safe.
+ * Instances of {@link MessageEncryption} obtained
+ * through a factory method of this class are <b>NOT</b> thread-safe.
+ * But instances of {@link EncryptedPushMessage} obtained through them are thread-safe.
  * </p>
  *
  * @author Tomoki Sato

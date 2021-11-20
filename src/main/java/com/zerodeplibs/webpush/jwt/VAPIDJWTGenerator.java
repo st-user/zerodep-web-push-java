@@ -13,7 +13,7 @@ package com.zerodeplibs.webpush.jwt;
  * </p>
  *
  * <p>
- * Of course, you can use arbitrary 3rd party libraries to implement this interface.
+ * Of course, you can use arbitrary 3rd party libraries to make your own implementation.
  * For example, if you want to use <a href="https://github.com/auth0/java-jwt">Auth0 Java JWT library</a>,
  * The implementation will be something like below.
  * </p>
@@ -35,6 +35,13 @@ package com.zerodeplibs.webpush.jwt;
  *         }
  *     }
  * </pre>
+ *
+ * <div><b>Thread Safety:</b></div>
+ * <p>
+ * Depends on implementations.
+ * Most of the implementations provided by <a href="https://github.com/st-user/zerodep-web-push-java-ext-jwt">zerodep-web-push-java-ext-jwt</a>
+ * are thread-safe. For more information, see its README.
+ * </p>
  *
  * @author Tomoki Sato
  * @see VAPIDJWTGeneratorFactory

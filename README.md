@@ -3,10 +3,12 @@
 A Java [Web Push](https://datatracker.ietf.org/doc/html/rfc8030) server-side library that doesn't
 force your application to have dependencies on specific third-party libraries.
 
-- Provides the functionalities for [VAPID](https://datatracker.ietf.org/doc/html/rfc8292)
-- Provides the functionalities
+This library
+
+- provides the functionalities for [VAPID](https://datatracker.ietf.org/doc/html/rfc8292)
+- provides the functionalities
   for [Message Encryption for Web Push](https://datatracker.ietf.org/doc/html/rfc8291)
-- Assumes that the [Push API](https://www.w3.org/TR/push-api/) is used.
+- assumes that the [Push API](https://www.w3.org/TR/push-api/) is used.
 
 This library itself doesn't provide all the functionalities needed for Web Push.
 
@@ -21,15 +23,12 @@ externally. However, you can choose arbitrary libraries that suit your project.
 - Components that help applications utilize a third-party HTTP Client library are available in '
   zerodep-web-push-java' out of the box.
 
-If your application can utilize these sub-modules/components, they make it easier for you to
-implement the related features.
-
-These sub-modules and components are optional, so they don't force your application to have
-dependencies on specific third-party libraries.
+These sub-modules and components are optional. You don't necessarily use them. However, they make it
+easier for you to build the required features.
 
 ## The motivation for this project
 
-The motivation for this project is to make it easy to implement Web Push functionality on any
+The motivation for this project is to make it easy to utilize the Web Push functionality on any
 architecture(e.g. an existing project that already depends on a specific web-framework and various
 third-party libraries).
 
@@ -53,14 +52,14 @@ Java 8+
 <dependency>
   <groupId>com.zerodeplibs</groupId>
   <artifactId>zerodep-web-push-java</artifactId>
-  <version>1.2.0</version>
+  <version>1.3.0</version>
 </dependency>
 
 ```
 
 ## Sub-modules and third-party libraries
 
-In order to implement the complete Web Push functionality with this library, at least the following
+In order for your application to implement the complete Web Push functionality with this library, at least the following
 two types of functionalities have to be provided from outside this library.
 
 <details>
@@ -72,18 +71,18 @@ for [VAPID](https://datatracker.ietf.org/doc/html/rfc8292).
 Sub-modules for this functionality are available
 from [zerodep-web-push-java-ext-jwt](https://github.com/st-user/zerodep-web-push-java-ext-jwt).
 
-These sub-modules are optional, so you can also implement such functionality by yourself by using classes and interfaces
-in `com.zerodeplibs.webpush.jwt` package.
+These sub-modules are optional, so you can also make such functionality by yourself by using
+classes and interfaces in `com.zerodeplibs.webpush.jwt` package.
 
 </details>
 
 <details>
     <summary><b>HTTP Client</b></summary>
 
-Application servers need to send HTTP requests to push services in order to request the delivery of push
-messages. Helper components for this functionality are available from
-the `com.zerodeplibs.webpush.httpclient` package. Each of these helper components
-utilizes a third-party HTTP Client library. Supported libraries are listed below.
+Application servers need to send HTTP requests to push services in order to request the delivery of
+push messages. Helper components for this functionality are available from
+the `com.zerodeplibs.webpush.httpclient` package. Each of these helper components utilizes a
+third-party HTTP Client library. Supported libraries are listed below.
 
 - [OkHttp](https://square.github.io/okhttp/)
 
@@ -108,7 +107,8 @@ utilizes a third-party HTTP Client library. Supported libraries are listed below
 
   The latest versions are recommended.
 
-These components and their dependencies are optional, so you can also implement such functionality by yourself by using classes in `com.zerodeplibs.webpush.httpclient` package.
+These components and their dependencies are optional, so you can also make such functionality
+by yourself by using classes in `com.zerodeplibs.webpush.httpclient` package.
 
 </details>
 
@@ -132,12 +132,12 @@ public class BasicExample {
     private VAPIDKeyPair vapidKeyPair;
 
     /**
-     * In this example, we read the key pair for VAPID
+     * In this example, we read a key pair for VAPID
      * from a PEM formatted file on the file system.
      * <p>
-     * You can extract key pairs from various sources.
-     * For example, '.der' file(binary content), an octet sequence stored in a database and so on.
-     * Please see the javadoc of PrivateKeySources and PublicKeySources.
+     * You can extract key pairs from various sources:
+     * '.der' file(binary content), an octet sequence stored in a database and so on.
+     * For more information, please see the javadoc of PrivateKeySources and PublicKeySources.
      */
     @Bean
     public VAPIDKeyPair vaidKeyPair(
@@ -149,7 +149,7 @@ public class BasicExample {
             PublicKeySources.ofPEMFile(new File(publicKeyFilePath).toPath())
 
             /*
-             * If you want to implement VAPIDJWTGenerator yourself,
+             * If you want to make your own VAPIDJWTGenerator,
              * the project for its sub-modules is a good example.
              * For more information, please consult the source codes on https://github.com/st-user/zerodep-web-push-java-ext-jwt
              */
@@ -162,7 +162,7 @@ public class BasicExample {
      * # Step 1.
      * Sends the public key to user agents.
      * <p>
-     * The user agents create push subscriptions with this public key.
+     * The user agents create a push subscription with this public key.
      */
     @GetMapping("/getPublicKey")
     public byte[] getPublicKey() {
@@ -184,8 +184,8 @@ public class BasicExample {
      * # Step 3.
      * Requests the delivery of push messages.
      * <p>
-     * In this example, for simplicity and testability, we implement this feature as an HTTP endpoint.
-     * However, in real applications, this feature does not have to be an HTTP endpoint.
+     * In this example, for simplicity and testability, we use an HTTP endpoint for this purpose.
+     * However, in real applications, this feature doesn't have to be provided as an HTTP endpoint.
      */
     @PostMapping("/sendMessage")
     public ResponseEntity<String> sendMessage(@RequestBody MyMessage myMessage)
@@ -208,7 +208,7 @@ public class BasicExample {
                 .toRequest();
 
             // In this example, we send push messages in simple text format.
-            // But you can also send them in JSON format as follows:
+            // You can also send them in JSON format as follows:
             //
             // ObjectMapper objectMapper = (Create a new one or get from the DI container.)
             // ....
@@ -233,17 +233,6 @@ public class BasicExample {
 
     ... Omitted for simplicity.
 
-    private Collection<PushSubscription> getSubscriptionsFromStorage() {
-        return this.subscriptionMap.values();
-    }
-
-    private void saveSubscriptionToStorage(PushSubscription subscription) {
-        this.subscriptionMap.put(subscription.getEndpoint(), subscription);
-    }
-
-    private final Logger logger = LoggerFactory.getLogger(BasicExample.class);
-    private final Map<String, PushSubscription> subscriptionMap = new HashMap<>();
-
 }
 
 ```
@@ -263,12 +252,12 @@ code: [zerodep-web-push-java-example-vertx](https://github.com/st-user/zerodep-w
 public class Example {
 
     /**
-     * In this example, we read the key pair for VAPID
+     * In this example, we read a key pair for VAPID
      * from a PEM formatted file on the file system.
      * <p>
-     * You can extract key pairs from various sources.
-     * For example, '.der' file(binary content), an octet sequence stored in a database and so on.
-     * Please see the javadoc of PrivateKeySources and PublicKeySources.
+     * You can extract key pairs from various sources:
+     * '.der' file(binary content), an octet sequence stored in a database and so on.
+     * For more information, please see the javadoc of PrivateKeySources and PublicKeySources.
      */
     private static VAPIDKeyPair createVAPIDKeyPair(Vertx vertx) throws IOException {
         return VAPIDKeyPairs.of(
@@ -291,7 +280,7 @@ public class Example {
          * # Step 1.
          * Sends the public key to user agents.
          *
-         * The user agents create push subscriptions with this public key.
+         * The user agents create a push subscription with this public key.
          */
         router
             .get("/getPublicKey")
@@ -322,8 +311,8 @@ public class Example {
          * # Step 3.
          * Requests the delivery of push messages.
          *
-         * In this example, for simplicity and testability, we implement this feature as an HTTP endpoint.
-         * However, in real applications, this feature does not have to be an HTTP endpoint.
+         * In this example, for simplicity and testability, we use an HTTP endpoint for this purpose.
+         * However, in real applications, this feature doesn't have to be provided as an HTTP endpoint.
          */
         router
             .post("/sendMessage")
@@ -479,20 +468,6 @@ The exceptions are:
 
 
 <details>
-    <summary><b>Thread safe or not thread safe</b></summary>
-
-The methods listed below can be called from multiple threads at the same time (thread safe).
-However, the others should **NOT** be considered thread-safe.
-
-**Thread safe**
-
-- The static utility methods(e.g. `com.zerodeplibs.webpush.header.Topic#ensure`).
-- The methods of instances that meet the conditions for thread safety described in their javadoc(
-  e.g. an instance of `com.zerodeplibs.webpush.VAPIDKeyPair.java`).
-
-</details>
-
-<details>
     <summary><b>Working with Java Cryptography Architecture(JCA)</b></summary>
 
 This library
@@ -511,8 +486,8 @@ javax.crypto.Cipher.getInstance("AES/GCM/NoPadding")
 By default, the providers shipped with the JDK will be used(e.g. `SunEC` and `SunJCE`).
 
 Of course, any provider that supports these algorithms is available(
-e.g. [Bouncy Castle](https://bouncycastle.org/)). This is because 'zerodep-web-push-java' has no dependencies
-on any specific provider.
+e.g. [Bouncy Castle](https://bouncycastle.org/)). This is because 'zerodep-web-push-java' has no
+dependencies on any specific provider.
 
 </details>
 

@@ -13,7 +13,7 @@ import okhttp3.RequestBody;
  *
  * <div><b>Thread Safety:</b></div>
  * <p>
- * Objects of this class are immutable. So they can be accessed safely from multiple threads.
+ * Instances of this class are immutable. So they can be accessed safely from multiple threads.
  * </p>
  *
  * @author Tomoki Sato

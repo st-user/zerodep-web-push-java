@@ -33,6 +33,12 @@ import java.util.function.BiConsumer;
  *
  * </pre>
  *
+ * <div><b>Thread Safety:</b></div>
+ * <p>
+ * An instance of this class is thread-safe(or immutable)
+ * only when each <code>value</code> of its additional claims is thread-safe(or immutable).
+ * </p>
+ *
  * @author Tomoki Sato
  * @see VAPIDJWTGenerator
  */
@@ -62,7 +68,8 @@ public class VAPIDJWTParam {
 
     /**
      * <p>
-     * Gets one of the additional claims by specifying the name and the type of the value.
+     * Gets one of the additional claims
+     * that is mapped to the given name and can be cast to the given type.
      * </p>
      *
      * <div><b>Example:</b></div>
@@ -177,7 +184,7 @@ public class VAPIDJWTParam {
          * @throws MalformedURLRuntimeException if the underlying {@link URL#URL(String)}
          *                                      throws {@link MalformedURLException}.
          * @throws IllegalStateException        if the methods for specifying a resource URL
-         *                                      is called more than once.
+         *                                      are called more than once.
          */
         public Builder resourceURLString(String resourceURLString) {
             WebPushPreConditions.checkNotNull(resourceURLString, "resourceURLString");
@@ -206,7 +213,7 @@ public class VAPIDJWTParam {
          * @param resourceURL a push resource URL.
          * @return this object.
          * @throws IllegalStateException if the methods for specifying a resource URL
-         *                               is called more than once.
+         *                               are called more than once.
          */
         public Builder resourceURL(URL resourceURL) {
             WebPushPreConditions.checkNotNull(resourceURL, "resourceURL");
@@ -218,18 +225,18 @@ public class VAPIDJWTParam {
 
         /**
          * <p>
-         * Specifies the time after which a JWT expires.
+         * Specifies the time after which a JWT for VAPID expires.
          * </p>
          *
          * <p>
          * Typically, the specified expiration time is used as an "exp" (Expiry) claim.
          * </p>
          *
-         * @param expiresAfter the time after which a JWT expires.
+         * @param expiresAfter the time after which a JWT for VAPID expires.
          * @param timeUnit     the unit of the given <code>expiresAfter</code>.
          * @return this object.
          * @throws IllegalStateException if the methods for specifying expiration time
-         *                               is called more than once.
+         *                               are called more than once.
          */
         public Builder expiresAfter(int expiresAfter, TimeUnit timeUnit) {
             WebPushPreConditions.checkNotNull(timeUnit, "timeUnit");
@@ -240,17 +247,17 @@ public class VAPIDJWTParam {
 
         /**
          * <p>
-         * Specifies the time in seconds after which a JWT expires.
+         * Specifies the time in seconds after which a JWT for VAPID expires.
          * </p>
          *
          * <p>
          * Typically, the specified expiration time is used as an "exp" (Expiry) claim.
          * </p>
          *
-         * @param seconds the time in seconds after which a JWT expires.
+         * @param seconds the time in seconds after which a JWT for VAPID expires.
          * @return this object.
          * @throws IllegalStateException if the methods for specifying expiration time
-         *                               is called more than once.
+         *                               are called more than once.
          * @deprecated Use {@link #expiresAfter(int, TimeUnit)}.
          */
         @Deprecated
@@ -262,17 +269,17 @@ public class VAPIDJWTParam {
 
         /**
          * <p>
-         * Specifies the time at which a JWT expires.
+         * Specifies the time at which a JWT for VAPID expires.
          * </p>
          *
          * <p>
          * Typically, the specified expiration time is used as an "exp" (Expiry) claim.
          * </p>
          *
-         * @param expirationTime the time at which a JWT expires.
+         * @param expirationTime the time at which a JWT for VAPID expires.
          * @return this object.
          * @throws IllegalStateException if the methods for specifying expiration time
-         *                               is called more than once.
+         *                               are called more than once.
          */
         public Builder expirationTime(Instant expirationTime) {
             WebPushPreConditions.checkNotNull(expirationTime, "expirationTime");
@@ -284,17 +291,17 @@ public class VAPIDJWTParam {
 
         /**
          * <p>
-         * Specifies the time at which a JWT expires.
+         * Specifies the time at which a JWT for VAPID expires.
          * </p>
          *
          * <p>
          * Typically, the specified expiration time is used as an "exp" (Expiry) claim.
          * </p>
          *
-         * @param expiresAt the time at which a JWT expires.
+         * @param expiresAt the time at which a JWT for VAPID expires.
          * @return this object.
          * @throws IllegalStateException if the methods for specifying expiration time
-         *                               is called more than once.
+         *                               are called more than once.
          * @deprecated Use {@link #expirationTime(Instant)}}.
          */
         @Deprecated
@@ -413,7 +420,7 @@ public class VAPIDJWTParam {
      * </p>
      *
      * <p>
-     * Typically, the returned value is set to an "aud" claim.
+     * Typically, the returned value is used as an "aud" claim.
      * </p>
      *
      * @return the origin.
@@ -423,7 +430,7 @@ public class VAPIDJWTParam {
     }
 
     /**
-     * Gets the expiration time at which a JWT expires.
+     * Gets the expiration time at which a JWT for VAPID expires.
      *
      * @return the expiration time.
      */
@@ -432,7 +439,7 @@ public class VAPIDJWTParam {
     }
 
     /**
-     * Gets the expiration time at which a JWT expires.
+     * Gets the expiration time at which a JWT for VAPID expires.
      *
      * @return the expiration time.
      */
@@ -447,7 +454,7 @@ public class VAPIDJWTParam {
      * </p>
      *
      * <p>
-     * Typically, the returned value is set to an "exp" claim.
+     * Typically, the returned value is used as an "exp" claim.
      * </p>
      *
      * @return the number of seconds.
@@ -464,7 +471,7 @@ public class VAPIDJWTParam {
      * </p>
      *
      * <p>
-     * Typically, the returned value is set to an "sub" claim.
+     * Typically, the returned value is used as an "sub" claim.
      * </p>
      *
      * @return an {@link Optional} that may or may not contain the subject.

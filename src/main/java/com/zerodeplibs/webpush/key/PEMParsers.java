@@ -4,13 +4,12 @@ import com.zerodeplibs.webpush.internal.WebPushPreConditions;
 
 /**
  * <p>
- * Static factory methods used to create an instance of {@link PEMParser}.
+ * Static factory methods used to create instances of {@link PEMParser}.
  * </p>
  *
  * <div><b>Thread Safety:</b></div>
  * <p>
- * The factory methods themselves are thread-safe.
- * The returned objects are also thread-safe because they are immutable.
+ * Instances obtained through a factory method of this class are immutable and thread-safe.
  * </p>
  *
  * @author Tomoki Sato

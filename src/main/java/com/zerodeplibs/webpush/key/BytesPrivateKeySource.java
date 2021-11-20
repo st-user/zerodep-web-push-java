@@ -9,7 +9,7 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Arrays;
 
 /**
- * An implementation of the PrivateKeySource that wraps a byte array.
+ * An implementation of {@link PrivateKeySource} that wraps a byte array.
  *
  * @author Tomoki Sato
  */

@@ -9,7 +9,7 @@ import java.security.interfaces.ECPublicKey;
 
 /**
  * <p>
- * Static factory methods used to create an instance of {@link PublicKeySource}.
+ * Static factory methods used to create instances of {@link PublicKeySource}.
  * </p>
  *
  * <p>
@@ -56,8 +56,7 @@ import java.security.interfaces.ECPublicKey;
  *
  * <div><b>Thread Safety:</b></div>
  * <p>
- * The factory methods themselves are thread-safe,
- * but the returned objects are <b>NOT</b> thread-safe.
+ * Instances obtained through a factory method of this class are <b>NOT</b> thread-safe.
  * </p>
  *
  * @author Tomoki Sato
@@ -250,9 +249,9 @@ public class PublicKeySources {
         }
 
         /**
-         * Specifies the parser used to parse the content of the PEM file.
+         * Specifies a parser used to parse the content of the PEM file.
          *
-         * @param parser the parser used to parse the content of the PEM file.
+         * @param parser a parser used to parse the content of the PEM file.
          * @return this object.
          */
         public PEMFileSourceBuilder parser(PEMParser parser) {

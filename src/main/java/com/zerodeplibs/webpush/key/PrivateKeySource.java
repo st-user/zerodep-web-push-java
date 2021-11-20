@@ -4,12 +4,17 @@ import java.security.interfaces.ECPrivateKey;
 
 /**
  * <p>
- * This class represents a source of an {@link ECPrivateKey}.
+ * Implementations of this interface represent a source of an {@link ECPrivateKey}.
  * </p>
  *
  * <p>
  * Typically, to create a PrivateKeySource,
  * a factory method defined in {@link PrivateKeySources} is used.
+ * </p>
+ *
+ * <div><b>Thread Safety:</b></div>
+ * <p>
+ * Depends on implementations. See {@link PrivateKeySources}.
  * </p>
  *
  * @author Tomoki Sato

@@ -16,7 +16,7 @@ import org.apache.hc.core5.http.io.entity.ByteArrayEntity;
  *
  * <div><b>Thread Safety:</b></div>
  * <p>
- * Objects of this class are immutable. So they can be accessed safely from multiple threads.
+ * Instances of this class are immutable. So they can be accessed safely from multiple threads.
  * </p>
  *
  * @author Tomoki Sato

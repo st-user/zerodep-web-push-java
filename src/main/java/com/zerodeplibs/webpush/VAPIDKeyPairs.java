@@ -14,15 +14,20 @@ import java.util.function.BiFunction;
 
 /**
  * <p>
- * Static factory methods used to create an instance of {@link VAPIDKeyPair}.
+ * Static factory methods used to create instances of {@link VAPIDKeyPair}.
  * </p>
  *
  * <div><b>Thread Safety:</b></div>
- * <p>
- * The factory methods themselves are thread-safe.
- * The returned objects are thread-safe only if an instance
- * obtained from <code>jwtGeneratorFactory</code> is thread-safe.
- * </p>
+ * <ul>
+ * <li>
+ * Instances obtained through {@link #of(PrivateKeySource, PublicKeySource, BiFunction)} are
+ * thread-safe only when an instance obtained from <code>jwtGeneratorFactory</code> is thread-safe.
+ * </li>
+ * <li>
+ * When you use {@link #of(PrivateKeySource, PublicKeySource)} with a sub-module provided by <a href="https://github.com/st-user/zerodep-web-push-java-ext-jwt">zerodep-web-push-java-ext-jwt</a>,
+ * obtained instances are thread-safe.
+ * </li>
+ * </ul>
  *
  * @author Tomoki Sato
  */

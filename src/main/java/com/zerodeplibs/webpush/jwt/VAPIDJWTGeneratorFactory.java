@@ -22,6 +22,13 @@ import java.security.interfaces.ECPublicKey;
  * and a {@link VAPIDJWTGenerator} directly.
  * </p>
  *
+ * <div><b>Thread Safety:</b></div>
+ * <p>
+ * Depends on implementations.
+ * All of the implementations provided by <a href="https://github.com/st-user/zerodep-web-push-java-ext-jwt">zerodep-web-push-java-ext-jwt</a>
+ * are thread-safe.
+ * </p>
+ *
  * @author Tomoki Sato
  * @see VAPIDKeyPairs#of(PrivateKeySource, PublicKeySource)
  */

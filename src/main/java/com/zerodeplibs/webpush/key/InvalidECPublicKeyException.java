@@ -2,8 +2,7 @@ package com.zerodeplibs.webpush.key;
 
 /**
  * <p>
- * This Exception is thrown by {@link PublicKeySource} when the source is extracting a public key
- * if the public key is invalid.
+ * This exception is thrown to indicate that an elliptic curve (EC) public key is invalid.
  * </p>
  *
  * <p>
