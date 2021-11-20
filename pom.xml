@@ -22,7 +22,7 @@
         <vertx.version>4.2.1</vertx.version>
         <!--
             Also Vert.x 3 is available.
-            See also 'maven-compiler-plugin' configuration.
+            See also the 'maven-compiler-plugin' configuration below.
             <vertx.version>3.9.9</vertx.version>
          -->
     </properties>
@@ -102,7 +102,7 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.8.0</version>
                     <!--
-                        When having 'module-info.java' and using Vert.x '3',
+                        When having a 'module-info.java' and using Vert.x '3',
                         you have to add the following 'add-reads' argument
                         in order for 'com.zerodeplibs.webpush' to read the Vert.x's module.
                     -->

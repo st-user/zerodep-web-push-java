@@ -27,12 +27,12 @@ import java.util.stream.Collectors;
 public class Example {
 
     /**
-     * In this example, we read the key pair for VAPID
+     * In this example, we read a key pair for VAPID
      * from a PEM formatted file on the file system.
      * <p>
-     * You can extract key pairs from various sources.
-     * For example, '.der' file(binary content), an octet sequence stored in a database and so on.
-     * Please see the javadoc of PrivateKeySources and PublicKeySources.
+     * You can extract key pairs from various sources:
+     * '.der' file(binary content), an octet sequence stored in a database and so on.
+     * For more information, please see the javadoc of PrivateKeySources and PublicKeySources.
      */
     private static VAPIDKeyPair createVAPIDKeyPair(Vertx vertx) throws IOException {
         return VAPIDKeyPairs.of(
@@ -55,7 +55,7 @@ public class Example {
          * # Step 1.
          * Sends the public key to user agents.
          *
-         * The user agents create push subscriptions with this public key.
+         * The user agents create a push subscription with this public key.
          */
         router
             .get("/getPublicKey")
@@ -86,8 +86,8 @@ public class Example {
          * # Step 3.
          * Requests the delivery of push messages.
          *
-         * In this example, for simplicity and testability, we implement this feature as an HTTP endpoint.
-         * However, in real applications, this feature does not have to be an HTTP endpoint.
+         * In this example, for simplicity and testability, we use an HTTP endpoint for this purpose.
+         * However, in real applications, this feature doesn't have to be provided as an HTTP endpoint.
          */
         router
             .post("/sendMessage")
