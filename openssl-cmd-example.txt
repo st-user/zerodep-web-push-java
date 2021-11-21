@@ -1,3 +1,7 @@
+##
+# Example commands to use openssl
+##
 openssl ecparam -genkey -name prime256v1 -noout -out my-private.pem
 openssl pkcs8 -in my-private.pem -topk8 -nocrypt -out my-private_pkcs8.pem
 openssl ec -in my-private.pem -pubout -conv_form uncompressed -out my-pub.pem
+
