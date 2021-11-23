@@ -1,7 +1,7 @@
 # zerodep-web-push-java
 
-A Java [Web Push](https://datatracker.ietf.org/doc/html/rfc8030) server-side library that doesn't
-force your application to have dependencies on specific third-party libraries.
+A Java [Web Push](https://datatracker.ietf.org/doc/html/rfc8030) server-side library that can easily
+be integrated with various third-party libraries and frameworks.
 
 This library
 
@@ -10,34 +10,31 @@ This library
   for [Message Encryption for Web Push](https://datatracker.ietf.org/doc/html/rfc8291)
 - assumes that the [Push API](https://www.w3.org/TR/push-api/) is used.
 
-This library itself doesn't provide all the functionalities needed for Web Push.
+'zerodep-web-push-java' assumes that suitable implementations(libraries) of the following
+functionalities vary depending on applications.
 
-The JSON Web Token (JWT) functionality and the Http Client functionality need to be provided
-externally. However, you can choose arbitrary libraries that suit your project.
+- Generating and signing JSON Web Token (used for VAPID)
+- Sending HTTP requests (requests for the delivery of push messages)
+- Cryptographic operations
 
-**NOTE**
+For example, an application may need to send HTTP requests **synchronously**
+with [Apache HTTPClient](https://hc.apache.org/httpcomponents-client-5.1.x/) but another application
+may need to do this **asynchronously** with [Vert.x](https://vertx.io/docs/vertx-web-client/java/).
 
-- Sub-modules that help applications utilize a third-party JWT library are available
-  from [zerodep-web-push-java-ext-jwt](https://github.com/st-user/zerodep-web-push-java-ext-jwt).
+In order to allow you to choose libraries suitable for your application, this library doesn't force
+your application to have dependencies on specifics libraries. Instead, this library
 
-- Components that help applications utilize a third-party HTTP Client library are available in '
-  zerodep-web-push-java' out of the box.
+- provides the functionality of JWT
+  with [its sub-modules](https://github.com/st-user/zerodep-web-push-java-ext-jwt),
+- provides optional components helping applications use HTTP Client libraries and
+- utilizes
+  [the Java Cryptography Architecture (JCA)](https://docs.oracle.com/javase/8/docs/technotes/guides/security/crypto/CryptoSpec.html)
+  for cryptographic operations.
 
-These sub-modules and components are optional. You don't necessarily use them. However, they make it
-easier for you to build the required features.
-
-## The motivation for this project
-
-The motivation for this project is to make it easy to utilize the Web Push functionality on any
-architecture(e.g. an existing project that already depends on a specific web-framework and various
-third-party libraries).
-
-To achieve this, this project focuses on:
-
-- having no dependencies on any specific third-party library.
-- providing an independent component for each feature. For example, in this library,
-  the `VAPIDKeyPair`
-  interface and the `MessageEncryption` interface are defined and can be used independently.
+Each of the sub-modules utilizes a specific JWT library. Each of the optional components supports a
+specific HTTP Client library. you can choose suitable modules/components for your requirements. JCA
+enables this library to be independent of specific implementations(providers) for security
+functionality.
 
 ## Requirements
 
@@ -52,15 +49,15 @@ Java 8+
 <dependency>
   <groupId>com.zerodeplibs</groupId>
   <artifactId>zerodep-web-push-java</artifactId>
-  <version>1.3.0</version>
+  <version>1.3.1</version>
 </dependency>
 
 ```
 
-## Sub-modules and third-party libraries
+## Sub-modules and optional components
 
-In order for your application to implement the complete Web Push functionality with this library, at least the following
-two types of functionalities have to be provided from outside this library.
+In order for your application to implement the complete Web Push functionality with this library, at
+least the following two types of functionalities have to be provided from outside this library.
 
 <details>
     <summary><b>JWT</b></summary>
@@ -71,8 +68,8 @@ for [VAPID](https://datatracker.ietf.org/doc/html/rfc8292).
 Sub-modules for this functionality are available
 from [zerodep-web-push-java-ext-jwt](https://github.com/st-user/zerodep-web-push-java-ext-jwt).
 
-These sub-modules are optional, so you can also make such functionality by yourself by using
-classes and interfaces in `com.zerodeplibs.webpush.jwt` package.
+These sub-modules are optional, so you can also make such functionality by yourself by using classes
+and interfaces in `com.zerodeplibs.webpush.jwt` package.
 
 </details>
 
@@ -107,8 +104,8 @@ third-party HTTP Client library. Supported libraries are listed below.
 
   The latest versions are recommended.
 
-These components and their dependencies are optional, so you can also make such functionality
-by yourself by using classes in `com.zerodeplibs.webpush.httpclient` package.
+These components and their dependencies are optional, so you can also make such functionality by
+yourself by using classes in `com.zerodeplibs.webpush.httpclient` package.
 
 </details>
 
@@ -459,10 +456,9 @@ return `java.util.Optional.empty()` when they need to indicate that the value do
 
 The exceptions are:
 
-- `com.zerodeplibs.webpush.PushSubscription.java`(the server-side representation for
-  a [push subscription](https://www.w3.org/TR/push-api/#push-subscription)).
-- The methods of runtime exceptions and checked exceptions thrown by some methods and constructors.
-  For example, their `getCause()` can return null.
+- `com.zerodeplibs.webpush.PushSubscription.java`. This is the server-side representation
+  of [push subscription](https://www.w3.org/TR/push-api/#push-subscription).
+- The methods of `Exception`. For example, their `getCause()` can return null.
 
 </details>
 

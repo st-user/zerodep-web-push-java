@@ -10,8 +10,8 @@
     <version>1.3.1</version>
 
     <name>${project.groupId}:${project.artifactId}</name>
-    <description>A Java Web Push server-side library that doesn't force your application to have
-        dependencies on specific third-party libraries.
+    <description>A Java Web Push server-side library that can easily be integrated with various
+        third-party libraries and frameworks.
     </description>
     <url>https://github.com/st-user/zerodep-web-push-java</url>
 
