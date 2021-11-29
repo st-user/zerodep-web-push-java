@@ -59,6 +59,8 @@ such as Google Chrome, Microsoft Edge and Firefox
    -d '{ "message": "Message sent with curl." }'
    ```
 
+video: [Web Push With Java; How to use the example application for ‘zerodep-web-push-java’(mac OS/LInux)](https://youtu.be/LluUcW6Q4hs)
+
 ## NOTE
 
 ### private key
