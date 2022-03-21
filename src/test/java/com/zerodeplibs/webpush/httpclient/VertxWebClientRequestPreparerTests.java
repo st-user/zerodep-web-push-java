@@ -21,6 +21,7 @@ import io.vertx.core.http.HttpClient;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpVersion;
 import io.vertx.core.json.JsonObject;
+import io.vertx.core.net.ProxyOptions;
 import io.vertx.core.streams.ReadStream;
 import io.vertx.ext.auth.authentication.Credentials;
 import io.vertx.ext.web.client.HttpRequest;
@@ -261,6 +262,11 @@ public class VertxWebClientRequestPreparerTests {
 
         @Override
         public HttpRequest<Buffer> followRedirects(boolean value) {
+            throw new UnsupportedOperationException("Unexpected invocation.");
+        }
+
+        @Override
+        public HttpRequest<Buffer> proxy(ProxyOptions proxyOptions) {
             throw new UnsupportedOperationException("Unexpected invocation.");
         }
 
