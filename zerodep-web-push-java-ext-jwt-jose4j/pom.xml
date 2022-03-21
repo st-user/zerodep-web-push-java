@@ -21,7 +21,7 @@
     <url>https://github.com/st-user/zerodep-web-push-java-ext-jwt</url>
 
     <properties>
-        <jose4j.version>0.7.9</jose4j.version>
+        <jose4j.version>0.7.11</jose4j.version>
     </properties>
 
     <dependencies>
