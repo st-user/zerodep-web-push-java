@@ -53,8 +53,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
-        <jackson.version>2.13.0</jackson.version>
-        <junit.version>5.8.1</junit.version>
+        <jackson.version>2.13.2</jackson.version>
+        <junit.version>5.8.2</junit.version>
+        <jose4j.version>0.7.11</jose4j.version>
     </properties>
 
     <build>
@@ -200,7 +201,7 @@
             <dependency>
                 <groupId>org.bitbucket.b_c</groupId>
                 <artifactId>jose4j</artifactId>
-                <version>0.7.9</version>
+                <version>${jose4j.version}</version>
                 <scope>test</scope>
             </dependency>
 

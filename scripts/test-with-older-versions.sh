@@ -17,7 +17,7 @@ JJWT_VER=0.11.0
 JOSE4J_VER=0.7.0
 NIMBUS_JOSE_VER=9.0
 VERTX3_VER=3.9.2
-VERTX3_LATEST_VER=3.9.9
+VERTX3_LATEST_VER=3.9.13
 VERTX_VER=4.0.0
 
 ./mvnw surefire:test -pl zerodep-web-push-java-ext-jwt-auth0 -Dauth0.version=${AUTH0_VER}
