@@ -3,18 +3,18 @@ package org.example;
 import com.zerodeplibs.webpush.PushSubscription;
 import com.zerodeplibs.webpush.VAPIDKeyPair;
 import com.zerodeplibs.webpush.VAPIDKeyPairs;
-import com.zerodeplibs.webpush.httpclient.OkHttpClientRequestPreparer;
+import com.zerodeplibs.webpush.httpclient.StandardHttpClientRequestPreparer;
 import com.zerodeplibs.webpush.key.PrivateKeySources;
 import com.zerodeplibs.webpush.key.PublicKeySources;
 import java.io.File;
 import java.io.IOException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,6 +94,52 @@ public class BasicExample {
      */
     @PostMapping("/sendMessage")
     public ResponseEntity<String> sendMessage(@RequestBody MyMessage myMessage)
+        throws IOException, InterruptedException {
+
+        String message = myMessage.getMessage();
+
+        HttpClient httpClient = HttpClient.newBuilder().build();
+        for (PushSubscription subscription : getSubscriptionsFromStorage()) {
+
+            HttpRequest request = StandardHttpClientRequestPreparer.getBuilder()
+                .pushSubscription(subscription)
+                .vapidJWTExpiresAfter(15, TimeUnit.MINUTES)
+                .vapidJWTSubject("mailto:example@example.com")
+                .pushMessage(message)
+                .ttl(1, TimeUnit.HOURS)
+                .urgencyLow()
+                .topic("MyTopic")
+                .build(vapidKeyPair)
+                .toRequest();
+
+            // In this example, we send push messages in simple text format.
+            // You can also send them in JSON format as follows:
+            //
+            // ObjectMapper objectMapper = (Create a new one or get from the DI container.)
+            // ....
+            // .pushMessage(objectMapper.writeValueAsBytes(objectForJson))
+            // ....
+
+            HttpResponse<String> httpResponse =
+                httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            logger.info(String.format("[Http Client] status code: %d", httpResponse.statusCode()));
+            // 201 Created : Success!
+            // 410 Gone : The subscription is no longer valid.
+            // etc...
+            // for more information, see the useful link below:
+            // [Response from push service - The Web Push Protocol ](https://developers.google.com/web/fundamentals/push-notifications/web-push-protocol)
+        }
+
+        return ResponseEntity.ok()
+            .header(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE)
+            .body("The message has been processed.");
+    }
+
+    // "/sendMessage" endpoint
+    // utilizing [OkHttp](https://square.github.io/okhttp/).
+    /*
+    @PostMapping("/sendMessage")
+    public ResponseEntity<String> sendMessageWithOkHttp(@RequestBody MyMessage myMessage)
         throws IOException {
 
         String message = myMessage.getMessage();
@@ -112,21 +158,8 @@ public class BasicExample {
                 .build(vapidKeyPair)
                 .toRequest();
 
-            // In this example, we send push messages in simple text format.
-            // You can also send them in JSON format as follows:
-            //
-            // ObjectMapper objectMapper = (Create a new one or get from the DI container.)
-            // ....
-            // pushMessage(objectMapper.writeValueAsBytes(objectForJson))
-            // ....
-
             try (Response response = httpClient.newCall(request).execute()) {
                 logger.info(String.format("[OkHttp] status code: %d", response.code()));
-                // 201 Created : Success!
-                // 410 Gone : The subscription is no longer valid.
-                // etc...
-                // for more information, see the useful link below:
-                // [Response from push service - The Web Push Protocol ](https://developers.google.com/web/fundamentals/push-notifications/web-push-protocol)
             }
 
         }
@@ -135,7 +168,7 @@ public class BasicExample {
             .header(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE)
             .body("The message has been processed.");
     }
-
+    */
 
     // "/sendMessage" endpoint
     // utilizing [Apache HTTP Client](https://hc.apache.org/httpcomponents-client-5.1.x/).
@@ -273,44 +306,6 @@ public class BasicExample {
 
         }
         new Thread(() -> LifeCycle.stop(httpClient)).start();
-
-        return ResponseEntity.ok()
-            .header(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE)
-            .body("The message has been processed.");
-    }
-    */
-
-
-    // "/sendMessage" endpoint utilizing JDK Http Client(JDK11+ required).
-    // When using this endpoint, remove the comment outs in 'Jdk11HttpClientRequestPreparer.java'.
-    // 'Jdk11HttpClientRequestPreparer.java' is in the same directory as this class.
-    /*
-    @PostMapping("/sendMessage")
-    public ResponseEntity<String> sendMessageWithJdk11HttpClient(@RequestBody MyMessage myMessage)
-        throws IOException, InterruptedException {
-
-        String message = myMessage.getMessage();
-
-        java.net.http.HttpClient httpClient = java.net.http.HttpClient.newBuilder()
-            .build();
-
-        for (PushSubscription subscription : getSubscriptionsFromStorage()) {
-
-            HttpRequest httpRequest = Jdk11HttpClientRequestPreparer.getBuilder()
-                .pushSubscription(subscription)
-                .vapidJWTExpiresAfter(15, TimeUnit.MINUTES)
-                .vapidJWTSubject("mailto:example@example.com")
-                .pushMessage(message)
-                .ttl(1, TimeUnit.HOURS)
-                .urgencyLow()
-                .topic("MyTopic")
-                .build(vapidKeyPair)
-                .toRequest();
-
-            HttpResponse<String> httpResponse =
-                httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-            logger.info(String.format("[JDK11 Http Client] status code: %d", httpResponse.statusCode()));
-        }
 
         return ResponseEntity.ok()
             .header(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE)
