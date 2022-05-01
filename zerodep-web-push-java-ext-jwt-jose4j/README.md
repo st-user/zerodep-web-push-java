@@ -55,7 +55,7 @@ following.
 
 VAPIDJWTParam param = VAPIDJWTParam.getBuilder()
     .resourceURLString("https://example.com")
-    .expiresAfterSeconds(60)
+    .expiresAfter(60, TimeUnit.SECONDS)
     .subject("mailto:test@example.com")
     .additionalClaim("myArbitraryClaim", "valueOfTheClaim") // Specifys an arbitrary claim.
     .build();
@@ -74,7 +74,7 @@ So the following example doesn't work.
 
 VAPIDJWTParam param = VAPIDJWTParam.getBuilder()
     .resourceURLString("https://example.com")
-    .expiresAfterSeconds(60)
+    .expiresAfter(60, TimeUnit.SECONDS)
     .subject("mailto:test@example.com")
     .additionalClaim("myArbitraryClaim", new MyClaim("...."))
     .build();

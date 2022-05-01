@@ -18,6 +18,7 @@ import java.security.spec.ECGenParameterSpec;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import org.jose4j.jwa.AlgorithmConstraints;
 import org.jose4j.jws.AlgorithmIdentifiers;
 import org.jose4j.jws.JsonWebSignature;
@@ -41,7 +42,7 @@ public class Auth0VAPIDJWTGeneratorTests {
         additionalClaim.put("myClaim", "hello");
         VAPIDJWTParam param = VAPIDJWTParam.getBuilder()
             .resourceURLString("https://example.com")
-            .expiresAfterSeconds(60)
+            .expiresAfter(60, TimeUnit.SECONDS)
             .subject("mailto:test@example.com")
             .additionalClaim("adClaim", additionalClaim)
             .build();
