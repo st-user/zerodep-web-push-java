@@ -7,7 +7,6 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -136,17 +135,11 @@ public class VAPIDJWTParam {
     public static class Builder {
 
         private static final Map<String, String> RESERVED_NAMES_WITH_MESSAGE =
-            Collections.unmodifiableMap(new HashMap<String, String>() {
-                {
-                    put("aud",
-                        "The \"aud\" claim should be specified via "
-                            + "#resourceURL or #resourceURLString.");
-                    put("exp",
-                        "The \"exp\" claim should be specified via "
-                            + "#expiresAt or #expiresAfter.");
-                    put("sub", "The \"sub\" claim should be specified via #subject.");
-                }
-            });
+            Map.of("aud", "The \"aud\" claim should be specified via "
+                    + "#resourceURL or #resourceURLString.", "exp",
+                "The \"exp\" claim should be specified via "
+                    + "#expiresAt or #expiresAfter.", "sub",
+                "The \"sub\" claim should be specified via #subject.");
 
         private URL _resourceURL;
         private Instant _expirationTime;
@@ -240,8 +233,7 @@ public class VAPIDJWTParam {
          */
         public Builder expiresAfter(int expiresAfter, TimeUnit timeUnit) {
             WebPushPreConditions.checkNotNull(timeUnit, "timeUnit");
-            // TODO. from JDK9, we can use TimeUnit#toChronoUnit
-            this.expirationTime(now().plusNanos(timeUnit.toNanos(expiresAfter)));
+            this.expirationTime(now().plus(expiresAfter, timeUnit.toChronoUnit()));
             return this;
         }
 
