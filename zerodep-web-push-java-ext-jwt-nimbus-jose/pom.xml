@@ -21,7 +21,7 @@
     <url>https://github.com/st-user/zerodep-web-push-java-ext-jwt</url>
 
     <properties>
-        <nimbus.jose.version>9.21</nimbus.jose.version>
+        <nimbus.jose.version>9.22</nimbus.jose.version>
     </properties>
 
     <dependencies>
