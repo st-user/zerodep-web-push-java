@@ -18,6 +18,7 @@ import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Date;
@@ -72,11 +73,11 @@ public class VAPIDKeyPairTests {
         );
 
         String origin = "https://example.com/origin";
-        Date expiresAt = new Date();
+        Instant expiresAt = Instant.now();
         String subject = "subjectX";
         VAPIDJWTParam jwtParam = VAPIDJWTParam.getBuilder()
             .resourceURLString(origin)
-            .expiresAt(expiresAt)
+            .expirationTime(expiresAt)
             .subject(subject)
             .build();
 
@@ -88,7 +89,7 @@ public class VAPIDKeyPairTests {
         String expectedTokenString = Stream.of(
             "https://example.com",
             subject,
-            expiresAt.toString(),
+            Date.from(expiresAt).toString(),
             privateKey.toString(),
             publicKey.toString()
         ).collect(Collectors.joining(":"));
