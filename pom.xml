@@ -171,8 +171,8 @@
                     <commitDevelopmentVersionAtStart>true</commitDevelopmentVersionAtStart>
                     <versionDigitToIncrement>1</versionDigitToIncrement>
                     <gitFlowConfig>
-                        <productionBranch>main</productionBranch>
-                        <developmentBranch>dev</developmentBranch>
+                        <productionBranch>main-v1</productionBranch>
+                        <developmentBranch>dev-v1</developmentBranch>
                         <featureBranchPrefix>feature-</featureBranchPrefix>
                         <releaseBranchPrefix>release-</releaseBranchPrefix>
                         <hotfixBranchPrefix>hotfix-</hotfixBranchPrefix>
