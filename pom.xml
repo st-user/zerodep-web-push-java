@@ -46,7 +46,10 @@
         <apache.http.client.version>5.1.3</apache.http.client.version>
         <jetty.client.version>9.4.45.v20220203</jetty.client.version>
         <vertx.version>4.2.6</vertx.version>
+        <!-- dependencies for unit test -->
         <junit.version>5.8.2</junit.version>
+        <jackson.version>2.13.2</jackson.version>
+        <jose4j.version>0.7.11</jose4j.version>
     </properties>
 
     <dependencies>
@@ -93,6 +96,38 @@
             <groupId>org.openjdk.jmh</groupId>
             <artifactId>jmh-generator-annprocess</artifactId>
             <version>1.33</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!--
+            Dependencies for testing.
+         -->
+
+        <dependency>
+            <groupId>org.bitbucket.b_c</groupId>
+            <artifactId>jose4j</artifactId>
+            <version>${jose4j.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${jackson.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
             <scope>test</scope>
         </dependency>
 
