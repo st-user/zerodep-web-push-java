@@ -31,7 +31,7 @@ class JwtUtil {
             payloadBase64Bytes.length);
 
         try {
-            byte[] signature = signToBytes(message, privateKey);
+            byte[] signature = signWith(message, privateKey);
             return String.format("%s.%s.%s", asString(headerBase64Bytes),
                 asString(payloadBase64Bytes), asString(signature));
         } catch (NoSuchAlgorithmException | InvalidKeyException | SignatureException e) {
@@ -43,14 +43,18 @@ class JwtUtil {
         return new String(data, StandardCharsets.UTF_8);
     }
 
-    private static byte[] signToBytes(byte[] data, ECPrivateKey privateKey)
+    private static byte[] signWith(byte[] data, ECPrivateKey privateKey)
         throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
 
         Signature sig = Signature.getInstance("SHA256withECDSA");
         sig.initSign(privateKey);
         sig.update(data);
 
-        byte[] signature = sig.sign();
+        return encode(toJws(sig.sign()));
+    }
+
+    //Visible for testing
+    static byte[] toJws(byte[] signature) {
 
         // DER: http://crypto.stackexchange.com/a/1797
         // JWS: https://datatracker.ietf.org/doc/html/rfc7515
@@ -61,28 +65,43 @@ class JwtUtil {
 
         int vrLength = signature[VR_LENGTH_INDEX];
 
-        if ((vrLength < R_LENGTH || R_LENGTH + MAX_PADDING_LENGTH < vrLength)
+        if (R_LENGTH + MAX_PADDING_LENGTH < vrLength
             ||
             (signature[VR_LENGTH_INDEX + vrLength + 1] != 0x02)) {
 
-            throw new VAPIDJWTCreationException("The format of the signature isn't valid DER");
+            throw new VAPIDJWTCreationException(
+                String.format("The format of the signature isn't valid DER. (vrLength = %d)",
+                    vrLength));
         }
 
         int vsLengthIndex = VR_LENGTH_INDEX + vrLength + 2;
         int vsLength = signature[vsLengthIndex];
 
-        if (vsLength < S_LENGTH || S_LENGTH + MAX_PADDING_LENGTH < vsLength) {
-            throw new VAPIDJWTCreationException("The format of the signature isn't valid DER");
+        if (S_LENGTH + MAX_PADDING_LENGTH < vsLength) {
+            throw new VAPIDJWTCreationException(
+                String.format("The format of the signature isn't valid DER. (vsLength = %d)",
+                    vsLength));
         }
 
         byte[] rs = new byte[R_LENGTH + S_LENGTH];
         int vrPadding = vrLength - R_LENGTH;
         int vsPadding = vsLength - S_LENGTH;
 
-        System.arraycopy(signature, VR_LENGTH_INDEX + 1 + vrPadding, rs, 0, R_LENGTH);
-        System.arraycopy(signature, vsLengthIndex + 1 + vsPadding, rs, R_LENGTH, S_LENGTH);
+        System.arraycopy(
+            signature,
+            VR_LENGTH_INDEX + 1 + Math.max(0, vrPadding),
+            rs,
+            Math.max(0, -vrPadding),
+            R_LENGTH - Math.max(0, -vrPadding));
 
-        return encode(rs);
+        System.arraycopy(
+            signature,
+            vsLengthIndex + 1 + Math.max(0, vsPadding),
+            rs,
+            R_LENGTH + Math.max(0, -vsPadding),
+            S_LENGTH - Math.max(0, -vsPadding));
+
+        return rs;
     }
 
     private static byte[] encodeString(String data) {
