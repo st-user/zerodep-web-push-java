@@ -19,6 +19,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 import org.jose4j.jwa.AlgorithmConstraints;
 import org.jose4j.jws.AlgorithmIdentifiers;
 import org.jose4j.jws.JsonWebSignature;
@@ -42,7 +43,7 @@ public class Jose4jVAPIDJWTGeneratorTests {
 
         VAPIDJWTParam param = VAPIDJWTParam.getBuilder()
             .resourceURLString("https://example.com")
-            .expiresAfterSeconds(60)
+            .expiresAfter(60, TimeUnit.SECONDS)
             .subject("mailto:test@example.com")
             .additionalClaim("adClaimString", "stringClaim")
             .additionalClaim("adClaimBoolean", true)
@@ -80,7 +81,7 @@ public class Jose4jVAPIDJWTGeneratorTests {
     private VAPIDJWTParam createTestParamWith(String name, Object claim) {
         return VAPIDJWTParam.getBuilder()
             .resourceURLString("https://example.com")
-            .expiresAfterSeconds(60)
+            .expiresAfter(60, TimeUnit.SECONDS)
             .subject("mailto:test@example.com")
             .additionalClaim(name, claim)
             .build();
@@ -136,7 +137,7 @@ public class Jose4jVAPIDJWTGeneratorTests {
 
     private byte[] splitAndDecode(int pos, String jwt) {
         String content = jwt.split("\\.")[pos];
-        return Base64.getDecoder().decode(content.getBytes(StandardCharsets.UTF_8));
+        return Base64.getUrlDecoder().decode(content.getBytes(StandardCharsets.UTF_8));
     }
 
     public static class TestingJWTHeader {

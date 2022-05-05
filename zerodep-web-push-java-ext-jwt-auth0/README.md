@@ -18,12 +18,12 @@ You can use this sub-module by adding the dependency to your pom.xml.
 <dependency>
     <groupId>com.zerodeplibs</groupId>
     <artifactId>zerodep-web-push-java</artifactId>
-    <version>1.3.2</version>
+    <version>2.0.0</version>
 </dependency>
 <dependency>
     <groupId>com.zerodeplibs</groupId>
     <artifactId>zerodep-web-push-java-ext-jwt-auth0</artifactId>
-    <version>1.3.2</version>
+    <version>2.0.0</version>
     <scope>runtime</scope>
 </dependency>
 ```
@@ -54,7 +54,7 @@ following.
 
 VAPIDJWTParam param = VAPIDJWTParam.getBuilder()
     .resourceURLString("https://example.com")
-    .expiresAfterSeconds(60)
+    .expiresAfter(60, TimeUnit.SECONDS)
     .subject("mailto:test@example.com")
     .additionalClaim("myArbitraryClaim", "valueOfTheClaim") // Specifys an arbitrary claim.
     .build();
@@ -73,7 +73,7 @@ So the following example doesn't work.
 
 VAPIDJWTParam param = VAPIDJWTParam.getBuilder()
     .resourceURLString("https://example.com")
-    .expiresAfterSeconds(60)
+    .expiresAfter(60, TimeUnit.SECONDS)
     .subject("mailto:test@example.com")
     .additionalClaim("myArbitraryClaim", new MyClaim("...."))
     .build();
