@@ -1,3 +1,5 @@
+**This is the branch for version 1. It is recommended to use [version 2](https://github.com/st-user/zerodep-web-push-java) if you can use java 11 or higher.**
+
 # zerodep-web-push-java
 
 A Java [Web Push](https://datatracker.ietf.org/doc/html/rfc8030) server-side library that can easily
