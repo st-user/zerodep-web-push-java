@@ -27,12 +27,12 @@ Jackson Databind on your classpath.
 <dependency>
     <groupId>com.zerodeplibs</groupId>
     <artifactId>zerodep-web-push-java</artifactId>
-    <version>1.3.2</version>
+    <version>1.4.0</version>
 </dependency>
 <dependency>
     <groupId>com.zerodeplibs</groupId>
     <artifactId>zerodep-web-push-java-ext-jwt-vertx</artifactId>
-    <version>1.3.2</version>
+    <version>1.4.0</version>
 </dependency>
 
 <!-- 

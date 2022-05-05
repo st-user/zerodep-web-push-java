@@ -136,7 +136,7 @@ public class Jose4jVAPIDJWTGeneratorTests {
 
     private byte[] splitAndDecode(int pos, String jwt) {
         String content = jwt.split("\\.")[pos];
-        return Base64.getDecoder().decode(content.getBytes(StandardCharsets.UTF_8));
+        return Base64.getUrlDecoder().decode(content.getBytes(StandardCharsets.UTF_8));
     }
 
     public static class TestingJWTHeader {
