@@ -3,6 +3,8 @@
 A [zerodep-web-push-java](https://github.com/st-user/zerodep-web-push-java) example
 using [Vert.x](https://vertx.io/docs/).
 
+**This is the example for v1. The example for v2 is [here](https://github.com/st-user/zerodep-web-push-java-example).**
+
 ## Requirements
 
 - JDK8+
