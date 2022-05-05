@@ -7,10 +7,11 @@ import com.zerodeplibs.webpush.key.PublicKeySources;
 import java.io.File;
 import java.io.IOException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 @Component
-public class Bean {
+public class MyComponents {
 
     /**
      * In this example, we read a key pair for VAPID
@@ -20,7 +21,7 @@ public class Bean {
      * '.der' file(binary content), an octet sequence stored in a database and so on.
      * For more information, please see the javadoc of PrivateKeySources and PublicKeySources.
      */
-    @org.springframework.context.annotation.Bean
+    @Bean
     public VAPIDKeyPair vaidKeyPair(
         @Value("${private.key.file.path}") String privateKeyFilePath,
         @Value("${public.key.file.path}") String publicKeyFilePath) throws IOException {
@@ -38,4 +39,5 @@ public class Bean {
             // (privateKey, publicKey) -> new MyOwnVAPIDJWTGenerator(privateKey)
         );
     }
+
 }

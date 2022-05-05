@@ -2,11 +2,7 @@ package org.example;
 
 import com.zerodeplibs.webpush.PushSubscription;
 import com.zerodeplibs.webpush.VAPIDKeyPair;
-import com.zerodeplibs.webpush.VAPIDKeyPairs;
 import com.zerodeplibs.webpush.httpclient.StandardHttpClientRequestPreparer;
-import com.zerodeplibs.webpush.key.PrivateKeySources;
-import com.zerodeplibs.webpush.key.PublicKeySources;
-import java.io.File;
 import java.io.IOException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -18,9 +14,7 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -33,35 +27,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class BasicExample {
 
+    /**
+     * @see MyComponents
+     */
     @Autowired
     private VAPIDKeyPair vapidKeyPair;
-
-    /**
-     * In this example, we read a key pair for VAPID
-     * from a PEM formatted file on the file system.
-     * <p>
-     * You can extract key pairs from various sources:
-     * '.der' file(binary content), an octet sequence stored in a database and so on.
-     * For more information, please see the javadoc of PrivateKeySources and PublicKeySources.
-     */
-    @Bean
-    public VAPIDKeyPair vaidKeyPair(
-        @Value("${private.key.file.path}") String privateKeyFilePath,
-        @Value("${public.key.file.path}") String publicKeyFilePath) throws IOException {
-
-        return VAPIDKeyPairs.of(
-            PrivateKeySources.ofPEMFile(new File(privateKeyFilePath).toPath()),
-            PublicKeySources.ofPEMFile(new File(publicKeyFilePath).toPath())
-
-            /*
-             * If you want to make your own VAPIDJWTGenerator,
-             * the project for its sub-modules is a good example.
-             * For more information, please consult the source codes on https://github.com/st-user/zerodep-web-push-java-ext-jwt
-             */
-
-            // (privateKey, publicKey) -> new MyOwnVAPIDJWTGenerator(privateKey)
-        );
-    }
 
     /**
      * # Step 1.
