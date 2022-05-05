@@ -51,7 +51,7 @@
         <junit.version>5.8.2</junit.version>
         <jackson.version>2.13.2</jackson.version>
         <jose4j.version>0.7.11</jose4j.version>
-        <jmh.version>1.34</jmh.version>
+        <jmh.version>1.35</jmh.version>
         <bouncycastle.version>1.70</bouncycastle.version>
         <slf4j.version>1.7.36</slf4j.version>
     </properties>
@@ -102,10 +102,6 @@
             <version>${jmh.version}</version>
             <scope>test</scope>
         </dependency>
-
-        <!--
-            Dependencies for testing.
-         -->
 
         <dependency>
             <groupId>org.bitbucket.b_c</groupId>
