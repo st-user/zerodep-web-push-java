@@ -3,13 +3,15 @@
 A [zerodep-web-push-java](https://github.com/st-user/zerodep-web-push-java) example
 using [Vert.x](https://vertx.io/docs/).
 
+**This is the example for v2. The example for v1
+is [here](https://github.com/st-user/zerodep-web-push-java-example-vertx/tree/main-v1).**
+
 ## Requirements
 
-- JDK8+
+- JDK11+
 - A library for generating ECDSA key pairs(e.g. [OpenSSL](https://www.openssl.org/))
 - A browser supporting [Push API](https://developer.mozilla.org/en-US/docs/Web/API/Push_API)
   such as Google Chrome, Microsoft Edge and Firefox
-
 
 ## Usage
 
@@ -25,8 +27,8 @@ using [Vert.x](https://vertx.io/docs/).
    openssl ec -in my-private.pem -pubout -conv_form uncompressed -out my-pub.pem
    cd ../
    ```
-   
-    **Linux/mac OS**
+
+   **Linux/mac OS**
 
    ```
    ./mvnw clean
@@ -51,8 +53,8 @@ using [Vert.x](https://vertx.io/docs/).
 
 6. (Optional) Since push notifications are handled in the background, we can get them even if we close the browser.
 
-   - Close the browser and open a terminal instead.
-   - Make the application send a push notification by using a command like the following:
+    - Close the browser and open a terminal instead.
+    - Make the application send a push notification by using a command like the following:
 
    ```
    curl -X POST http://localhost:8080/sendMessage \
@@ -79,7 +81,6 @@ For example:
 
 - [Push API - Web APIs | MDN](https://developer.mozilla.org/en-US/docs/Web/API/Push_API)
 - [Web Push Notifications: Timely, Relevant, and Precise](https://developers.google.com/web/fundamentals/push-notifications)
-
 
 ## See also
 
