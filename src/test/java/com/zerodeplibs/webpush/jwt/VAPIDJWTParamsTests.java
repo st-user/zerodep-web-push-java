@@ -236,7 +236,7 @@ public class VAPIDJWTParamsTests {
         String messageForAud =
             "The \"aud\" claim should be specified via #resourceURL or #resourceURLString.";
         String messageForExp =
-            "The \"exp\" claim should be specified via #expiresAt or #expiresAfter.";
+            "The \"exp\" claim should be specified via #expirationTime or #expiresAfter.";
         String messageForSub = "The \"sub\" claim should be specified via #subject.";
 
         VAPIDJWTParam.Builder param = VAPIDJWTParam.getBuilder();

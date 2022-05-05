@@ -79,7 +79,7 @@ public class VAPIDJWTParam {
      * ArrayList&lt;String&gt; hogeList = new ArrayList&lt;&gt;();
      * VAPIDJWTParam param = VAPIDJWTParam.getBuilder()
      *      .resourceURLString(.....)
-     *      .expiresAfterSeconds(.....)
+     *      .expiresAfter(.....)
      *      .additionalClaim("hoge", hogeList);
      *      .build();
      *
@@ -143,7 +143,7 @@ public class VAPIDJWTParam {
                             + "#resourceURL or #resourceURLString.");
                     put("exp",
                         "The \"exp\" claim should be specified via "
-                            + "#expiresAt or #expiresAfter.");
+                            + "#expirationTime or #expiresAfter.");
                     put("sub", "The \"sub\" claim should be specified via #subject.");
                 }
             });
@@ -346,7 +346,7 @@ public class VAPIDJWTParam {
          * <li>"aud" - this claim should be specified
          * via {@link #resourceURL(URL)} or {@link #resourceURLString(String)}.</li>
          * <li>"exp" - this claim should be specified
-         * via {@link #expirationTime(Instant)} or {@link #expiresAfterSeconds(int)}.</li>
+         * via {@link #expirationTime(Instant)} or {@link #expiresAfter(int, TimeUnit)}.</li>
          * <li>"sub" - this claim should be specified
          * via {@link #subject(String)}</li>
          * </ul>
