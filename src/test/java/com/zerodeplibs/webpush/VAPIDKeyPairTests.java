@@ -4,7 +4,6 @@ import static com.zerodeplibs.webpush.MessageEncryptionTestUtil.generateKeyPair;
 import static com.zerodeplibs.webpush.TestAssertionUtil.assertNullCheck;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.zerodeplibs.webpush.jwt.VAPIDJWTGenerator;
 import com.zerodeplibs.webpush.jwt.VAPIDJWTParam;
@@ -18,6 +17,7 @@ import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Date;
@@ -72,11 +72,11 @@ public class VAPIDKeyPairTests {
         );
 
         String origin = "https://example.com/origin";
-        Date expiresAt = new Date();
+        Instant expiresAt = Instant.now();
         String subject = "subjectX";
         VAPIDJWTParam jwtParam = VAPIDJWTParam.getBuilder()
             .resourceURLString(origin)
-            .expiresAt(expiresAt)
+            .expirationTime(expiresAt)
             .subject(subject)
             .build();
 
@@ -88,7 +88,7 @@ public class VAPIDKeyPairTests {
         String expectedTokenString = Stream.of(
             "https://example.com",
             subject,
-            expiresAt.toString(),
+            Date.from(expiresAt).toString(),
             privateKey.toString(),
             publicKey.toString()
         ).collect(Collectors.joining(":"));
@@ -141,22 +141,15 @@ public class VAPIDKeyPairTests {
     }
 
     @Test
-    public void shouldThrowExceptionWhenNoSubmoduleForVAPIDJWTGeneratorExists()
+    public void shouldUseDefaultImplementationWhenNoSubmoduleForVAPIDJWTGeneratorExists()
         throws InvalidAlgorithmParameterException, NoSuchAlgorithmException {
 
         KeyPair keyPair = generateKeyPair();
         ECPrivateKey privateKey = (ECPrivateKey) keyPair.getPrivate();
         ECPublicKey publicKey = (ECPublicKey) keyPair.getPublic();
 
-
-        String expectedMessage =
-            "No sub-module for VAPIDJWTGenerator exists.";
-
-        assertThat(assertThrows(
-                IllegalStateException.class,
-                () -> VAPIDKeyPairs.of(PrivateKeySources.ofECPrivateKey(privateKey),
-                    PublicKeySources.ofECPublicKey(publicKey))).getMessage(),
-            equalTo(expectedMessage));
+        VAPIDKeyPairs.of(PrivateKeySources.ofECPrivateKey(privateKey),
+            PublicKeySources.ofECPublicKey(publicKey));
     }
 
     private static class TestingJWTGeneraator implements VAPIDJWTGenerator {

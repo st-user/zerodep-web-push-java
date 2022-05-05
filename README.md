@@ -5,42 +5,23 @@ be integrated with various third-party libraries and frameworks.
 
 This library
 
-- provides the functionalities for [VAPID](https://datatracker.ietf.org/doc/html/rfc8292)
-- provides the functionalities
+- Provides the functionalities for [VAPID](https://datatracker.ietf.org/doc/html/rfc8292)
+- Provides the functionalities
   for [Message Encryption for Web Push](https://datatracker.ietf.org/doc/html/rfc8291)
-- assumes that the [Push API](https://www.w3.org/TR/push-api/) is used.
+- Assumes that the [Push API](https://www.w3.org/TR/push-api/) is used
 
-'zerodep-web-push-java' assumes that suitable implementations(libraries) of the following
-functionalities vary depending on applications.
+## Versions
 
-- Generating and signing JSON Web Token (used for VAPID)
-- Sending HTTP requests (requests for the delivery of push messages)
-- Cryptographic operations
+| zerodep-web-push-java | java version requirements |
+|-----------------------|---------------------------|
+| v2.x.x                | java 11 or higher         |
+| v1.x.x                | java 8 or higher          |
 
-For example, an application may need to send HTTP requests **synchronously**
-with [Apache HTTPClient](https://hc.apache.org/httpcomponents-client-5.1.x/) but another application
-may need to do this **asynchronously** with [Vert.x](https://vertx.io/docs/vertx-web-client/java/).
+It is recommended that you use v2.x.x (the latest version of v2) if you can use java 11 or higher.
+Some features are only available in version 2.
 
-In order to allow you to choose libraries suitable for your application, this library doesn't force
-your application to have dependencies on specifics libraries. Instead, this library
+The documentation specific to v1 is [here](https://github.com/st-user/zerodep-web-push-java/tree/main-v1).
 
-- provides the functionality of JWT
-  with [its sub-modules](https://github.com/st-user/zerodep-web-push-java-ext-jwt),
-- provides optional components helping applications use HTTP Client libraries and
-- utilizes
-  [the Java Cryptography Architecture (JCA)](https://docs.oracle.com/javase/8/docs/technotes/guides/security/crypto/CryptoSpec.html)
-  for cryptographic operations.
-
-Each of the sub-modules utilizes a specific JWT library. Each of the optional components supports a
-specific HTTP Client library. you can choose suitable modules/components for your requirements. JCA
-enables this library to be independent of specific implementations(providers) for security
-functionality.
-
-## Requirements
-
-Java 8+
-
-(To build from source, JDK 9+)
 
 ## Installation
 
@@ -49,65 +30,10 @@ Java 8+
 <dependency>
   <groupId>com.zerodeplibs</groupId>
   <artifactId>zerodep-web-push-java</artifactId>
-  <version>1.3.2</version>
+  <version>2.0.0</version>
 </dependency>
 
 ```
-
-## Sub-modules and optional components
-
-In order for your application to implement the complete Web Push functionality with this library, at
-least the following two types of functionalities have to be provided from outside this library.
-
-<details>
-    <summary><b>JWT</b></summary>
-
-A JWT library is used to generate JSON Web Token (JWT)
-for [VAPID](https://datatracker.ietf.org/doc/html/rfc8292).
-
-Sub-modules for this functionality are available
-from [zerodep-web-push-java-ext-jwt](https://github.com/st-user/zerodep-web-push-java-ext-jwt).
-
-These sub-modules are optional, so you can also make such functionality by yourself by using classes
-and interfaces in `com.zerodeplibs.webpush.jwt` package.
-
-</details>
-
-<details>
-    <summary><b>HTTP Client</b></summary>
-
-Application servers need to send HTTP requests to push services in order to request the delivery of
-push messages. Helper components for this functionality are available from
-the `com.zerodeplibs.webpush.httpclient` package. Each of these helper components utilizes a
-third-party HTTP Client library. Supported libraries are listed below.
-
-- [OkHttp](https://square.github.io/okhttp/)
-
-  Version 4.9.0 or higher. The latest version is recommended.
-
-- [Apache HTTPClient](https://hc.apache.org/httpcomponents-client-5.1.x/)
-
-  Version 5.1 or higher. The latest version is recommended.
-
-- [Eclipse Jetty Client Libraries](https://www.eclipse.org/jetty/documentation/jetty-11/programming-guide/index.html#pg-client)
-
-    - Jetty 9: 9.4.33.v20201020 or higher.
-    - Jetty 10: 10.0.0 or higher.
-    - Jetty 11: 11.0.0 or higher.
-
-  The latest versions are recommended.
-
-- [Vert.x Web Client](https://vertx.io/docs/vertx-web-client/java/)
-
-    - Vert.x 3: 3.9.2 or higher.
-    - Vert.x 4: 4.0.0 or higher.
-
-  The latest versions are recommended.
-
-These components and their dependencies are optional, so you can also make such functionality by
-yourself by using classes in `com.zerodeplibs.webpush.httpclient` package.
-
-</details>
 
 ## Usage examples
 
@@ -121,12 +47,8 @@ code: [zerodep-web-push-java-example](https://github.com/st-user/zerodep-web-pus
 
 ``` java
 
-@SpringBootApplication
-@RestController
-public class BasicExample {
-
-    @Autowired
-    private VAPIDKeyPair vapidKeyPair;
+@Component
+public class MyComponents {
 
     /**
      * In this example, we read a key pair for VAPID
@@ -154,6 +76,17 @@ public class BasicExample {
             // (privateKey, publicKey) -> new MyOwnVAPIDJWTGenerator(privateKey)
         );
     }
+}
+
+@SpringBootApplication
+@RestController
+public class BasicExample {
+
+    /**
+     * @see org.example.Bean
+     */
+    @Autowired
+    private VAPIDKeyPair vapidKeyPair;
 
     /**
      * # Step 1.
@@ -186,14 +119,14 @@ public class BasicExample {
      */
     @PostMapping("/sendMessage")
     public ResponseEntity<String> sendMessage(@RequestBody MyMessage myMessage)
-        throws IOException {
+        throws IOException, InterruptedException {
 
         String message = myMessage.getMessage();
 
-        OkHttpClient httpClient = new OkHttpClient();
+        HttpClient httpClient = HttpClient.newBuilder().build();
         for (PushSubscription subscription : getSubscriptionsFromStorage()) {
 
-            Request request = OkHttpClientRequestPreparer.getBuilder()
+            HttpRequest request = StandardHttpClientRequestPreparer.getBuilder()
                 .pushSubscription(subscription)
                 .vapidJWTExpiresAfter(15, TimeUnit.MINUTES)
                 .vapidJWTSubject("mailto:example@example.com")
@@ -209,18 +142,17 @@ public class BasicExample {
             //
             // ObjectMapper objectMapper = (Create a new one or get from the DI container.)
             // ....
-            // pushMessage(objectMapper.writeValueAsBytes(objectForJson))
+            // .pushMessage(objectMapper.writeValueAsBytes(objectForJson))
             // ....
 
-            try (Response response = httpClient.newCall(request).execute()) {
-                logger.info(String.format("[OkHttp] status code: %d", response.code()));
-                // 201 Created : Success!
-                // 410 Gone : The subscription is no longer valid.
-                // etc...
-                // for more information, see the useful link below:
-                // [Response from push service - The Web Push Protocol ](https://developers.google.com/web/fundamentals/push-notifications/web-push-protocol)
-            }
-
+            HttpResponse<String> httpResponse =
+                httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            logger.info(String.format("[Http Client] status code: %d", httpResponse.statusCode()));
+            // 201 Created : Success!
+            // 410 Gone : The subscription is no longer valid.
+            // etc...
+            // for more information, see the useful link below:
+            // [Response from push service - The Web Push Protocol ](https://developers.google.com/web/fundamentals/push-notifications/web-push-protocol)
         }
 
         return ResponseEntity.ok()
@@ -445,6 +377,86 @@ public class Example {
 
 </details>
 
+## Concepts
+
+'zerodep-web-push-java' assumes that suitable implementations(libraries) of the following
+functionalities vary depending on applications.
+
+- Generating and signing JSON Web Token(JWT) used for VAPID
+- Sending HTTP requests for the delivery of push messages
+- Cryptographic operations
+
+For example, an application may need to send HTTP requests **synchronously**
+with [Apache HTTPClient](https://hc.apache.org/httpcomponents-client-5.1.x/) but another application
+may need to do this **asynchronously** with [Vert.x](https://vertx.io/docs/vertx-web-client/java/).
+
+In order to allow you to choose the way suitable for your application, this library doesn't force
+your application to have dependencies on specifics libraries. Instead, this library
+
+- Provides the functionality of JWT with [sub-modules](https://github.com/st-user/zerodep-web-push-java-ext-jwt)
+- Also, provides the functionality of JWT out of the box(without any third-party library)
+- Provides optional components helping applications use various third-party HTTP Client libraries
+- Also, provides a component helping applications use [JDK's HTTP Client module](https://docs.oracle.com/en/java/javase/11/docs/api/java.net.http/java/net/http/HttpClient.html).
+- Utilizes
+  [the Java Cryptography Architecture (JCA)](https://docs.oracle.com/javase/8/docs/technotes/guides/security/crypto/CryptoSpec.html)
+  for cryptographic operations
+
+Each of the sub-modules utilizes a specific JWT library. Each of the optional components supports a
+specific HTTP Client library. you can choose suitable modules/components for your requirements. JCA
+enables this library to be independent of specific implementations(providers) for security
+functionality.
+
+## Various sub-modules and helper components
+
+The following functionalities can be provided from outside this library.
+
+<details>
+    <summary><b>JWT</b></summary>
+
+JWT libraries are used to generate JSON Web Token (JWT)
+for [VAPID](https://datatracker.ietf.org/doc/html/rfc8292).
+
+Sub-modules for this functionality are available
+from [zerodep-web-push-java-ext-jwt](https://github.com/st-user/zerodep-web-push-java-ext-jwt).
+
+</details>
+
+<details>
+    <summary><b>HTTP Client</b></summary>
+
+Application servers need to send HTTP requests to push services in order to request the delivery of
+push messages. Helper components for this functionality are available from
+the `com.zerodeplibs.webpush.httpclient` package. One of them
+utilizes [JDK's HTTP Client module](https://docs.oracle.com/en/java/javase/11/docs/api/java.net.http/java/net/http/HttpClient.html)
+.
+The others utilize third-party HTTP Client libraries. Supported third-party libraries are listed
+below.
+
+- [OkHttp](https://square.github.io/okhttp/)
+
+  Version 4.9.0 or higher. The latest version is recommended.
+
+- [Apache HTTPClient](https://hc.apache.org/httpcomponents-client-5.1.x/)
+
+  Version 5.1 or higher. The latest version is recommended.
+
+- [Eclipse Jetty Client Libraries](https://www.eclipse.org/jetty/documentation/jetty-11/programming-guide/index.html#pg-client)
+
+    - Jetty 9: 9.4.33.v20201020 or higher.
+    - Jetty 10: 10.0.0 or higher.
+    - Jetty 11: 11.0.0 or higher.
+
+  The latest versions are recommended.
+
+- [Vert.x Web Client](https://vertx.io/docs/vertx-web-client/java/)
+
+    - Vert.x 3: 3.9.2 or higher.
+    - Vert.x 4: 4.0.0 or higher.
+
+  The latest versions are recommended.
+
+</details>
+
 ## MISC
 
 <details>
@@ -474,6 +486,7 @@ API for cryptographic operations. The algorithms used by this library are listed
 java.security.SecureRandom
 java.security.KeyFactory.getInstance("EC") 
 java.security.KeyPairGenerator.getInstance("EC") // curve: secp256r1
+java.security.Signature.getInstance("SHA256withECDSA")
 javax.crypto.KeyAgreement.getInstance("ECDH")
 javax.crypto.Mac.getInstance("HmacSHA256") 
 javax.crypto.Cipher.getInstance("AES/GCM/NoPadding")

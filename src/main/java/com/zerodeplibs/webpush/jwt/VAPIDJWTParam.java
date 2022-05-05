@@ -7,7 +7,6 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -79,7 +78,7 @@ public class VAPIDJWTParam {
      * ArrayList&lt;String&gt; hogeList = new ArrayList&lt;&gt;();
      * VAPIDJWTParam param = VAPIDJWTParam.getBuilder()
      *      .resourceURLString(.....)
-     *      .expiresAfterSeconds(.....)
+     *      .expiresAfter(.....)
      *      .additionalClaim("hoge", hogeList);
      *      .build();
      *
@@ -136,17 +135,11 @@ public class VAPIDJWTParam {
     public static class Builder {
 
         private static final Map<String, String> RESERVED_NAMES_WITH_MESSAGE =
-            Collections.unmodifiableMap(new HashMap<String, String>() {
-                {
-                    put("aud",
-                        "The \"aud\" claim should be specified via "
-                            + "#resourceURL or #resourceURLString.");
-                    put("exp",
-                        "The \"exp\" claim should be specified via "
-                            + "#expiresAt or #expiresAfter.");
-                    put("sub", "The \"sub\" claim should be specified via #subject.");
-                }
-            });
+            Map.of("aud", "The \"aud\" claim should be specified via "
+                    + "#resourceURL or #resourceURLString.", "exp",
+                "The \"exp\" claim should be specified via "
+                    + "#expirationTime or #expiresAfter.", "sub",
+                "The \"sub\" claim should be specified via #subject.");
 
         private URL _resourceURL;
         private Instant _expirationTime;
@@ -159,7 +152,7 @@ public class VAPIDJWTParam {
                 + "a resource URL(resourceURLString/resourceURL) cannot be called more than once.";
 
         private static final String MSG_EXPIRES_AT_NO_MORE_THAN_ONCE = "The methods for specifying "
-            + "expiration time(expiresAfter/expirationTime/expiresAfterSeconds/expiresAt) "
+            + "expiration time(expiresAfter/expirationTime) "
             + "cannot be called more than once.";
 
         Builder() {
@@ -240,30 +233,7 @@ public class VAPIDJWTParam {
          */
         public Builder expiresAfter(int expiresAfter, TimeUnit timeUnit) {
             WebPushPreConditions.checkNotNull(timeUnit, "timeUnit");
-            // TODO. from JDK9, we can use TimeUnit#toChronoUnit
-            this.expirationTime(now().plusNanos(timeUnit.toNanos(expiresAfter)));
-            return this;
-        }
-
-        /**
-         * <p>
-         * Specifies the time in seconds after which a JWT for VAPID expires.
-         * </p>
-         *
-         * <p>
-         * Typically, the specified expiration time is used as an "exp" (Expiry) claim.
-         * </p>
-         *
-         * @param seconds the time in seconds after which a JWT for VAPID expires.
-         * @return this object.
-         * @throws IllegalStateException if the methods for specifying expiration time
-         *                               are called more than once.
-         * @deprecated Use {@link #expiresAfter(int, TimeUnit)}.
-         */
-        @Deprecated
-        public Builder expiresAfterSeconds(int seconds) {
-            // TODO check if no more than 24 hours
-            this.expirationTime(now().plusSeconds(seconds));
+            this.expirationTime(now().plus(expiresAfter, timeUnit.toChronoUnit()));
             return this;
         }
 
@@ -286,28 +256,6 @@ public class VAPIDJWTParam {
             WebPushPreConditions.checkState(this._expirationTime == null,
                 MSG_EXPIRES_AT_NO_MORE_THAN_ONCE);
             this._expirationTime = expirationTime;
-            return this;
-        }
-
-        /**
-         * <p>
-         * Specifies the time at which a JWT for VAPID expires.
-         * </p>
-         *
-         * <p>
-         * Typically, the specified expiration time is used as an "exp" (Expiry) claim.
-         * </p>
-         *
-         * @param expiresAt the time at which a JWT for VAPID expires.
-         * @return this object.
-         * @throws IllegalStateException if the methods for specifying expiration time
-         *                               are called more than once.
-         * @deprecated Use {@link #expirationTime(Instant)}}.
-         */
-        @Deprecated
-        public Builder expiresAt(Date expiresAt) {
-            WebPushPreConditions.checkNotNull(expiresAt, "expirationTime");
-            this.expirationTime(expiresAt.toInstant());
             return this;
         }
 
@@ -346,7 +294,7 @@ public class VAPIDJWTParam {
          * <li>"aud" - this claim should be specified
          * via {@link #resourceURL(URL)} or {@link #resourceURLString(String)}.</li>
          * <li>"exp" - this claim should be specified
-         * via {@link #expirationTime(Instant)} or {@link #expiresAfterSeconds(int)}.</li>
+         * via {@link #expirationTime(Instant)} or {@link #expiresAfter(int, TimeUnit)}.</li>
          * <li>"sub" - this claim should be specified
          * via {@link #subject(String)}</li>
          * </ul>

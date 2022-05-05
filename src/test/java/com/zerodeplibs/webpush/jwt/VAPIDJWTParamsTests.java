@@ -29,13 +29,15 @@ public class VAPIDJWTParamsTests {
 
         VAPIDJWTParam param = new TestingBuilder(mockForNow)
             .resourceURLString("https://example.com/resource")// Default port.
-            .expiresAfterSeconds((int) TimeUnit.HOURS.toSeconds(24))
+            .expiresAfter(24, TimeUnit.HOURS)
             .subject("mailto:example@example.com")
             .additionalClaim("hoge", "fuga")
             .build();
 
         assertThat(param.getOrigin(), equalTo("https://example.com"));
-        assertThat(param.getExpiresAt(), equalTo(Date.from(mockForNow.plusSeconds(24 * 60 * 60))));
+        assertThat(param.getExpiresAtInSeconds(), equalTo(
+            Date.from(mockForNow.plusSeconds(24 * 60 * 60)).getTime() / 1000
+        ));
         assertThat(param.getSubject().get(), equalTo("mailto:example@example.com"));
         assertThat(param.getAdditionalClaim("hoge", String.class).get(), equalTo("fuga"));
 
@@ -44,13 +46,6 @@ public class VAPIDJWTParamsTests {
             .expirationTime(Instant.now())
             .build();
         assertThat(paramWithNotDefaultPort.getOrigin(), equalTo("https://example.com:8080"));
-
-        VAPIDJWTParam paramWithTimeUnit = new TestingBuilder(mockForNow)
-            .resourceURLString("https://example.com/resource")
-            .expiresAfter(12, TimeUnit.HOURS)
-            .build();
-        assertThat(paramWithTimeUnit.getExpiresAt(),
-            equalTo(Date.from(mockForNow.plusSeconds(12 * 60 * 60))));
     }
 
     @Test
@@ -73,19 +68,11 @@ public class VAPIDJWTParamsTests {
 
         VAPIDJWTParam param = new TestingBuilder(mockForNow)
             .resourceURL(new URL("https://example.com/resource"))
-            .expiresAt(Date.from(mockForNow.plusSeconds(24 * 60 * 60)))
+            .expirationTime(mockForNow.plusSeconds(24 * 60 * 60))
             .build();
 
         assertThat(param.getOrigin(), equalTo("https://example.com"));
         assertThat(param.getExpiresAt(), equalTo(Date.from(mockForNow.plusSeconds(24 * 60 * 60))));
-
-        VAPIDJWTParam paramWithExpirationTime = new TestingBuilder(mockForNow)
-            .resourceURLString("https://example.com/resource")
-            .expirationTime(mockForNow.plusSeconds(10))// Use #expirationTime
-            .build();
-
-        assertThat(paramWithExpirationTime.getExpiresAt(),
-            equalTo(Date.from(mockForNow.plusSeconds(10))));
     }
 
     @Test
@@ -131,7 +118,7 @@ public class VAPIDJWTParamsTests {
     @Test
     public void builderShouldThrowExceptionWhenIllegalExpirationTimesArePassed() {
 
-        assertNullCheck(() -> VAPIDJWTParam.getBuilder().expiresAt(null),
+        assertNullCheck(() -> VAPIDJWTParam.getBuilder().expirationTime(null),
             "expirationTime");
 
         assertNullCheck(() -> VAPIDJWTParam.getBuilder().expiresAfter(1, null),
@@ -143,35 +130,15 @@ public class VAPIDJWTParamsTests {
 
         String messageForMultipleCalls = "The methods for specifying "
             +
-            "expiration time(expiresAfter/expirationTime/expiresAfterSeconds/expiresAt) cannot be called more than once.";
+            "expiration time(expiresAfter/expirationTime) cannot be called more than once.";
 
         assertStateCheck(() -> VAPIDJWTParam.getBuilder()
-                .expiresAfterSeconds(1)
-                .expiresAfterSeconds(1),
+                .expiresAfter(1, TimeUnit.MILLISECONDS)
+                .expirationTime(Instant.now()),
             messageForMultipleCalls);
 
         assertStateCheck(() -> VAPIDJWTParam.getBuilder()
                 .expirationTime(Instant.now())
-                .expirationTime(Instant.now()),
-            messageForMultipleCalls);
-
-        assertStateCheck(() -> VAPIDJWTParam.getBuilder()
-                .expiresAt(new Date())
-                .expiresAt(new Date()),
-            messageForMultipleCalls);
-
-        assertStateCheck(() -> VAPIDJWTParam.getBuilder()
-                .expiresAfterSeconds(1)
-                .expiresAt(new Date()),
-            messageForMultipleCalls);
-
-        assertStateCheck(() -> VAPIDJWTParam.getBuilder()
-                .expiresAfterSeconds(1)
-                .expirationTime(Instant.now()),
-            messageForMultipleCalls);
-
-        assertStateCheck(() -> VAPIDJWTParam.getBuilder()
-                .expiresAfterSeconds(1)
                 .expiresAfter(1, TimeUnit.HOURS),
             messageForMultipleCalls);
     }
@@ -183,7 +150,7 @@ public class VAPIDJWTParamsTests {
         claim.add("hoge");
         VAPIDJWTParam param = VAPIDJWTParam.getBuilder()
             .resourceURLString("https://example.com")
-            .expiresAfterSeconds(50)
+            .expiresAfter(50, TimeUnit.SECONDS)
             .additionalClaim("fuga", claim)
             .build();
 
@@ -220,7 +187,7 @@ public class VAPIDJWTParamsTests {
         String messageForExpirationTimeAbsence = "The expiration time isn't specified.";
 
         assertStateCheck(() -> VAPIDJWTParam.getBuilder()
-                .expiresAfterSeconds(1)
+                .expiresAfter(1, TimeUnit.SECONDS)
                 .build(),
             messageForResourceURLAbsence);
 
@@ -236,7 +203,7 @@ public class VAPIDJWTParamsTests {
         String messageForAud =
             "The \"aud\" claim should be specified via #resourceURL or #resourceURLString.";
         String messageForExp =
-            "The \"exp\" claim should be specified via #expiresAt or #expiresAfter.";
+            "The \"exp\" claim should be specified via #expirationTime or #expiresAfter.";
         String messageForSub = "The \"sub\" claim should be specified via #subject.";
 
         VAPIDJWTParam.Builder param = VAPIDJWTParam.getBuilder();
@@ -264,14 +231,14 @@ public class VAPIDJWTParamsTests {
 
         VAPIDJWTParam a = new TestingBuilder(mockForNow)
             .resourceURLString("https://example.com")
-            .expiresAfterSeconds(100)
+            .expiresAfter(100, TimeUnit.SECONDS)
             .subject("SUBJECT")
             .additionalClaim("a", "b")
             .build();
 
         VAPIDJWTParam b = new TestingBuilder(mockForNow)
             .resourceURLString("https://example.com")
-            .expiresAfterSeconds(100)
+            .expiresAfter(100, TimeUnit.SECONDS)
             .subject("SUBJECT")
             .additionalClaim("a", "b")
             .build();
@@ -290,7 +257,7 @@ public class VAPIDJWTParamsTests {
 
         VAPIDJWTParam param = new TestingBuilder(mockForNow)
             .resourceURLString("https://example.com")
-            .expiresAfterSeconds(100)
+            .expiresAfter(100, TimeUnit.SECONDS)
             .subject("SUBJECT")
             .additionalClaim("a", "b")
             .build();

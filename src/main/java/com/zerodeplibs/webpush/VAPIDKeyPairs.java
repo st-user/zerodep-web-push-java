@@ -1,6 +1,7 @@
 package com.zerodeplibs.webpush;
 
 import com.zerodeplibs.webpush.internal.WebPushPreConditions;
+import com.zerodeplibs.webpush.jwt.DefaultVAPIDJWTGeneratorFactory;
 import com.zerodeplibs.webpush.jwt.VAPIDJWTGenerator;
 import com.zerodeplibs.webpush.jwt.VAPIDJWTGeneratorFactory;
 import com.zerodeplibs.webpush.key.InvalidECPublicKeyException;
@@ -63,9 +64,12 @@ public class VAPIDKeyPairs {
      * </p>
      *
      * <p>
-     * The implementation of {@link VAPIDJWTGenerator} is provided
-     * by one of the sub-modules for {@link VAPIDJWTGenerator} on your classpath.
-     * If such sub-modules don't exist, an {@link IllegalStateException} is thrown.
+     * The implementation of {@link VAPIDJWTGenerator} can be provided
+     * by one of the sub-modules
+     * (<a href="https://github.com/st-user/zerodep-web-push-java-ext-jwt">zerodep-web-push-java-ext-jwt</a>)
+     * on your classpath.
+     * If such sub-modules don't exist, the default implementation
+     * (created by {@link com.zerodeplibs.webpush.jwt.DefaultVAPIDJWTGeneratorFactory}) is used.
      * </p>
      *
      * @param privateKeySource a private key source.
@@ -73,7 +77,7 @@ public class VAPIDKeyPairs {
      * @return a new {@link VAPIDKeyPair}
      * @throws InvalidECPublicKeyException if the public key extracted
      *                                     from the given public key source is invalid.
-     * @throws IllegalStateException       if no sub-module for {@link VAPIDJWTGenerator} exists.
+     * @see com.zerodeplibs.webpush.jwt.DefaultVAPIDJWTGeneratorFactory
      */
     public static VAPIDKeyPair of(PrivateKeySource privateKeySource,
                                   PublicKeySource publicKeySource) {
@@ -89,7 +93,7 @@ public class VAPIDKeyPairs {
                 VAPIDJWTGeneratorFactory.class.getClassLoader());
         Iterator<VAPIDJWTGeneratorFactory> factoryIterator = loader.iterator();
         if (!factoryIterator.hasNext()) {
-            throw new IllegalStateException("No sub-module for VAPIDJWTGenerator exists.");
+            return new DefaultVAPIDJWTGeneratorFactory();
         }
         return factoryIterator.next();
     }
