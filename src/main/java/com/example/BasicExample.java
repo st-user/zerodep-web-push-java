@@ -25,7 +25,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
-import reactor.util.function.Tuple2;
 import reactor.util.retry.Retry;
 
 @SpringBootApplication
@@ -177,6 +176,9 @@ public class BasicExample {
 
                     })
                     .retryWhen(
+                        // TODO Consider 'Retry-After' header field
+                        //   - https://datatracker.ietf.org/doc/html/rfc8030#section-8.4
+                        //   - https://stackoverflow.com/questions/65744150/spring-webclient-how-to-retry-with-delay-based-on-response-header
                         Retry.backoff(3, Duration.ofMillis(500))
                             .jitter(0.75)
                             .filter(e -> e instanceof DoRetryException)
@@ -251,8 +253,7 @@ public class BasicExample {
         }
 
         String shortUrl() {
-            Matcher matcher = Pattern.compile("(https?://.*?/.{0,10})")
-                .matcher(this.subscription.getEndpoint());
+            Matcher matcher = SHORT_URL_PATTERN.matcher(this.subscription.getEndpoint());
             return matcher.find() ? matcher.group(1) + "..." : "-";
         }
     }

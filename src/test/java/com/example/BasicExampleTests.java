@@ -49,7 +49,7 @@ public class BasicExampleTests {
         }
     }
 
-    void startServer() throws IOException {
+    private void startServer() throws IOException {
         this.server = new MockWebServer();
         this.server.start(9876);
         this.server.url("/");
