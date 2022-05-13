@@ -3,11 +3,13 @@ package com.example;
 import com.zerodeplibs.webpush.PushSubscription;
 import com.zerodeplibs.webpush.VAPIDKeyPair;
 import java.time.Duration;
+import java.util.Comparator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -79,43 +81,43 @@ public class BasicExample {
 
                 return Mono.fromCallable(() -> {
 
-                    // In some circumstances, the JWT creation and the message encryption
-                    // may be considered "blocking" operations.
-                    //
-                    // On the author's environment, the JWT creation takes about 0.7ms
-                    // and the message encryption takes about 1.7ms.
-                    //
-                    // references:
-                    //   https://vertx.io/docs/vertx-core/java/#golden_rule
-                    //   https://projectreactor.io/docs/core/release/reference/#faq.wrap-blocking
+                        // In some circumstances, the JWT creation and the message encryption
+                        // may be considered "blocking" operations.
+                        //
+                        // On the author's environment, the JWT creation takes about 0.7ms
+                        // and the message encryption takes about 1.7ms.
+                        //
+                        // references:
+                        //   https://vertx.io/docs/vertx-core/java/#golden_rule
+                        //   https://projectreactor.io/docs/core/release/reference/#faq.wrap-blocking
 
-                    return SpringWebClientRequestPreparer.getBuilder()
-                        .pushSubscription(subscription)
-                        .vapidJWTExpiresAfter(15, TimeUnit.MINUTES)
-                        .vapidJWTSubject("mailto:example@example.com")
-                        .pushMessage(message)
-                        .ttl(1, TimeUnit.HOURS)
-                        .urgencyLow()
-                        .topic("MyTopic")
-                        .build(vapidKeyPair);
+                        return SpringWebClientRequestPreparer.getBuilder()
+                            .pushSubscription(subscription)
+                            .vapidJWTExpiresAfter(15, TimeUnit.MINUTES)
+                            .vapidJWTSubject("mailto:example@example.com")
+                            .pushMessage(message)
+                            .ttl(1, TimeUnit.HOURS)
+                            .urgencyLow()
+                            .topic("MyTopic")
+                            .build(vapidKeyPair);
 
-                    // In this example, we send push messages in simple text format.
-                    // You can also send them in JSON format as follows:
-                    //
-                    // ObjectMapper objectMapper = (Create a new one or get from the DI container.)
-                    // ....
-                    // .pushMessage(objectMapper.writeValueAsBytes(objectForJson))
-                    // ....
+                        // In this example, we send push messages in simple text format.
+                        // You can also send them in JSON format as follows:
+                        //
+                        // ObjectMapper objectMapper = (Create a new one or get from the DI container.)
+                        // ....
+                        // .pushMessage(objectMapper.writeValueAsBytes(objectForJson))
+                        // ....
 
-                }).zipWith(Mono.just(subscription)).subscribeOn(Schedulers.boundedElastic());
+                    }).onErrorResume(e ->
+                        alertAndResume(e).flatMap(r -> {
+                            resultResponse.add(r);
+                            return Mono.empty();
+                        })
+                    )
+                    .zipWith(Mono.just(subscription)).subscribeOn(Schedulers.boundedElastic());
 
             })
-            .onErrorResume(e ->
-                alertAndResume(e).flatMap(r -> {
-                    resultResponse.add(r);
-                    return Mono.empty();
-                })
-            )
             .flatMap(t -> {
 
                 SpringWebClientRequestPreparer preparer = t.getT1();
@@ -195,7 +197,11 @@ public class BasicExample {
     }
 
     private Flux<PushSubscription> getSubscriptionsFromStorage() {
-        return Flux.fromIterable(this.subscriptionMap.values());
+        return Flux.fromIterable(
+            this.subscriptionMap.values().stream()
+                .sorted(Comparator.comparing(PushSubscription::getEndpoint))
+                .collect(Collectors.toList())
+        );
     }
 
     private Mono<PushSubscription> saveSubscriptionToStorage(PushSubscription subscription) {

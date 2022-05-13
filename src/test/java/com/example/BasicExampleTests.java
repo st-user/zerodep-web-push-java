@@ -86,12 +86,12 @@ public class BasicExampleTests {
         postSubscription("http://localhost:9876/a"); // 201
         postSubscription("http://localhost:9876/b"); // 429 Too Many Request
         postSubscription("http://localhost:9876/c"); // 500
-        postSubscription(
-            createInvalidPushSubscription("http://invalid.example.com/x")); // Invalid Subscription
         postSubscription("http://localhost:9876/d"); // 401 Unauthorized
         postSubscription("http://localhost:9876/e"); // 302 Found
         postSubscription("http://localhost:9876/f"); // 200 Ok
         postSubscription("http://localhost:9876/g"); // 410 Gone
+        postSubscription(
+            createInvalidPushSubscription("http://invalid.example.com/x")); // Invalid Subscription
 
         BasicExample.RequestResultResponse responseBody = webClient.post()
             .uri("/sendMessage")
