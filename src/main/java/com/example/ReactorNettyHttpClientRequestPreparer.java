@@ -33,8 +33,7 @@ public class ReactorNettyHttpClientRequestPreparer {
         byte[] body = requestPreparationInfo.getEncryptedPushMessage().map(m -> m.toBytes())
             .orElse(new byte[0]);
 
-        return httpClient
-            .headers(headers -> {
+        return httpClient.headers(headers -> {
 
                 headers
                     .set("Authorization", requestPreparationInfo.getVapidHeader())
