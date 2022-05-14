@@ -81,6 +81,16 @@ public class BasicExampleTests {
 
     @Test
     void sendRequestsForDeliveryOfPushNotification() throws Exception {
+        sendRequestsForDeliveryOfPushNotification("/sendMessage");
+    }
+
+    @Test
+    void sendRequestsForDeliveryOfPushNotificationWithReactorNetty() throws Exception {
+        sendRequestsForDeliveryOfPushNotification("/sendMessageWithReactorNetty");
+    }
+
+    private void sendRequestsForDeliveryOfPushNotification(String endpointUrl) throws Exception {
+
         startServer();
 
         postSubscription("http://localhost:9876/a"); // 201
@@ -94,7 +104,7 @@ public class BasicExampleTests {
             createInvalidPushSubscription("http://invalid.example.com/x")); // Invalid Subscription
 
         BasicExample.RequestResultResponse responseBody = webClient.post()
-            .uri("/sendMessage")
+            .uri(endpointUrl)
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue("{\"message\":\"Test\"}")
             .exchange()

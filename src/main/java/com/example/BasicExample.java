@@ -27,6 +27,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
+import reactor.netty.http.client.HttpClient;
 import reactor.util.retry.Retry;
 
 @SpringBootApplication
@@ -171,6 +172,142 @@ public class BasicExample {
                                 String.format(
                                     "Receive %s response",
                                     response.statusCode()
+                                ),
+                                subscription
+                            )
+                        );
+
+                    })
+                    .retryWhen(
+                        // TODO Consider 'Retry-After' header field
+                        //   - https://datatracker.ietf.org/doc/html/rfc8030#section-8.4
+                        //   - https://stackoverflow.com/questions/65744150/spring-webclient-how-to-retry-with-delay-based-on-response-header
+                        Retry.backoff(3, Duration.ofMillis(500))
+                            .jitter(0.75)
+                            .filter(e -> e instanceof DoRetryException)
+                            .onRetryExhaustedThrow((retryBackoffSpec, retrySignal) -> {
+                                throw new DoNotRetryException(
+                                    "External Service failed to process after max retries",
+                                    subscription);
+                            })
+                    ).onErrorResume(this::alertAndResume);
+
+            })
+            .collect(() -> resultResponse, RequestResultResponse::add)
+            .map(ResponseEntity::ok);
+    }
+
+    /**
+     * The example for [Reactor Netty HTTP Client](https://projectreactor.io/docs/netty/release/reference/index.html#http-client)
+     */
+    @PostMapping("/sendMessageWithReactorNetty")
+    public Mono<ResponseEntity<RequestResultResponse>> sendMessageWithReactorNetty(
+        @RequestBody MyMessage myMessage) {
+
+        String message = myMessage.getMessage() == null ? "" : myMessage.getMessage();
+        RequestResultResponse resultResponse = new RequestResultResponse();
+        HttpClient client = HttpClient.create();
+
+        return getSubscriptionsFromStorage()
+            // In order to avoid wasting bandwidth,
+            // we send HTTP requests at some intervals.
+            .delayElements(Duration.ofMillis(100))
+            .flatMap(subscription -> {
+
+                return Mono.fromCallable(() -> {
+
+                        // In some circumstances, the JWT creation and the message encryption
+                        // may be considered "blocking" operations.
+                        //
+                        // On the author's environment, the JWT creation takes about 0.7ms
+                        // and the message encryption takes about 1.7ms.
+                        //
+                        // references:
+                        //   https://vertx.io/docs/vertx-core/java/#golden_rule
+                        //   https://projectreactor.io/docs/core/release/reference/#faq.wrap-blocking
+
+                        return ReactorNettyHttpClientRequestPreparer.getBuilder()
+                            .pushSubscription(subscription)
+                            .vapidJWTExpiresAfter(15, TimeUnit.MINUTES)
+                            .vapidJWTSubject("mailto:example@example.com")
+                            .pushMessage(message)
+                            .ttl(1, TimeUnit.HOURS)
+                            .urgencyLow()
+                            .topic("MyTopic")
+                            .build(vapidKeyPair);
+
+                        // In this example, we send push messages in simple text format.
+                        // You can also send them in JSON format as follows:
+                        //
+                        // ObjectMapper objectMapper = (Create a new one or get from the DI container.)
+                        // ....
+                        // .pushMessage(objectMapper.writeValueAsBytes(objectForJson))
+                        // ....
+
+                    }).onErrorResume(e ->
+                        alertAndResume(e).flatMap(r -> {
+                            resultResponse.add(r);
+                            return Mono.empty();
+                        })
+                    )
+                    .zipWith(Mono.just(subscription)).subscribeOn(Schedulers.boundedElastic());
+
+            })
+            .flatMap(t -> {
+
+                ReactorNettyHttpClientRequestPreparer preparer = t.getT1();
+                PushSubscription subscription = t.getT2();
+
+                // 201 Created : Success!
+                // 410 Gone : The subscription is no longer valid.
+                // etc...
+                // for more information, see the useful link below:
+                // [Response from push service - The Web Push Protocol ](https://developers.google.com/web/fundamentals/push-notifications/web-push-protocol)
+
+                return preparer.prepare(client).response().flatMap(response -> {
+
+                        HttpStatus status = HttpStatus.valueOf(response.status().code());
+
+                        if (status.is2xxSuccessful()) {
+                            return Mono.just(new RequestResult(true, ""));
+                        }
+
+                        if (status == HttpStatus.TOO_MANY_REQUESTS ||
+                            status.is5xxServerError()) {
+
+                            return Mono.error(
+                                new DoRetryException(
+                                    String.format(
+                                        "Receive %s response",
+                                        status
+                                    ),
+                                    subscription
+                                )
+                            );
+                        }
+
+                        if (status == HttpStatus.GONE) {
+
+                            return removeSubscriptionFromStorage(subscription).flatMap(
+                                _ignore ->
+                                    Mono.error(
+                                        new DoNotRetryException(
+                                            String.format(
+                                                "Receive %s response",
+                                                status
+                                            ),
+                                            subscription
+                                        )
+                                    )
+                            );
+                        }
+
+
+                        return Mono.error(
+                            new DoNotRetryException(
+                                String.format(
+                                    "Receive %s response",
+                                    status
                                 ),
                                 subscription
                             )
