@@ -32,6 +32,15 @@ public class VAPIDJWTCreationException extends RuntimeException {
     }
 
     /**
+     * Creates a new {@link VAPIDJWTCreationException} with the given message.
+     *
+     * @param message a message.
+     */
+    public VAPIDJWTCreationException(String message) {
+        super(message);
+    }
+
+    /**
      * Creates a new {@link VAPIDJWTCreationException} with the default message and the given cause.
      *
      * @param cause the underlying cause.
