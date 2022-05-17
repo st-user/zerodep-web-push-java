@@ -37,33 +37,6 @@ public class BasicExample {
     private VAPIDKeyPair vapidKeyPair;
 
     /**
-     * In this example, we read a key pair for VAPID
-     * from a PEM formatted file on the file system.
-     * <p>
-     * You can extract key pairs from various sources:
-     * '.der' file(binary content), an octet sequence stored in a database and so on.
-     * For more information, please see the javadoc of PrivateKeySources and PublicKeySources.
-     */
-    @Bean
-    public VAPIDKeyPair vaidKeyPair(
-        @Value("${private.key.file.path}") String privateKeyFilePath,
-        @Value("${public.key.file.path}") String publicKeyFilePath) throws IOException {
-
-        return VAPIDKeyPairs.of(
-            PrivateKeySources.ofPEMFile(new File(privateKeyFilePath).toPath()),
-            PublicKeySources.ofPEMFile(new File(publicKeyFilePath).toPath())
-
-            /*
-             * If you want to make your own VAPIDJWTGenerator,
-             * the project for its sub-modules is a good example.
-             * For more information, please consult the source codes on https://github.com/st-user/zerodep-web-push-java-ext-jwt
-             */
-
-            // (privateKey, publicKey) -> new MyOwnVAPIDJWTGenerator(privateKey)
-        );
-    }
-
-    /**
      * # Step 1.
      * Sends the public key to user agents.
      * <p>
@@ -273,44 +246,6 @@ public class BasicExample {
 
         }
         new Thread(() -> LifeCycle.stop(httpClient)).start();
-
-        return ResponseEntity.ok()
-            .header(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE)
-            .body("The message has been processed.");
-    }
-    */
-
-
-    // "/sendMessage" endpoint utilizing JDK Http Client(JDK11+ required).
-    // When using this endpoint, remove the comment outs in 'Jdk11HttpClientRequestPreparer.java'.
-    // 'Jdk11HttpClientRequestPreparer.java' is in the same directory as this class.
-    /*
-    @PostMapping("/sendMessage")
-    public ResponseEntity<String> sendMessageWithJdk11HttpClient(@RequestBody MyMessage myMessage)
-        throws IOException, InterruptedException {
-
-        String message = myMessage.getMessage();
-
-        java.net.http.HttpClient httpClient = java.net.http.HttpClient.newBuilder()
-            .build();
-
-        for (PushSubscription subscription : getSubscriptionsFromStorage()) {
-
-            HttpRequest httpRequest = Jdk11HttpClientRequestPreparer.getBuilder()
-                .pushSubscription(subscription)
-                .vapidJWTExpiresAfter(15, TimeUnit.MINUTES)
-                .vapidJWTSubject("mailto:example@example.com")
-                .pushMessage(message)
-                .ttl(1, TimeUnit.HOURS)
-                .urgencyLow()
-                .topic("MyTopic")
-                .build(vapidKeyPair)
-                .toRequest();
-
-            HttpResponse<String> httpResponse =
-                httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-            logger.info(String.format("[JDK11 Http Client] status code: %d", httpResponse.statusCode()));
-        }
 
         return ResponseEntity.ok()
             .header(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE)
