@@ -8,6 +8,7 @@ on:
             - v1.**
 jobs:
     publish:
+        environment: OSSHR Release
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v3
@@ -21,9 +22,6 @@ jobs:
                   server-password: MAVEN_PASSWORD
                   gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
                   gpg-passphrase: MAVEN_GPG_PASSPHRASE
-
-            - name: Test
-              run: sh ./scripts/test-with-older-versions.sh
 
             - name: Publish package
               run: ./mvnw clean deploy -Prelease
