@@ -20,6 +20,7 @@ using [Vert.x](https://vertx.io/docs/).
    ```
    git clone https://github.com/st-user/zerodep-web-push-java-example-vertx.git
    cd zerodep-web-push-java-example-vertx
+   git switch main-v1
    mkdir .keys
    cd .keys
    openssl ecparam -genkey -name prime256v1 -noout -out my-private.pem
@@ -87,4 +88,5 @@ For example:
 
 - [zerodep-web-push-java-ext-jwt](https://github.com/st-user/zerodep-web-push-java-ext-jwt)
 - [zerodep-web-push-java-example](https://github.com/st-user/zerodep-web-push-java-example)
+- [zerodep-web-push-java-example-webflux](https://github.com/st-user/zerodep-web-push-java-example-webflux)
 
