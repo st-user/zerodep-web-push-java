@@ -53,9 +53,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>11</maven.compiler.release>
 
-        <jackson.version>2.13.2</jackson.version>
+        <jackson.version>2.13.3</jackson.version>
         <junit.version>5.8.2</junit.version>
-        <jose4j.version>0.7.11</jose4j.version>
+        <jose4j.version>0.7.12</jose4j.version>
     </properties>
 
     <build>
