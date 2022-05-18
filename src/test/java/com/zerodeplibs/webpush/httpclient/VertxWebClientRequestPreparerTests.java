@@ -32,10 +32,12 @@ import io.vertx.ext.web.client.impl.WebClientBase;
 import io.vertx.ext.web.client.predicate.ResponsePredicate;
 import io.vertx.ext.web.codec.BodyCodec;
 import io.vertx.ext.web.multipart.MultipartForm;
+import io.vertx.uritemplate.Variables;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.Test;
@@ -261,6 +263,21 @@ public class VertxWebClientRequestPreparerTests {
         }
 
         @Override
+        public HttpRequest<Buffer> setTemplateParam(String s, String s1) {
+            return null;
+        }
+
+        @Override
+        public HttpRequest<Buffer> setTemplateParam(String s, List<String> list) {
+            return null;
+        }
+
+        @Override
+        public HttpRequest<Buffer> setTemplateParam(String s, Map<String, String> map) {
+            return null;
+        }
+
+        @Override
         public HttpRequest<Buffer> followRedirects(boolean value) {
             throw new UnsupportedOperationException("Unexpected invocation.");
         }
@@ -278,6 +295,11 @@ public class VertxWebClientRequestPreparerTests {
         @Override
         public MultiMap queryParams() {
             throw new UnsupportedOperationException("Unexpected invocation.");
+        }
+
+        @Override
+        public Variables templateParams() {
+            return null;
         }
 
         @Override

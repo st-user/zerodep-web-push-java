@@ -45,6 +45,7 @@ package com.zerodeplibs.webpush.jwt;
  *
  * @author Tomoki Sato
  * @see VAPIDJWTGeneratorFactory
+ * @see DefaultVAPIDJWTGeneratorFactory
  */
 public interface VAPIDJWTGenerator {
 

@@ -4,7 +4,6 @@ import static com.zerodeplibs.webpush.MessageEncryptionTestUtil.generateKeyPair;
 import static com.zerodeplibs.webpush.TestAssertionUtil.assertNullCheck;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.zerodeplibs.webpush.jwt.VAPIDJWTGenerator;
 import com.zerodeplibs.webpush.jwt.VAPIDJWTParam;
@@ -141,22 +140,15 @@ public class VAPIDKeyPairTests {
     }
 
     @Test
-    public void shouldThrowExceptionWhenNoSubmoduleForVAPIDJWTGeneratorExists()
+    public void shouldUseDefaultImplementationWhenNoSubmoduleForVAPIDJWTGeneratorExists()
         throws InvalidAlgorithmParameterException, NoSuchAlgorithmException {
 
         KeyPair keyPair = generateKeyPair();
         ECPrivateKey privateKey = (ECPrivateKey) keyPair.getPrivate();
         ECPublicKey publicKey = (ECPublicKey) keyPair.getPublic();
 
-
-        String expectedMessage =
-            "No sub-module for VAPIDJWTGenerator exists.";
-
-        assertThat(assertThrows(
-                IllegalStateException.class,
-                () -> VAPIDKeyPairs.of(PrivateKeySources.ofECPrivateKey(privateKey),
-                    PublicKeySources.ofECPublicKey(publicKey))).getMessage(),
-            equalTo(expectedMessage));
+        VAPIDKeyPairs.of(PrivateKeySources.ofECPrivateKey(privateKey),
+            PublicKeySources.ofECPublicKey(publicKey));
     }
 
     private static class TestingJWTGeneraator implements VAPIDJWTGenerator {
