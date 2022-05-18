@@ -6,7 +6,7 @@
 
     <groupId>org.example</groupId>
     <artifactId>zerodep-web-push-java-example-vertx</artifactId>
-    <version>1.4.0</version>
+    <version>1.5.0</version>
 
     <name>zerodep-web-push-java-example-vertx</name>
     <url>https://github.com/st-user/zerodep-web-push-java-example-vertx</url>
@@ -19,7 +19,7 @@
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <zerodeplibs.version>${project.version}</zerodeplibs.version>
-        <vertx.version>4.2.7</vertx.version>
+        <vertx.version>4.3.0</vertx.version>
         <!--
             Also Vert.x 3 is available.
             See also the 'maven-compiler-plugin' configuration below.
@@ -82,7 +82,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.13.2</version>
+            <version>2.13.3</version>
         </dependency>
 
     </dependencies>
