@@ -25,7 +25,7 @@ Java 8+
 <dependency>
   <groupId>com.zerodeplibs</groupId>
   <artifactId>zerodep-web-push-java</artifactId>
-  <version>1.4.0</version>
+  <version>1.5.0</version>
 </dependency>
 
 ```
