@@ -5,7 +5,7 @@ module com.zerodeplibs.webpush {
     exports com.zerodeplibs.webpush.key;
     exports com.zerodeplibs.webpush;
 
-    requires java.net.http;
+    requires static java.net.http;
     requires static okhttp3;
     requires static org.apache.httpcomponents.client5.httpclient5;
     requires static org.apache.httpcomponents.core5.httpcore5;
