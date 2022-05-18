@@ -23,7 +23,7 @@ jobs:
                   gpg-passphrase: MAVEN_GPG_PASSPHRASE
 
             - name: Publish package
-              run: ./mvnw clean deploy -Prelease
+              run: mvn clean deploy -Prelease
               env:
                   MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
                   MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
