@@ -30,7 +30,7 @@ The documentation specific to v1 is [here](https://github.com/st-user/zerodep-we
 <dependency>
   <groupId>com.zerodeplibs</groupId>
   <artifactId>zerodep-web-push-java</artifactId>
-  <version>2.0.1</version>
+  <version>2.0.2</version>
 </dependency>
 
 ```

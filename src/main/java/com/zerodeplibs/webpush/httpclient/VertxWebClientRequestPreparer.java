@@ -52,10 +52,10 @@ public class VertxWebClientRequestPreparer {
      * <pre class="code">
      * preparer.sendBuffer(
      *     webClient,
-     *     request -> {
+     *     request -&gt; {
      *         request.timeout(10_000L)
      *     },
-     *     response -> { ... }
+     *     response -&gt; { ... }
      * )
      * </pre>
      *
@@ -113,7 +113,7 @@ public class VertxWebClientRequestPreparer {
      * <pre class="code">
      * preparer.sendBuffer(
      *     webClient,
-     *     request -> {
+     *     request -&gt; {
      *         request.timeout(10_000L)
      *     }
      * )
