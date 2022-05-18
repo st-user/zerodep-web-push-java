@@ -12,11 +12,11 @@ and [zerodep-web-push-java-example-vertx](https://github.com/st-user/zerodep-web
 
 In this example, we demonstrate the error handling on requesting the delivery of push notifications.
 
-**This is the example for v2.**
+**This is the example for v1. The example for v2 is [here](https://github.com/st-user/zerodep-web-push-java-example-webflux).**
 
 ## Requirements
 
-- JDK11+
+- JDK8+
 - A library for generating ECDSA key pairs(e.g. [OpenSSL](https://www.openssl.org/))
 - A browser supporting [Push API](https://developer.mozilla.org/en-US/docs/Web/API/Push_API)
   such as Google Chrome, Microsoft Edge and Firefox
@@ -27,6 +27,7 @@ In this example, we demonstrate the error handling on requesting the delivery of
 
    ```
    git clone https://github.com/st-user/zerodep-web-push-java-example-webflux.git
+   git switch main-v1
    cd zerodep-web-push-java-example-webflux
    mkdir .keys
    cd .keys
