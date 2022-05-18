@@ -13,7 +13,7 @@
 
     <groupId>com.zerodeplibs</groupId>
     <artifactId>zerodep-web-push-java-example</artifactId>
-    <version>1.4.0</version>
+    <version>1.5.0</version>
 
     <name>zerodep-web-push-java-example</name>
     <url>https://github.com/st-user/zerodep-web-push-java-example</url>
@@ -44,14 +44,14 @@
             ////// Optional sub-module for JWT library /////
 
             [Java JWT - auth0](https://github.com/auth0/java-jwt).
-        -->
-        <dependency>
-            <groupId>com.zerodeplibs</groupId>
-            <artifactId>zerodep-web-push-java-ext-jwt-auth0</artifactId>
-            <version>${zerodeplibs.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <!--
+
+            <dependency>
+                <groupId>com.zerodeplibs</groupId>
+                <artifactId>zerodep-web-push-java-ext-jwt-auth0</artifactId>
+                <version>${zerodeplibs.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+
 
             If you want to explicitly specify the version:
 
