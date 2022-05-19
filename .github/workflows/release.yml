@@ -2,8 +2,6 @@ name: Publish package to the Maven Central Repository
 
 on:
     push:
-        branches:
-            - 'main'
         tags:
             - v2.**
 jobs:
