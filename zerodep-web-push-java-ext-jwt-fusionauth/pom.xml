@@ -21,7 +21,7 @@
     <url>https://github.com/st-user/zerodep-web-push-java-ext-jwt</url>
 
     <properties>
-        <fusionauth.version>5.1.2</fusionauth.version>
+        <fusionauth.version>5.2.0</fusionauth.version>
     </properties>
 
     <dependencies>
