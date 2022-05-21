@@ -1,6 +1,7 @@
 package com.zerodeplibs.webpush.key;
 
 import java.security.interfaces.ECPublicKey;
+import java.util.Base64;
 
 /**
  * <p>
@@ -45,4 +46,17 @@ public interface PublicKeySource {
      *                                     public key is invalid(Depending on the implementation).
      */
     byte[] extractBytesInUncompressedForm();
+
+    /**
+     * Extracts the elliptic curve (EC) public key in uncompressed form encoded
+     * using base64url without padding.
+     *
+     * @return the public key in uncompressed form encoded using base64url without padding.
+     * @throws InvalidECPublicKeyException if the extracted
+     *                                     public key is invalid(Depending on the implementation).
+     */
+    default String extractStringInUncompressedForm() {
+        return Base64.getUrlEncoder().withoutPadding()
+            .encodeToString(this.extractBytesInUncompressedForm());
+    }
 }

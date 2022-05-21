@@ -9,7 +9,6 @@ import com.zerodeplibs.webpush.key.PublicKeySource;
 import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
 import java.util.Arrays;
-import java.util.Base64;
 
 /**
  * A standard implementation of the VAPIDKeyPair.
@@ -38,8 +37,7 @@ class StandardVAPIDKeyPair implements VAPIDKeyPair {
 
         this.uncompressedPublicKey = publicKeySource.extractBytesInUncompressedForm();
 
-        this.uncompressedPublicKeyBase64 = Base64.getUrlEncoder().withoutPadding()
-            .encodeToString(this.uncompressedPublicKey);
+        this.uncompressedPublicKeyBase64 = publicKeySource.extractStringInUncompressedForm();
 
         VAPIDJWTGenerator jwtGenerator = jwtGeneratorFactory.create(privateKey, publicKey);
         WebPushPreConditions.checkNotNull(jwtGenerator,
@@ -51,6 +49,11 @@ class StandardVAPIDKeyPair implements VAPIDKeyPair {
     @Override
     public byte[] extractPublicKeyInUncompressedForm() {
         return Arrays.copyOf(this.uncompressedPublicKey, this.uncompressedPublicKey.length);
+    }
+
+    @Override
+    public String extractPublicKeyInUncompressedFormAsString() {
+        return this.uncompressedPublicKeyBase64;
     }
 
     @Override
