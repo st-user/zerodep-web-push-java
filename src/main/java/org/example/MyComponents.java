@@ -29,14 +29,6 @@ public class MyComponents {
         return VAPIDKeyPairs.of(
             PrivateKeySources.ofPEMFile(new File(privateKeyFilePath).toPath()),
             PublicKeySources.ofPEMFile(new File(publicKeyFilePath).toPath())
-
-            /*
-             * If you want to make your own VAPIDJWTGenerator,
-             * the project for its sub-modules is a good example.
-             * For more information, please consult the source codes on https://github.com/st-user/zerodep-web-push-java-ext-jwt
-             */
-
-            // (privateKey, publicKey) -> new MyOwnVAPIDJWTGenerator(privateKey)
         );
     }
 }
