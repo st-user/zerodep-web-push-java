@@ -46,6 +46,11 @@ class PreparerTestUtil {
         }
 
         @Override
+        public String extractPublicKeyInUncompressedFormAsString() {
+            throw new UnsupportedOperationException("Not supported on testing.");
+        }
+
+        @Override
         public String generateAuthorizationHeaderValue(VAPIDJWTParam jwtParam) {
             if (expectedParameters != null) {
                 assertThat(jwtParam, equalTo(expectedParameters));
