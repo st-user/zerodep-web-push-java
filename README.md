@@ -7,10 +7,10 @@ be integrated with various third-party libraries and frameworks.
 
 This library
 
-- provides the functionalities for [VAPID](https://datatracker.ietf.org/doc/html/rfc8292)
-- provides the functionalities
+- Provides the functionalities for [VAPID](https://datatracker.ietf.org/doc/html/rfc8292)
+- Provides the functionalities
   for [Message Encryption for Web Push](https://datatracker.ietf.org/doc/html/rfc8291)
-- assumes that the [Push API](https://www.w3.org/TR/push-api/) is used.
+- Assumes that the [Push API](https://www.w3.org/TR/push-api/) is used
 
 ## Requirements
 
@@ -30,142 +30,235 @@ Java 8+
 
 ```
 
-## Examples
+## How to use
 
-### Spring MVC / WebFlux
+Sending push notifications requires slightly complex steps. So it is recommended that you check one of the example projects(Please see [Examples](#examples)).
 
-  - [zerodep-web-push-java-example](https://github.com/st-user/zerodep-web-push-java-example)
+The following is a typical flow to send push notifications with this library.
 
-    <details>
-        <summary><b>Controller for VAPID and Message Encryption</b></summary>
-    
-    ``` java
+1. Generate a key pair for VAPID with an arbitrary way(e.g. openssl commands).
 
-    @Component
-    public class MyComponents {
-    
-        /**
-         * In this example, we read a key pair for VAPID
-         * from a PEM formatted file on the file system.
-         * <p>
-         * You can extract key pairs from various sources:
-         * '.der' file(binary content), an octet sequence stored in a database and so on.
-         * For more information, please see the javadoc of PrivateKeySources and PublicKeySources.
-         */
-        @Bean
-        public VAPIDKeyPair vaidKeyPair(
-            @Value("${private.key.file.path}") String privateKeyFilePath,
-            @Value("${public.key.file.path}") String publicKeyFilePath) throws IOException {
-    
-            return VAPIDKeyPairs.of(
-                PrivateKeySources.ofPEMFile(new File(privateKeyFilePath).toPath()),
-                PublicKeySources.ofPEMFile(new File(publicKeyFilePath).toPath())
-    
-                /*
-                 * If you want to make your own VAPIDJWTGenerator,
-                 * the project for its sub-modules is a good example.
-                 * For more information, please consult the source codes on https://github.com/st-user/zerodep-web-push-java-ext-jwt
-                 */
-    
-                // (privateKey, publicKey) -> new MyOwnVAPIDJWTGenerator(privateKey)
-            );
-        }
-    }
-    
-    @SpringBootApplication
-    @RestController
-    public class BasicExample {
-    
-        @Autowired
-        private VAPIDKeyPair vapidKeyPair;
-    
-        /**
-         * # Step 1.
-         * Sends the public key to user agents.
-         * <p>
-         * The user agents create a push subscription with this public key.
-         */
-        @GetMapping("/getPublicKey")
-        public byte[] getPublicKey() {
-            return vapidKeyPair.extractPublicKeyInUncompressedForm();
-        }
-    
-        /**
-         * # Step 2.
-         * Obtains push subscriptions from user agents.
-         * <p>
-         * The application server(this application) requests the delivery of push messages with these subscriptions.
-         */
-        @PostMapping("/subscribe")
-        public void subscribe(@RequestBody PushSubscription subscription) {
-            this.saveSubscriptionToStorage(subscription);
-        }
-    
-        /**
-         * # Step 3.
-         * Requests the delivery of push messages.
-         * <p>
-         * In this example, for simplicity and testability, we use an HTTP endpoint for this purpose.
-         * However, in real applications, this feature doesn't have to be provided as an HTTP endpoint.
-         */
-        @PostMapping("/sendMessage")
-        public ResponseEntity<String> sendMessage(@RequestBody MyMessage myMessage)
-            throws IOException {
-    
-            String message = myMessage.getMessage();
-    
-            OkHttpClient httpClient = new OkHttpClient();
-            for (PushSubscription subscription : getSubscriptionsFromStorage()) {
-    
-                Request request = OkHttpClientRequestPreparer.getBuilder()
-                    .pushSubscription(subscription)
-                    .vapidJWTExpiresAfter(15, TimeUnit.MINUTES)
-                    .vapidJWTSubject("mailto:example@example.com")
-                    .pushMessage(message)
-                    .ttl(1, TimeUnit.HOURS)
-                    .urgencyLow()
-                    .topic("MyTopic")
-                    .build(vapidKeyPair)
-                    .toRequest();
-    
-                // In this example, we send push messages in simple text format.
-                // You can also send them in JSON format as follows:
-                //
-                // ObjectMapper objectMapper = (Create a new one or get from the DI container.)
-                // ....
-                // pushMessage(objectMapper.writeValueAsBytes(objectForJson))
-                // ....
-    
-                try (Response response = httpClient.newCall(request).execute()) {
-                    logger.info(String.format("[OkHttp] status code: %d", response.code()));
-                    // 201 Created : Success!
-                    // 410 Gone : The subscription is no longer valid.
-                    // etc...
-                    // for more information, see the useful link below:
-                    // [Response from push service - The Web Push Protocol ](https://developers.google.com/web/fundamentals/push-notifications/web-push-protocol)
-                }
-    
-            }
-    
-            return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE)
-                .body("The message has been processed.");
-        }
-    
-        ... Omitted for simplicity.
-    
-    } 
-
+   Example:
+    ``` bash
+    openssl ecparam -genkey -name prime256v1 -noout -out soruceKey.pem
+    openssl pkcs8 -in soruceKey.pem -topk8 -nocrypt -out vapidPrivateKey.pem
+    openssl ec -in sourceKey.pem -pubout -conv_form uncompressed -out vapidPublicKey.pem
     ```
 
-    </details>
+2. Instantiate `VAPIDKeyPair` with the key pair generated in '1.'.
 
-  - [zerodep-web-push-java-example-webflux](https://github.com/st-user/zerodep-web-push-java-example-webflux)
+   Example:
+    ``` java
+    VAPIDKeyPair vapidKeyPair = VAPIDKeyPairs.of(
+        PrivateKeySources.ofPEMFile(new File(pathToYourPrivateKeyFile).toPath()),
+        PublicKeySources.ofPEMFile(new File(pathToYourPublicKeyFile).toPath()
+    );
+    ```
+
+3. Send the public key for VAPID to the browser.
+
+   Typically, this is achieved by exposing an endpoint to get the public key like `GET /getPublicKey`. Javascript on the browser fetches the public key through this endpoint.
+
+   Example:
+    ``` java
+    @GetMapping("/getPublicKey")
+    public byte[] getPublicKey() {
+        return vapidKeyPair.extractPublicKeyInUncompressedForm();
+    }
+    ```
+   (javascript on browser)
+    ``` javascript
+    const serverPublicKey = await fetch('/getPublicKey')
+                                    .then(response => response.arrayBuffer());
+
+    const subscription = await registration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: serverPublicKey
+    });
+    ```
+
+4. Obtain a push subscription from the browser.
+
+   Typically, this is achieved by exposing an endpoint for the browser to post the push subscription like `POST /subscribe`.
+
+   Example:
+    ``` java
+    @PostMapping("/subscribe")
+    public void subscribe(@RequestBody PushSubscription subscription) {
+       this.saveSubscriptionToStorage(subscription);
+    }
+    ```
+   (javascript on browser)
+    ``` javascript
+    await fetch('/subscribe', {
+        method: 'POST',
+        body: JSON.stringify(subscription),
+        headers: {
+            'content-type': 'application/json'
+        }
+    }).then(res => {
+       .....
+    });
+    ```
+
+
+5. Send a push notification to the push service by using RequestPreparer (e.g. `StandardHttpClientRequestPreparer`) with the `VAPIDKeyPair` and the push subscription.
+
+    ``` java
+    Request request = OkHttpClientRequestPreparer.getBuilder()
+        .pushSubscription(subscription)
+        .vapidJWTExpiresAfter(15, TimeUnit.MINUTES)
+        .vapidJWTSubject("mailto:example@example.com")
+        .pushMessage(message)
+        .ttl(1, TimeUnit.HOURS)
+        .urgencyLow()
+        .topic("MyTopic")
+        .build(vapidKeyPair)
+        .toRequest();
+   
+    try (Response response = httpClient.newCall(request).execute()) {
+        .....
+    }
+    ```
+
+
+## Examples
+
+### Spring Boot (MVC)
+
+Source code and usage: [zerodep-web-push-java-example](https://github.com/st-user/zerodep-web-push-java-example)
+
+<details>
+    <summary><b>Controller for VAPID and Message Encryption</b></summary>
+    
+``` java
+
+@Component
+public class MyComponents {
+
+    /**
+     * In this example, we read a key pair for VAPID
+     * from a PEM formatted file on the file system.
+     * <p>
+     * You can extract key pairs from various sources:
+     * '.der' file(binary content), an octet sequence stored in a database and so on.
+     * For more information, please see the javadoc of PrivateKeySources and PublicKeySources.
+     */
+    @Bean
+    public VAPIDKeyPair vaidKeyPair(
+        @Value("${private.key.file.path}") String privateKeyFilePath,
+        @Value("${public.key.file.path}") String publicKeyFilePath) throws IOException {
+
+        return VAPIDKeyPairs.of(
+            PrivateKeySources.ofPEMFile(new File(privateKeyFilePath).toPath()),
+            PublicKeySources.ofPEMFile(new File(publicKeyFilePath).toPath())
+
+            /*
+             * If you want to make your own VAPIDJWTGenerator,
+             * the project for its sub-modules is a good example.
+             * For more information, please consult the source codes on https://github.com/st-user/zerodep-web-push-java-ext-jwt
+             */
+
+            // (privateKey, publicKey) -> new MyOwnVAPIDJWTGenerator(privateKey)
+        );
+    }
+}
+    
+@SpringBootApplication
+@RestController
+public class BasicExample {
+
+    @Autowired
+    private VAPIDKeyPair vapidKeyPair;
+
+    /**
+     * # Step 1.
+     * Sends the public key to user agents.
+     * <p>
+     * The user agents create a push subscription with this public key.
+     */
+    @GetMapping("/getPublicKey")
+    public byte[] getPublicKey() {
+        return vapidKeyPair.extractPublicKeyInUncompressedForm();
+    }
+
+    /**
+     * # Step 2.
+     * Obtains push subscriptions from user agents.
+     * <p>
+     * The application server(this application) requests the delivery of push messages with these subscriptions.
+     */
+    @PostMapping("/subscribe")
+    public void subscribe(@RequestBody PushSubscription subscription) {
+        this.saveSubscriptionToStorage(subscription);
+    }
+
+    /**
+     * # Step 3.
+     * Requests the delivery of push messages.
+     * <p>
+     * In this example, for simplicity and testability, we use an HTTP endpoint for this purpose.
+     * However, in real applications, this feature doesn't have to be provided as an HTTP endpoint.
+     */
+    @PostMapping("/sendMessage")
+    public ResponseEntity<String> sendMessage(@RequestBody MyMessage myMessage)
+        throws IOException {
+
+        String message = myMessage.getMessage();
+
+        OkHttpClient httpClient = new OkHttpClient();
+        for (PushSubscription subscription : getSubscriptionsFromStorage()) {
+
+            Request request = OkHttpClientRequestPreparer.getBuilder()
+                .pushSubscription(subscription)
+                .vapidJWTExpiresAfter(15, TimeUnit.MINUTES)
+                .vapidJWTSubject("mailto:example@example.com")
+                .pushMessage(message)
+                .ttl(1, TimeUnit.HOURS)
+                .urgencyLow()
+                .topic("MyTopic")
+                .build(vapidKeyPair)
+                .toRequest();
+
+            // In this example, we send push messages in simple text format.
+            // You can also send them in JSON format as follows:
+            //
+            // ObjectMapper objectMapper = (Create a new one or get from the DI container.)
+            // ....
+            // pushMessage(objectMapper.writeValueAsBytes(objectForJson))
+            // ....
+
+            try (Response response = httpClient.newCall(request).execute()) {
+                logger.info(String.format("[OkHttp] status code: %d", response.code()));
+                // 201 Created : Success!
+                // 410 Gone : The subscription is no longer valid.
+                // etc...
+                // for more information, see the useful link below:
+                // [Response from push service - The Web Push Protocol ](https://developers.google.com/web/fundamentals/push-notifications/web-push-protocol)
+            }
+
+        }
+
+        return ResponseEntity.ok()
+            .header(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE)
+            .body("The message has been processed.");
+    }
+    
+    ... Omitted for simplicity.
+    
+} 
+
+```
+
+</details>
+
+### Spring Boot (WebFlux)
+
+Source code and usage: [zerodep-web-push-java-example-webflux](https://github.com/st-user/zerodep-web-push-java-example-webflux)
 
 ### Vert.x
 
-full source
-code: [zerodep-web-push-java-example-vertx](https://github.com/st-user/zerodep-web-push-java-example-vertx)
+Source code and usage: [zerodep-web-push-java-example-vertx](https://github.com/st-user/zerodep-web-push-java-example-vertx)
 
 <details>
     <summary><b>Standalone application for VAPID and Message Encryption</b></summary>
@@ -376,15 +469,15 @@ public class Example {
 'zerodep-web-push-java' assumes that suitable implementations(libraries) of the following
 functionalities vary depending on applications.
 
-- Generating and signing JSON Web Token (used for VAPID)
-- Sending HTTP requests (requests for the delivery of push messages)
+- Generating and signing JSON Web Token(JWT) used for VAPID
+- Sending HTTP requests for the delivery of push messages
 - Cryptographic operations
 
 For example, an application may need to send HTTP requests **synchronously**
 with [Apache HTTPClient](https://hc.apache.org/httpcomponents-client-5.1.x/) but another application
 may need to do this **asynchronously** with [Vert.x](https://vertx.io/docs/vertx-web-client/java/).
 
-In order to allow you to choose libraries suitable for your application, this library doesn't force
+In order to allow you to choose the way suitable for your application, this library doesn't force
 your application to have dependencies on specifics libraries. Instead, this library
 
 - Provides the functionality of JWT for VAPID
@@ -400,8 +493,7 @@ specific HTTP Client library. you can choose suitable modules/components for you
 enables this library to be independent of specific implementations(providers) for security
 functionality.
 
-
-## Sub-modules and optional components
+## Various sub-modules and helper components
 
 <details>
     <summary><b>JWT</b></summary>
@@ -448,14 +540,15 @@ third-party HTTP Client library. Supported libraries are listed below.
   The latest versions are recommended.
 
 - **Others**
-
+  
   'zerodep-web-push-java' doesn't directly provide optional components for the libraries other than the above. However, 'zerodep-web-push-java' can be easily integrated with the other HTTP Client libraries and frameworks.
   For example, you can also utilize the following libraries.
 
-    - [Spring WebFlux (WebClient)](https://docs.spring.io/spring-framework/docs/current/reference/html/web-reactive.html#webflux-client)
-    - [Reactor Netty HTTP Client](https://projectreactor.io/docs/netty/release/reference/index.html#http-client)
+  - [Spring WebFlux (WebClient)](https://docs.spring.io/spring-framework/docs/current/reference/html/web-reactive.html#webflux-client)
+  - [Reactor Netty HTTP Client](https://projectreactor.io/docs/netty/release/reference/index.html#http-client)
 
   Please see [zerodep-web-push-java-example-webflux](https://github.com/st-user/zerodep-web-push-java-example-webflux) for more information.
+
 
 </details>
 
