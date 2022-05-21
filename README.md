@@ -35,14 +35,104 @@ The documentation specific to v1 is [here](https://github.com/st-user/zerodep-we
 
 ```
 
+## How to use
+
+Sending push notifications requires slightly complex steps. So it is recommended that you check one of the example projects(Please see [Examples](#examples)).
+
+The following is a typical flow to send push notifications with this library.
+
+1. Generate a key pair for VAPID with an arbitrary way(e.g. openssl commands).
+
+    Example:
+    ``` bash
+    openssl ecparam -genkey -name prime256v1 -noout -out soruceKey.pem
+    openssl pkcs8 -in soruceKey.pem -topk8 -nocrypt -out vapidPrivateKey.pem
+    openssl ec -in sourceKey.pem -pubout -conv_form uncompressed -out vapidPublicKey.pem
+    ```
+
+2. Instantiate `VAPIDKeyPair` with the key pair generated in '1.'.
+
+    Example:
+    ``` java
+    VAPIDKeyPair vapidKeyPair = VAPIDKeyPairs.of(
+        PrivateKeySources.ofPEMFile(new File(pathToYourPrivateKeyFile).toPath()),
+        PublicKeySources.ofPEMFile(new File(pathToYourPublicKeyFile).toPath()
+    );
+    ```
+
+3. Send the public key for VAPID to the browser.
+
+    Typically, this is achieved by exposing an endpoint to get the public key like `GET /getPublicKey`. Javascript on the browser fetches the public key through this endpoint.
+
+    Example:
+    ``` java
+    @GetMapping("/getPublicKey")
+    public byte[] getPublicKey() {
+        return vapidKeyPair.extractPublicKeyInUncompressedForm();
+    }
+    ```
+   (javascript on browser)
+    ``` javascript
+    const serverPublicKey = await fetch('/getPublicKey')
+                                    .then(response => response.arrayBuffer());
+
+    const subscription = await registration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: serverPublicKey
+    });
+    ```
+
+4. Obtain a push subscription from the browser.
+
+    Typically, this is achieved by exposing an endpoint for the browser to post the push subscription like `POST /subscribe`.
+
+    Example:
+    ``` java
+    @PostMapping("/subscribe")
+    public void subscribe(@RequestBody PushSubscription subscription) {
+       this.saveSubscriptionToStorage(subscription);
+    }
+    ```
+   (javascript on browser)
+    ``` javascript
+    await fetch('/subscribe', {
+        method: 'POST',
+        body: JSON.stringify(subscription),
+        headers: {
+            'content-type': 'application/json'
+        }
+    }).then(res => {
+       .....
+    });
+    ```
+   
+
+5. Send a push notification to the push service by using RequestPreparer (e.g. `StandardHttpClientRequestPreparer`) with the `VAPIDKeyPair` and the push subscription.
+
+    ``` java
+    HttpRequest request = StandardHttpClientRequestPreparer.getBuilder()
+        .pushSubscription(subscription)
+        .vapidJWTExpiresAfter(15, TimeUnit.MINUTES)
+        .vapidJWTSubject("mailto:example@example.com")
+        .pushMessage(message)
+        .ttl(1, TimeUnit.HOURS)
+        .urgencyLow()
+        .topic("MyTopic")
+        .build(vapidKeyPair)
+        .toRequest();
+   
+    HttpResponse<String> httpResponse = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+    ```
+
+
 ## Examples
 
-### Spring MVC / WebFlux
+### Spring Boot (MVC)
 
- - [zerodep-web-push-java-example](https://github.com/st-user/zerodep-web-push-java-example)
+Source code and usage: [zerodep-web-push-java-example](https://github.com/st-user/zerodep-web-push-java-example)
 
-    <details>
-        <summary><b>Controller for VAPID and Message Encryption</b></summary>
+<details>
+    <summary><b>Controller for VAPID and Message Encryption</b></summary>
     
     ``` java
     
@@ -165,14 +255,15 @@ The documentation specific to v1 is [here](https://github.com/st-user/zerodep-we
     
     ```
     
-    </details>
+</details>
 
- - [zerodep-web-push-java-example-webflux](https://github.com/st-user/zerodep-web-push-java-example-webflux)
+### Spring Boot (WebFlux)
+
+Source code and usage: [zerodep-web-push-java-example-webflux](https://github.com/st-user/zerodep-web-push-java-example-webflux)
 
 ### Vert.x
 
-full source
-code: [zerodep-web-push-java-example-vertx](https://github.com/st-user/zerodep-web-push-java-example-vertx)
+Source code and usage: [zerodep-web-push-java-example-vertx](https://github.com/st-user/zerodep-web-push-java-example-vertx) 
 
 <details>
     <summary><b>Standalone application for VAPID and Message Encryption</b></summary>
