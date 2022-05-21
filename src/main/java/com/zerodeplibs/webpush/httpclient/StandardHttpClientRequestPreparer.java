@@ -11,6 +11,23 @@ import java.net.http.HttpRequest;
  * The "Preparer" used to utilize {@link java.net.http.HttpClient}.
  * </p>
  *
+ * <div><b>Example:</b></div>
+ * <pre class="code">
+ * VAPIDKeyPair vapidKeyPair = .....
+ *
+ * HttpRequest request = StandardHttpClientRequestPreparer.getBuilder()
+ *     .pushSubscription(subscription)
+ *     .vapidJWTExpiresAfter(15, TimeUnit.MINUTES)
+ *     .vapidJWTSubject("mailto:example@example.com")
+ *     .pushMessage(message)
+ *     .ttl(1, TimeUnit.HOURS)
+ *     .urgencyLow()
+ *     .topic("MyTopic")
+ *     .build(vapidKeyPair)
+ *     .toRequest();
+ *
+ * </pre>
+ *
  * <div><b>Thread Safety:</b></div>
  * <p>
  * Instances of this class are immutable. So they can be accessed safely from multiple threads.

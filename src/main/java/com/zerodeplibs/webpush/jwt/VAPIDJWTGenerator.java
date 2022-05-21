@@ -1,5 +1,9 @@
 package com.zerodeplibs.webpush.jwt;
 
+import com.zerodeplibs.webpush.VAPIDKeyPairs;
+import com.zerodeplibs.webpush.key.PrivateKeySource;
+import com.zerodeplibs.webpush.key.PublicKeySource;
+
 /**
  * <p>
  * The interface to a generator that generates JSON Web Token (JWT) used
@@ -8,13 +12,20 @@ package com.zerodeplibs.webpush.jwt;
  * </p>
  *
  * <p>
- * If you have dependencies on one or more sub-modules for {@link VAPIDJWTGenerator},
+ * Typically, you don't have to implement this interface by yourself.
+ * When you use {@link VAPIDKeyPairs#of(PrivateKeySource, PublicKeySource)}
+ * without any sub-module for this interface, the default implementation is automatically provided
+ * through {@link DefaultVAPIDJWTGeneratorFactory}.
+ * </p>
+ *
+ * <p>
+ * If you have dependencies on one or more sub-modules for {@link VAPIDJWTGenerator}(<a href="https://github.com/st-user/zerodep-web-push-java-ext-jwt">zerodep-web-push-java-ext-jwt</a>),
  * the implementation can be provided by the sub-module(s).
  * </p>
  *
  * <p>
  * Of course, you can use arbitrary 3rd party libraries to make your own implementation.
- * For example, if you want to use <a href="https://github.com/auth0/java-jwt">Auth0 Java JWT library</a>,
+ * For example, if you want to make your own implementation by utilizing <a href="https://github.com/auth0/java-jwt">Auth0 Java JWT library</a>,
  * The implementation will be something like below.
  * </p>
  * <pre class="code">
@@ -39,6 +50,7 @@ package com.zerodeplibs.webpush.jwt;
  * <div><b>Thread Safety:</b></div>
  * <p>
  * Depends on implementations.
+ * The implementation provided through {@link DefaultVAPIDJWTGeneratorFactory} is thread-safe.
  * Most of the implementations provided by <a href="https://github.com/st-user/zerodep-web-push-java-ext-jwt">zerodep-web-push-java-ext-jwt</a>
  * are thread-safe. For more information, see its README.
  * </p>

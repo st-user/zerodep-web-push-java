@@ -25,6 +25,12 @@ import java.util.function.BiFunction;
  * thread-safe only when an instance obtained from <code>jwtGeneratorFactory</code> is thread-safe.
  * </li>
  * <li>
+ * When you use {@link #of(PrivateKeySource, PublicKeySource)}
+ * without sub-modules for {@link VAPIDJWTGenerator},
+ * obtained instances are thread-safe.
+ * Because the default implementation of {@link VAPIDJWTGenerator} is thread-safe.
+ * </li>
+ * <li>
  * When you use {@link #of(PrivateKeySource, PublicKeySource)} with a sub-module provided by <a href="https://github.com/st-user/zerodep-web-push-java-ext-jwt">zerodep-web-push-java-ext-jwt</a>,
  * obtained instances are thread-safe.
  * </li>
