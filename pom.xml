@@ -6,7 +6,7 @@
 
     <groupId>org.example</groupId>
     <artifactId>zerodep-web-push-java-example-vertx</artifactId>
-    <version>1.5.0</version>
+    <version>1.6.0</version>
 
     <name>zerodep-web-push-java-example-vertx</name>
     <url>https://github.com/st-user/zerodep-web-push-java-example-vertx</url>
