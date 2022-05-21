@@ -13,19 +13,26 @@ import java.security.interfaces.ECPublicKey;
  * </p>
  *
  * <p>
- * Typically, an implementation of this interface is provided
- * by a sub-module for {@link VAPIDJWTGenerator}.
- * If you have dependencies on one or more of the sub-modules,
+ * Typically, an implementation of this interface is provided automatically.
+ * </p>
+ *
+ * <ul>
+ * <li>
+ * If you don't have a dependency on a sub-module for {@link VAPIDJWTGenerator},
+ * the default implementation({@link DefaultVAPIDJWTGeneratorFactory}) is automatically used.
+ * </li>
+ * <li>
+ * If you have dependencies on one or more of the sub-modules(<a href="https://github.com/st-user/zerodep-web-push-java-ext-jwt">zerodep-web-push-java-ext-jwt</a>),
  * the instance of {@link VAPIDJWTGeneratorFactory}
  * can be loaded via {@link java.util.ServiceLoader}.
- * So, in this case, you don't have to instantiate a {@link VAPIDJWTGeneratorFactory}
- * and a {@link VAPIDJWTGenerator} directly.
- * </p>
+ * </li>
+ * </ul>
  *
  * <div><b>Thread Safety:</b></div>
  * <p>
  * Depends on implementations.
- * All of the implementations provided by <a href="https://github.com/st-user/zerodep-web-push-java-ext-jwt">zerodep-web-push-java-ext-jwt</a>
+ * The default implementation({@link DefaultVAPIDJWTGeneratorFactory}) and
+ * all of the implementations provided by <a href="https://github.com/st-user/zerodep-web-push-java-ext-jwt">zerodep-web-push-java-ext-jwt</a>
  * are thread-safe.
  * </p>
  *
