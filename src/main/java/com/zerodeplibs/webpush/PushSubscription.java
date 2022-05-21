@@ -50,7 +50,7 @@ import java.util.Objects;
  * <div><b>Thread Safety:</b></div>
  * <p>
  * Instances of this class are mutable.
- * So use them carefully when accessing them from multiple threads.
+ * So use them carefully if they are accessed from multiple threads.
  * </p>
  *
  * @author Tomoki Sato
@@ -88,7 +88,7 @@ public class PushSubscription {
      * <div><b>Thread Safety:</b></div>
      * <p>
      * Instances of this class are mutable.
-     * So use them carefully when accessing them from multiple threads.
+     * So use them carefully if they are accessed from multiple threads.
      * </p>
      *
      * @author Tomoki Sato

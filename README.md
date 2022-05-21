@@ -566,8 +566,8 @@ below.
     <summary><b>Null safety</b></summary>
 
 The public methods and constructors of this library do not accept `null`s and do not return `null`s.
-They throw an `Exception` when a null reference is passed. Some methods
-return `java.util.Optional.empty()` when they need to indicate that the value does not exist.
+They throw an `Exception` if a null reference is passed. Some methods
+return `java.util.Optional.empty()` if they need to indicate that the value does not exist.
 
 The exceptions are:
 
