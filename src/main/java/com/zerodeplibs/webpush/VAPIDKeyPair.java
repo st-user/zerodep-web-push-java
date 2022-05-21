@@ -20,15 +20,21 @@ import com.zerodeplibs.webpush.key.PublicKeySource;
  * <pre class="code">
  * VAPIDKeyPair vapidKeyPair = VAPIDKeyPairs.of(
  *      PrivateKeySources.ofPEMFile(new File(privateKeyFilePath).toPath()),
- *      PublicKeySources.ofPEMFile(new File(publicKeyFilePath).toPath()),
- *      MyAuth0VAPIDJWTGenerator::new
+ *      PublicKeySources.ofPEMFile(new File(publicKeyFilePath).toPath())
  * );
  *
  * ........
  *
- * VAPIDJWTParam jwtParam = ......
- * String headerValue = vapidKeyPair.generateAuthorizationHeaderValue(jwtParam);
- * myHeader.addHeader("Authorization", headerValue);
+ * Request request = OkHttpClientRequestPreparer.getBuilder()
+ *     .pushSubscription(subscription)
+ *     .vapidJWTExpiresAfter(15, TimeUnit.MINUTES)
+ *     .vapidJWTSubject("mailto:example@example.com")
+ *     .pushMessage(message)
+ *     .ttl(1, TimeUnit.HOURS)
+ *     .urgencyLow()
+ *     .topic("MyTopic")
+ *     .build(vapidKeyPair)
+ *     .toRequest();
  *
  * </pre>
  *
