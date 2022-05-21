@@ -20,15 +20,21 @@ import com.zerodeplibs.webpush.key.PublicKeySource;
  * <pre class="code">
  * VAPIDKeyPair vapidKeyPair = VAPIDKeyPairs.of(
  *      PrivateKeySources.ofPEMFile(new File(privateKeyFilePath).toPath()),
- *      PublicKeySources.ofPEMFile(new File(publicKeyFilePath).toPath()),
- *      MyAuth0VAPIDJWTGenerator::new
+ *      PublicKeySources.ofPEMFile(new File(publicKeyFilePath).toPath())
  * );
  *
  * ........
  *
- * VAPIDJWTParam jwtParam = ......
- * String headerValue = vapidKeyPair.generateAuthorizationHeaderValue(jwtParam);
- * myHeader.addHeader("Authorization", headerValue);
+ * Request request = OkHttpClientRequestPreparer.getBuilder()
+ *     .pushSubscription(subscription)
+ *     .vapidJWTExpiresAfter(15, TimeUnit.MINUTES)
+ *     .vapidJWTSubject("mailto:example@example.com")
+ *     .pushMessage(message)
+ *     .ttl(1, TimeUnit.HOURS)
+ *     .urgencyLow()
+ *     .topic("MyTopic")
+ *     .build(vapidKeyPair)
+ *     .toRequest();
  *
  * </pre>
  *
@@ -60,12 +66,39 @@ public interface VAPIDKeyPair {
      * <p>
      * Typically, the extracted octet sequence is sent to browsers
      * and used to set the 'applicationServerKey' field.
+     * (See also: <a href="https://www.w3.org/TR/push-api/#pushsubscriptionoptions-interface">W3C document for Push API</a>)
      * </p>
      *
      * @return the octet sequence of the public key in uncompressed form.
      * @see PushSubscription
+     * @see #extractPublicKeyInUncompressedFormAsString()
      */
     byte[] extractPublicKeyInUncompressedForm();
+
+    /**
+     * <p>
+     * Extracts the public key in uncompressed form
+     * (65-byte array starting with 0x04) encoded using base64url without padding.
+     * </p>
+     *
+     * <p>
+     * Typically, the extracted text is sent to browsers
+     * and used to set the 'applicationServerKey' field.
+     * (See also: <a href="https://www.w3.org/TR/push-api/#pushsubscriptionoptions-interface">W3C document for Push API</a>)
+     * </p>
+     *
+     * <p>
+     * This 'String' version of the public key is useful
+     * if you want to send the public key to browsers as a text format.
+     * For example, you can send the public key as a field of JSON('application/json') response
+     * by extracting the public key through this method.
+     * </p>
+     *
+     * @return the public key in uncompressed form encoded using base64url without padding.
+     * @see PushSubscription
+     * @see #extractPublicKeyInUncompressedForm()
+     */
+    String extractPublicKeyInUncompressedFormAsString();
 
     /**
      * Generates a credential(that uses 'vapid' authentication scheme)

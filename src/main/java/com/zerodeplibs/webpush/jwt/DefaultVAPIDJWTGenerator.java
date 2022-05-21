@@ -24,7 +24,7 @@ class DefaultVAPIDJWTGenerator implements VAPIDJWTGenerator {
      * Generates a JWT used for VAPID.
      *
      * <p>
-     * When the given param has additional claims, these values
+     * If the given param has additional claims, these values
      * must be an instance of {@link String}, {@link Boolean},
      * {@link Integer}, {@link Long}, {@link Double}, {@link Date} or {@link Instant}.
      * </p>

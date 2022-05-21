@@ -8,7 +8,15 @@ import java.util.Date;
 
 
 /**
+ * <p>
  * The default factory class for {@link VAPIDJWTGenerator}.
+ * </p>
+ *
+ * <p>
+ * If you want to specify an <a href="https://datatracker.ietf.org/doc/html/rfc8292#section-2.2">additional claim</a>,
+ * its value must be an instance of {@link String}, {@link Boolean},
+ * {@link Integer}, {@link Long}, {@link Double}, {@link Date} or {@link Instant}.
+ * </p>
  *
  * @see com.zerodeplibs.webpush.VAPIDKeyPairs
  * @author Tomoki Sato
@@ -18,14 +26,6 @@ public class DefaultVAPIDJWTGeneratorFactory implements VAPIDJWTGeneratorFactory
     /**
      * <p>
      * Creates a new {@link VAPIDJWTGenerator} with the given private key and public key.
-     * </p>
-     *
-     * <p>
-     * When a parameter passed
-     * to {@link VAPIDJWTGenerator#generate(VAPIDJWTParam)} of the returned generator
-     * has additional claims, these values
-     * must be an instance of {@link String}, {@link Boolean},
-     * {@link Integer}, {@link Long}, {@link Double}, {@link Date} or {@link Instant}.
      * </p>
      *
      * @param privateKey a private key.

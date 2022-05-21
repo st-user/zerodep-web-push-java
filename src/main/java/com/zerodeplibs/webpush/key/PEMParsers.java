@@ -22,8 +22,11 @@ public class PEMParsers {
     /**
      * <p>
      * Creates a new {@link PEMParser} with the given type label.
-     * For example, when extracting the content between '-----BEGIN PRIVATE KEY-----'
-     * and '-----END PRIVATE KEY-----',
+     * </p>
+     *
+     * <p>
+     * In order to extract the content between '-----BEGIN PRIVATE KEY-----'
+     * and '-----END PRIVATE KEY-----' for example,
      * pass 'PRIVATE KEY' to the <code>label</code> argument.
      * </p>
      *

@@ -36,7 +36,7 @@ import java.util.function.BiConsumer;
  * <div><b>Thread Safety:</b></div>
  * <p>
  * An instance of this class is thread-safe(or immutable)
- * only when each <code>value</code> of its additional claims is thread-safe(or immutable).
+ * only if each <code>value</code> of its additional claims is thread-safe(or immutable).
  * </p>
  *
  * @author Tomoki Sato
