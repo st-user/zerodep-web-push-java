@@ -57,6 +57,29 @@ public class VAPIDKeyPairTests {
     }
 
     @Test
+    public void shouldExtractECPublicKeyInUncompressedForm_usingBase64urlWithoutPadding()
+        throws InvalidAlgorithmParameterException, NoSuchAlgorithmException {
+
+        KeyPair keyPair = generateKeyPair();
+        ECPrivateKey privateKey = (ECPrivateKey) keyPair.getPrivate();
+        ECPublicKey publicKey = (ECPublicKey) keyPair.getPublic();
+
+        VAPIDKeyPair vapidKeyPair = VAPIDKeyPairs.of(
+            PrivateKeySources.ofECPrivateKey(privateKey),
+            PublicKeySources.ofECPublicKey(publicKey),
+            TestingJWTGeneraator::new
+        );
+
+        byte[] publicKeyEncoded = publicKey.getEncoded();
+
+        byte[] expectedBytes = Arrays.copyOfRange(publicKeyEncoded, publicKeyEncoded.length - 65,
+            publicKeyEncoded.length);
+        String expectedString = Base64.getUrlEncoder().withoutPadding().encodeToString(expectedBytes);
+
+        assertThat(vapidKeyPair.extractPublicKeyInUncompressedFormAsString(), equalTo(expectedString));
+    }
+
+    @Test
     public void shouldGenerateAuthorizationHeaderFieldWithTheGivenParameters()
         throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
 

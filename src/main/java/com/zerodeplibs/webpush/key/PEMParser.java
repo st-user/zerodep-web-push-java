@@ -14,7 +14,7 @@ package com.zerodeplibs.webpush.key;
  * <p>
  * Implementations of this interface are intended to parse PEM-encoded texts originated
  * from trusted sources(e.g. a PEM file created by yourself).
- * Be careful when parsing data originated from untrusted sources.
+ * Be careful if you parse data originated from untrusted sources.
  * </p>
  *
  * <div><b>Thread Safety:</b></div>
