@@ -134,126 +134,128 @@ Source code and usage: [zerodep-web-push-java-example](https://github.com/st-use
 <details>
     <summary><b>Controller for VAPID and Message Encryption</b></summary>
     
-    ``` java
+``` java
     
-    @Component
-    public class MyComponents {
+@Component
+public class MyComponents {
+
+    /**
+     * In this example, we read a key pair for VAPID
+     * from a PEM formatted file on the file system.
+     * <p>
+     * You can extract key pairs from various sources:
+     * '.der' file(binary content), an octet sequence stored in a database and so on.
+     * For more information, please see the javadoc of PrivateKeySources and PublicKeySources.
+     */
+    @Bean
+    public VAPIDKeyPair vaidKeyPair(
+        @Value("${private.key.file.path}") String privateKeyFilePath,
+        @Value("${public.key.file.path}") String publicKeyFilePath) throws IOException {
+
+        return VAPIDKeyPairs.of(
+            PrivateKeySources.ofPEMFile(new File(privateKeyFilePath).toPath()),
+            PublicKeySources.ofPEMFile(new File(publicKeyFilePath).toPath())
+
+            /*
+             * If you want to make your own VAPIDJWTGenerator,
+             * the project for its sub-modules is a good example.
+             * For more information, please consult the source codes on https://github.com/st-user/zerodep-web-push-java-ext-jwt
+             */
+
+            // (privateKey, publicKey) -> new MyOwnVAPIDJWTGenerator(privateKey)
+        );
+    }
+
+}
+
     
-        /**
-         * In this example, we read a key pair for VAPID
-         * from a PEM formatted file on the file system.
-         * <p>
-         * You can extract key pairs from various sources:
-         * '.der' file(binary content), an octet sequence stored in a database and so on.
-         * For more information, please see the javadoc of PrivateKeySources and PublicKeySources.
-         */
-        @Bean
-        public VAPIDKeyPair vaidKeyPair(
-            @Value("${private.key.file.path}") String privateKeyFilePath,
-            @Value("${public.key.file.path}") String publicKeyFilePath) throws IOException {
-    
-            return VAPIDKeyPairs.of(
-                PrivateKeySources.ofPEMFile(new File(privateKeyFilePath).toPath()),
-                PublicKeySources.ofPEMFile(new File(publicKeyFilePath).toPath())
-    
-                /*
-                 * If you want to make your own VAPIDJWTGenerator,
-                 * the project for its sub-modules is a good example.
-                 * For more information, please consult the source codes on https://github.com/st-user/zerodep-web-push-java-ext-jwt
-                 */
-    
-                // (privateKey, publicKey) -> new MyOwnVAPIDJWTGenerator(privateKey)
-            );
+@SpringBootApplication
+@RestController
+public class BasicExample {
+
+    /**
+     * @see MyComponents
+     */
+    @Autowired
+    private VAPIDKeyPair vapidKeyPair;
+
+    /**
+     * # Step 1.
+     * Sends the public key to user agents.
+     * <p>
+     * The user agents create a push subscription with this public key.
+     */
+    @GetMapping("/getPublicKey")
+    public byte[] getPublicKey() {
+        return vapidKeyPair.extractPublicKeyInUncompressedForm();
+    }
+
+    /**
+     * # Step 2.
+     * Obtains push subscriptions from user agents.
+     * <p>
+     * The application server(this application) requests the delivery of push messages with these subscriptions.
+     */
+    @PostMapping("/subscribe")
+    public void subscribe(@RequestBody PushSubscription subscription) {
+        this.saveSubscriptionToStorage(subscription);
+    }
+
+    /**
+     * # Step 3.
+     * Requests the delivery of push messages.
+     * <p>
+     * In this example, for simplicity and testability, we use an HTTP endpoint for this purpose.
+     * However, in real applications, this feature doesn't have to be provided as an HTTP endpoint.
+     */
+    @PostMapping("/sendMessage")
+    public ResponseEntity<String> sendMessage(@RequestBody MyMessage myMessage)
+        throws IOException, InterruptedException {
+
+        String message = myMessage.getMessage();
+
+        HttpClient httpClient = HttpClient.newBuilder().build();
+        for (PushSubscription subscription : getSubscriptionsFromStorage()) {
+
+            HttpRequest request = StandardHttpClientRequestPreparer.getBuilder()
+                .pushSubscription(subscription)
+                .vapidJWTExpiresAfter(15, TimeUnit.MINUTES)
+                .vapidJWTSubject("mailto:example@example.com")
+                .pushMessage(message)
+                .ttl(1, TimeUnit.HOURS)
+                .urgencyLow()
+                .topic("MyTopic")
+                .build(vapidKeyPair)
+                .toRequest();
+
+            // In this example, we send push messages in simple text format.
+            // You can also send them in JSON format as follows:
+            //
+            // ObjectMapper objectMapper = (Create a new one or get from the DI container.)
+            // ....
+            // .pushMessage(objectMapper.writeValueAsBytes(objectForJson))
+            // ....
+
+            HttpResponse<String> httpResponse =
+                httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            logger.info(String.format("[Http Client] status code: %d", httpResponse.statusCode()));
+            // 201 Created : Success!
+            // 410 Gone : The subscription is no longer valid.
+            // etc...
+            // for more information, see the useful link below:
+            // [Response from push service - The Web Push Protocol ](https://developers.google.com/web/fundamentals/push-notifications/web-push-protocol)
         }
+
+        return ResponseEntity.ok()
+            .header(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE)
+            .body("The message has been processed.");
     }
     
-    @SpringBootApplication
-    @RestController
-    public class BasicExample {
+    ... Omitted for simplicity.
     
-        /**
-         * @see org.example.Bean
-         */
-        @Autowired
-        private VAPIDKeyPair vapidKeyPair;
+}
     
-        /**
-         * # Step 1.
-         * Sends the public key to user agents.
-         * <p>
-         * The user agents create a push subscription with this public key.
-         */
-        @GetMapping("/getPublicKey")
-        public byte[] getPublicKey() {
-            return vapidKeyPair.extractPublicKeyInUncompressedForm();
-        }
-    
-        /**
-         * # Step 2.
-         * Obtains push subscriptions from user agents.
-         * <p>
-         * The application server(this application) requests the delivery of push messages with these subscriptions.
-         */
-        @PostMapping("/subscribe")
-        public void subscribe(@RequestBody PushSubscription subscription) {
-            this.saveSubscriptionToStorage(subscription);
-        }
-    
-        /**
-         * # Step 3.
-         * Requests the delivery of push messages.
-         * <p>
-         * In this example, for simplicity and testability, we use an HTTP endpoint for this purpose.
-         * However, in real applications, this feature doesn't have to be provided as an HTTP endpoint.
-         */
-        @PostMapping("/sendMessage")
-        public ResponseEntity<String> sendMessage(@RequestBody MyMessage myMessage)
-            throws IOException, InterruptedException {
-    
-            String message = myMessage.getMessage();
-    
-            HttpClient httpClient = HttpClient.newBuilder().build();
-            for (PushSubscription subscription : getSubscriptionsFromStorage()) {
-    
-                HttpRequest request = StandardHttpClientRequestPreparer.getBuilder()
-                    .pushSubscription(subscription)
-                    .vapidJWTExpiresAfter(15, TimeUnit.MINUTES)
-                    .vapidJWTSubject("mailto:example@example.com")
-                    .pushMessage(message)
-                    .ttl(1, TimeUnit.HOURS)
-                    .urgencyLow()
-                    .topic("MyTopic")
-                    .build(vapidKeyPair)
-                    .toRequest();
-    
-                // In this example, we send push messages in simple text format.
-                // You can also send them in JSON format as follows:
-                //
-                // ObjectMapper objectMapper = (Create a new one or get from the DI container.)
-                // ....
-                // .pushMessage(objectMapper.writeValueAsBytes(objectForJson))
-                // ....
-    
-                HttpResponse<String> httpResponse =
-                    httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-                logger.info(String.format("[Http Client] status code: %d", httpResponse.statusCode()));
-                // 201 Created : Success!
-                // 410 Gone : The subscription is no longer valid.
-                // etc...
-                // for more information, see the useful link below:
-                // [Response from push service - The Web Push Protocol ](https://developers.google.com/web/fundamentals/push-notifications/web-push-protocol)
-            }
-    
-            return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE)
-                .body("The message has been processed.");
-        }
-    
-        ... Omitted for simplicity.
-    
-    }
-    
-    ```
+```
     
 </details>
 
@@ -485,8 +487,9 @@ may need to do this **asynchronously** with [Vert.x](https://vertx.io/docs/vertx
 In order to allow you to choose the way suitable for your application, this library doesn't force
 your application to have dependencies on specifics libraries. Instead, this library
 
-- Provides the functionality of JWT with [sub-modules](https://github.com/st-user/zerodep-web-push-java-ext-jwt)
-- Also, provides the functionality of JWT out of the box(without any third-party library)
+- Provides the functionality of JWT for VAPID
+  with [sub-modules](https://github.com/st-user/zerodep-web-push-java-ext-jwt)
+- Also, provides the functionality of JWT for VAPID out of the box(without any third-party library)
 - Provides optional components helping applications use various third-party HTTP Client libraries
 - Also, provides a component helping applications use [JDK's HTTP Client module](https://docs.oracle.com/en/java/javase/11/docs/api/java.net.http/java/net/http/HttpClient.html).
 - Utilizes
@@ -510,6 +513,8 @@ for [VAPID](https://datatracker.ietf.org/doc/html/rfc8292).
 
 Sub-modules for this functionality are available
 from [zerodep-web-push-java-ext-jwt](https://github.com/st-user/zerodep-web-push-java-ext-jwt).
+
+These sub-modules are optional.
 
 </details>
 
