@@ -21,7 +21,7 @@
     <url>https://github.com/st-user/zerodep-web-push-java-ext-jwt</url>
 
     <properties>
-        <vertx.version>4.3.0</vertx.version>
+        <vertx.version>4.3.7</vertx.version>
     </properties>
 
     <dependencies>
