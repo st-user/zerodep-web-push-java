@@ -191,7 +191,17 @@ public class VertxWebClientRequestPreparerTests {
         }
 
         @Override
+        public HttpMethod method() {
+            throw new UnsupportedOperationException("Unexpected invocation.");
+        }
+
+        @Override
         public HttpRequest<Buffer> port(int value) {
+            throw new UnsupportedOperationException("Unexpected invocation.");
+        }
+
+        @Override
+        public int port() {
             throw new UnsupportedOperationException("Unexpected invocation.");
         }
 
@@ -201,7 +211,17 @@ public class VertxWebClientRequestPreparerTests {
         }
 
         @Override
+        public BodyCodec<Buffer> bodyCodec() {
+            throw new UnsupportedOperationException("Unexpected invocation.");
+        }
+
+        @Override
         public HttpRequest<Buffer> host(String value) {
+            throw new UnsupportedOperationException("Unexpected invocation.");
+        }
+
+        @Override
+        public String host() {
             throw new UnsupportedOperationException("Unexpected invocation.");
         }
 
@@ -211,7 +231,17 @@ public class VertxWebClientRequestPreparerTests {
         }
 
         @Override
+        public String virtualHost() {
+            throw new UnsupportedOperationException("Unexpected invocation.");
+        }
+
+        @Override
         public HttpRequest<Buffer> uri(String value) {
+            throw new UnsupportedOperationException("Unexpected invocation.");
+        }
+
+        @Override
+        public String uri() {
             throw new UnsupportedOperationException("Unexpected invocation.");
         }
 
@@ -247,9 +277,19 @@ public class VertxWebClientRequestPreparerTests {
         }
 
         @Override
+        public Boolean ssl() {
+            throw new UnsupportedOperationException("Unexpected invocation.");
+        }
+
+        @Override
         public HttpRequest<Buffer> timeout(long value) {
             this.timeout = value;
             return this;
+        }
+
+        @Override
+        public long timeout() {
+            throw new UnsupportedOperationException("Unexpected invocation.");
         }
 
         @Override
@@ -283,12 +323,27 @@ public class VertxWebClientRequestPreparerTests {
         }
 
         @Override
+        public boolean followRedirects() {
+            throw new UnsupportedOperationException("Unexpected invocation.");
+        }
+
+        @Override
         public HttpRequest<Buffer> proxy(ProxyOptions proxyOptions) {
             throw new UnsupportedOperationException("Unexpected invocation.");
         }
 
         @Override
+        public ProxyOptions proxy() {
+            throw new UnsupportedOperationException("Unexpected invocation.");
+        }
+
+        @Override
         public HttpRequest<Buffer> expect(ResponsePredicate predicate) {
+            throw new UnsupportedOperationException("Unexpected invocation.");
+        }
+
+        @Override
+        public List<ResponsePredicate> expectations() {
             throw new UnsupportedOperationException("Unexpected invocation.");
         }
 
@@ -309,6 +364,21 @@ public class VertxWebClientRequestPreparerTests {
 
         @Override
         public HttpRequest<Buffer> multipartMixed(boolean allow) {
+            throw new UnsupportedOperationException("Unexpected invocation.");
+        }
+
+        @Override
+        public boolean multipartMixed() {
+            throw new UnsupportedOperationException("Unexpected invocation.");
+        }
+
+        @Override
+        public HttpRequest<Buffer> traceOperation(String s) {
+            throw new UnsupportedOperationException("Unexpected invocation.");
+        }
+
+        @Override
+        public String traceOperation() {
             throw new UnsupportedOperationException("Unexpected invocation.");
         }
 
