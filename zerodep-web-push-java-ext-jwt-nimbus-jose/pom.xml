@@ -8,7 +8,7 @@
     <parent>
         <groupId>com.zerodeplibs</groupId>
         <artifactId>zerodep-web-push-java-ext-jwt</artifactId>
-        <version>1.6.0</version>
+        <version>1.6.1</version>
     </parent>
 
     <packaging>jar</packaging>
@@ -21,7 +21,7 @@
     <url>https://github.com/st-user/zerodep-web-push-java-ext-jwt</url>
 
     <properties>
-        <nimbus.jose.version>9.22</nimbus.jose.version>
+        <nimbus.jose.version>9.26</nimbus.jose.version>
     </properties>
 
     <dependencies>
@@ -72,6 +72,15 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <argLine>
+                        --add-modules com.nimbusds.jose.jwt --add-opens com.zerodeplibs.webpush.ext.jwt.nimbusjose/com.zerodeplibs.webpush.ext.jwt.nimbusjose=com.nimbusds.jose.jwt
+                    </argLine>
+                </configuration>
             </plugin>
         </plugins>
     </build>

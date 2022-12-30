@@ -8,7 +8,7 @@
     <parent>
         <groupId>com.zerodeplibs</groupId>
         <artifactId>zerodep-web-push-java-ext-jwt</artifactId>
-        <version>1.6.0</version>
+        <version>1.6.1</version>
     </parent>
 
     <packaging>jar</packaging>
@@ -21,7 +21,7 @@
     <url>https://github.com/st-user/zerodep-web-push-java-ext-jwt</url>
 
     <properties>
-        <fusionauth.version>5.2.0</fusionauth.version>
+        <fusionauth.version>5.2.1</fusionauth.version>
     </properties>
 
     <dependencies>
