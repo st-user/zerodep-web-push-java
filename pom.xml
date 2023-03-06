@@ -44,7 +44,7 @@
         <!-- optional dependencies -->
         <okhttp.version>4.10.0</okhttp.version>
         <apache.http.client.version>5.2.1</apache.http.client.version>
-        <jetty.client.version>9.4.50.v20221201</jetty.client.version>
+        <jetty.client.version>11.0.14</jetty.client.version>
         <vertx.version>4.3.7</vertx.version>
         <!-- dependencies for unit test -->
         <junit.version>5.9.1</junit.version>
