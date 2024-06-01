@@ -42,17 +42,17 @@
         <maven.compiler.release>11</maven.compiler.release>
 
         <!-- optional dependencies -->
-        <okhttp.version>4.10.0</okhttp.version>
-        <apache.http.client.version>5.2.1</apache.http.client.version>
-        <jetty.client.version>9.4.50.v20221201</jetty.client.version>
-        <vertx.version>4.3.7</vertx.version>
+        <okhttp.version>4.12.0</okhttp.version>
+        <apache.http.client.version>5.3.1</apache.http.client.version>
+        <jetty.client.version>9.4.54.v20240208</jetty.client.version>
+        <vertx.version>4.5.8</vertx.version>
         <!-- dependencies for unit test -->
-        <junit.version>5.9.1</junit.version>
-        <jose4j.version>0.9.2</jose4j.version>
-        <jackson.version>2.14.1</jackson.version>
-        <jmh.version>1.36</jmh.version>
-        <bouncycastle.version>1.70</bouncycastle.version>
-        <slf4j.version>2.0.6</slf4j.version>
+        <junit.version>5.10.2</junit.version>
+        <jose4j.version>0.9.6</jose4j.version>
+        <jackson.version>2.17.1</jackson.version>
+        <jmh.version>1.37</jmh.version>
+        <bouncycastle.version>1.78.1</bouncycastle.version>
+        <slf4j.version>2.0.13</slf4j.version>
     </properties>
 
     <dependencies>
@@ -153,7 +153,7 @@
 
         <dependency>
             <groupId>org.bouncycastle</groupId>
-            <artifactId>bcprov-jdk15on</artifactId>
+            <artifactId>bcprov-jdk18on</artifactId>
             <version>${bouncycastle.version}</version>
             <scope>test</scope>
         </dependency>
