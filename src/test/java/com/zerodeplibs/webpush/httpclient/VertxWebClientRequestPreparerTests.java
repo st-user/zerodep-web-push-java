@@ -293,6 +293,26 @@ public class VertxWebClientRequestPreparerTests {
         }
 
         @Override
+        public HttpRequest<Buffer> idleTimeout(long l) {
+            return null;
+        }
+
+        @Override
+        public long idleTimeout() {
+            return 0;
+        }
+
+        @Override
+        public HttpRequest<Buffer> connectTimeout(long l) {
+            return null;
+        }
+
+        @Override
+        public long connectTimeout() {
+            return 0;
+        }
+
+        @Override
         public HttpRequest<Buffer> addQueryParam(String paramName, String paramValue) {
             throw new UnsupportedOperationException("Unexpected invocation.");
         }
