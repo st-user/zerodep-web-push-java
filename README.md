@@ -45,8 +45,8 @@ The following is a typical flow to send push notifications with this library.
 
     Example:
     ``` bash
-    openssl ecparam -genkey -name prime256v1 -noout -out soruceKey.pem
-    openssl pkcs8 -in soruceKey.pem -topk8 -nocrypt -out vapidPrivateKey.pem
+    openssl ecparam -genkey -name prime256v1 -noout -out sourceKey.pem
+    openssl pkcs8 -in sourceKey.pem -topk8 -nocrypt -out vapidPrivateKey.pem
     openssl ec -in sourceKey.pem -pubout -conv_form uncompressed -out vapidPublicKey.pem
     ```
 
