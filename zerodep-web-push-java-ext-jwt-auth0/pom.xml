@@ -21,7 +21,7 @@
     <url>https://github.com/st-user/zerodep-web-push-java-ext-jwt</url>
 
     <properties>
-        <auth0.version>4.2.1</auth0.version>
+        <auth0.version>4.4.0</auth0.version>
     </properties>
 
     <dependencies>
