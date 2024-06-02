@@ -8,7 +8,7 @@
     <parent>
         <groupId>com.zerodeplibs</groupId>
         <artifactId>zerodep-web-push-java-ext-jwt</artifactId>
-        <version>2.1.1</version>
+        <version>2.1.2</version>
     </parent>
 
     <packaging>jar</packaging>
@@ -21,7 +21,7 @@
     <url>https://github.com/st-user/zerodep-web-push-java-ext-jwt</url>
 
     <properties>
-        <jose4j.version>0.9.2</jose4j.version>
+        <jose4j.version>0.9.6</jose4j.version>
     </properties>
 
     <dependencies>
