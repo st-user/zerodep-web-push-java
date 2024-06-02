@@ -22,13 +22,13 @@ see https://github.com/jwtk/jjwt#jdk-projects).
 <dependency>
     <groupId>com.zerodeplibs</groupId>
     <artifactId>zerodep-web-push-java</artifactId>
-    <version>1.6.1</version>
+    <version>1.6.2</version>
 </dependency>
 <!-- Currently zerodep-web-push-java-ext-jwt-jjwt depends on jjwt v0.11.2 -->
 <dependency>
     <groupId>com.zerodeplibs</groupId>
     <artifactId>zerodep-web-push-java-ext-jwt-jjwt</artifactId>
-    <version>1.6.1</version>
+    <version>1.6.2</version>
     <scope>runtime</scope>
 </dependency>
 
@@ -36,13 +36,13 @@ see https://github.com/jwtk/jjwt#jdk-projects).
 <dependency>
     <groupId>io.jsonwebtoken</groupId>
     <artifactId>jjwt-impl</artifactId>
-    <version>0.11.5</version>
+    <version>0.12.5</version>
     <scope>runtime</scope>
 </dependency>
 <dependency>
     <groupId>io.jsonwebtoken</groupId>
     <artifactId>jjwt-jackson</artifactId> <!-- or jjwt-gson if Gson is preferred -->
-    <version>0.11.5</version>
+    <version>0.12.5</version>
     <scope>runtime</scope>
 </dependency>
 ```
