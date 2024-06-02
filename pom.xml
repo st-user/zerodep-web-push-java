@@ -7,7 +7,7 @@
 
     <groupId>com.zerodeplibs</groupId>
     <artifactId>zerodep-web-push-java</artifactId>
-    <version>1.6.1</version>
+    <version>1.6.2</version>
 
     <name>${project.groupId}:${project.artifactId}</name>
     <description>A Java Web Push server-side library that can easily be integrated with various
@@ -42,17 +42,17 @@
         <maven.compiler.source>8</maven.compiler.source>
 
         <!-- optional dependencies -->
-        <okhttp.version>4.10.0</okhttp.version>
-        <apache.http.client.version>5.2.1</apache.http.client.version>
-        <jetty.client.version>9.4.50.v20221201</jetty.client.version>
-        <vertx.version>4.3.7</vertx.version>
+        <okhttp.version>4.12.0</okhttp.version>
+        <apache.http.client.version>5.3.1</apache.http.client.version>
+        <jetty.client.version>9.4.54.v20240208</jetty.client.version>
+        <vertx.version>4.5.8</vertx.version>
         <!-- dependencies for unit test -->
-        <junit.version>5.9.1</junit.version>
-        <jose4j.version>0.9.2</jose4j.version>
-        <jackson.version>2.14.1</jackson.version>
-        <jmh.version>1.36</jmh.version>
-        <bouncycastle.version>1.70</bouncycastle.version>
-        <slf4j.version>2.0.6</slf4j.version>
+        <junit.version>5.10.2</junit.version>
+        <jose4j.version>0.9.6</jose4j.version>
+        <jackson.version>2.17.1</jackson.version>
+        <jmh.version>1.37</jmh.version>
+        <bouncycastle.version>1.78.1</bouncycastle.version>
+        <slf4j.version>2.0.13</slf4j.version>
     </properties>
 
     <dependencies>
@@ -157,7 +157,7 @@
 
         <dependency>
             <groupId>org.bouncycastle</groupId>
-            <artifactId>bcprov-jdk15on</artifactId>
+            <artifactId>bcprov-jdk18on</artifactId>
             <version>${bouncycastle.version}</version>
             <scope>test</scope>
         </dependency>
@@ -177,15 +177,15 @@
             <plugins>
                 <plugin>
                     <artifactId>maven-clean-plugin</artifactId>
-                    <version>3.1.0</version>
+                    <version>3.3.2</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-resources-plugin</artifactId>
-                    <version>3.0.2</version>
+                    <version>3.3.1</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.8.0</version>
+                    <version>3.13.0</version>
                     <executions>
                         <execution>
                             <id>default-compile</id>
@@ -211,7 +211,7 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.22.2</version>
+                    <version>3.2.5</version>
                     <configuration>
                         <argLine>
                             --add-modules
@@ -246,24 +246,24 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-jar-plugin</artifactId>
-                    <version>3.0.2</version>
+                    <version>3.4.1</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-install-plugin</artifactId>
-                    <version>2.5.2</version>
+                    <version>3.1.2</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-deploy-plugin</artifactId>
-                    <version>2.8.2</version>
+                    <version>3.1.2</version>
                 </plugin>
 
                 <plugin>
                     <artifactId>maven-site-plugin</artifactId>
-                    <version>3.7.1</version>
+                    <version>3.12.1</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-project-info-reports-plugin</artifactId>
-                    <version>3.4.1</version>
+                    <version>3.5.0</version>
                 </plugin>
 
             </plugins>
@@ -273,12 +273,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.1.2</version>
+                <version>3.3.1</version>
                 <dependencies>
                     <dependency>
                         <groupId>com.puppycrawl.tools</groupId>
                         <artifactId>checkstyle</artifactId>
-                        <version>10.5.0</version>
+                        <version>10.17.0</version>
                     </dependency>
                 </dependencies>
                 <configuration>
@@ -304,7 +304,7 @@
             <plugin>
                 <groupId>com.amashchenko.maven.plugin</groupId>
                 <artifactId>gitflow-maven-plugin</artifactId>
-                <version>1.16.0</version>
+                <version>1.21.0</version>
                 <configuration>
                     <verbose>true</verbose>
                     <installProject>false</installProject>
@@ -349,7 +349,7 @@
                     <plugin>
                         <groupId>org.sonatype.plugins</groupId>
                         <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.6.8</version>
+                        <version>1.7.0</version>
                         <extensions>true</extensions>
                         <configuration>
                             <serverId>ossrh</serverId>
@@ -361,7 +361,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
-                        <version>3.2.1</version>
+                        <version>3.3.1</version>
                         <executions>
                             <execution>
                                 <id>attach-sources</id>
@@ -375,7 +375,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.4.1</version>
+                        <version>3.6.3</version>
                         <executions>
                             <execution>
                                 <id>attach-javadoc</id>
@@ -389,7 +389,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>3.0.1</version>
+                        <version>3.2.4</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
