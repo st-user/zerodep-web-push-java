@@ -235,6 +235,11 @@ public class BasicExample {
     */
 
 
+    // NOTE:
+    // Now we can't use 'zerodep-web-push-java' with jetty-client in Spring Boot 3.2.6 or higher.
+    // Because Spring Boot 3.2.6 or higher seems to depend on jetty 12 (12.0.9) but 'zerodep-web-push-java' supports jetty 9, 10 and 11 on the other hand.
+    // See also: https://github.com/st-user/zerodep-web-push-java/issues/52
+    //
     // "/sendMessage" endpoint
     // utilizing [Jetty Client](https://www.eclipse.org/jetty/documentation/jetty-11/programming-guide/index.html#pg-client).
     /*
