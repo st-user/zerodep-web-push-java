@@ -16,7 +16,7 @@ In this example, we demonstrate the error handling on requesting the delivery of
 
 ## Requirements
 
-- JDK11+
+- JDK17+
 - A library for generating ECDSA key pairs(e.g. [OpenSSL](https://www.openssl.org/))
 - A browser supporting [Push API](https://developer.mozilla.org/en-US/docs/Web/API/Push_API)
   such as Google Chrome, Microsoft Edge and Firefox
