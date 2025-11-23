@@ -1,0 +1,7 @@
+##
+# Example commands to make the application send a push notification
+##
+curl -X POST http://localhost:8080/sendMessage \
+-H 'Content-Type: application/json' \
+-d '{ "message": "Message sent with curl." }'
+
