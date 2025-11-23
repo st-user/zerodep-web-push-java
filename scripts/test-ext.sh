@@ -1,6 +1,6 @@
 #!/bin/sh
 
-./mvnw clean test
+./mvnw clean test -pl ":zerodep-web-push-java-ext-jwt"
 COMPILE_RESULT=$?
 
 ##
@@ -20,32 +20,32 @@ VERTX3_VER=3.9.2
 VERTX3_LATEST_VER=3.9.16
 VERTX_VER=4.0.0
 
-./mvnw surefire:test -pl zerodep-web-push-java-ext-jwt-auth0 -Dauth0.version=${AUTH0_VER}
+./mvnw surefire:test -pl "ext-jwt/zerodep-web-push-java-ext-jwt-auth0" -Dauth0.version=${AUTH0_VER}
 AUTH0_RET=$?
 
-./mvnw surefire:test -pl zerodep-web-push-java-ext-jwt-fusionauth -Dfusionauth.version=${FUSION_AUTH_VER}
+./mvnw surefire:test -pl "ext-jwt/zerodep-web-push-java-ext-jwt-fusionauth" -Dfusionauth.version=${FUSION_AUTH_VER}
 FUSION_AUTH_RET=$?
 
-./mvnw surefire:test -pl zerodep-web-push-java-ext-jwt-jjwt -Djjwt.version=${JJWT_VER}
+./mvnw surefire:test -pl "ext-jwt/zerodep-web-push-java-ext-jwt-jjwt" -Djjwt.version=${JJWT_VER}
 JJWT_RET=$?
 
-./mvnw surefire:test -pl zerodep-web-push-java-ext-jwt-jose4j -Djose4j.version=${JOSE4J_VER}
+./mvnw surefire:test -pl "ext-jwt/zerodep-web-push-java-ext-jwt-jose4j" -Djose4j.version=${JOSE4J_VER}
 JOSE4J_RET=$?
 
-./mvnw surefire:test -pl zerodep-web-push-java-ext-jwt-nimbus-jose -Dnimbus.jose.version=${NIMBUS_JOSE_VER}
+./mvnw surefire:test -pl "ext-jwt/zerodep-web-push-java-ext-jwt-nimbus-jose" -Dnimbus.jose.version=${NIMBUS_JOSE_VER}
 NIMBUS_JOSE_RET=$?
 
 echo "Starts testing Vert.x v3"
 
-./mvnw surefire:test -pl zerodep-web-push-java-ext-jwt-vertx -Dvertx.version=${VERTX3_VER}
+./mvnw surefire:test -pl "ext-jwt/zerodep-web-push-java-ext-jwt-vertx" -Dvertx.version=${VERTX3_VER}
 VERTX3_RET=$?
 
-./mvnw surefire:test -pl zerodep-web-push-java-ext-jwt-vertx -Dvertx.version=${VERTX3_LATEST_VER}
+./mvnw surefire:test -pl "ext-jwt/zerodep-web-push-java-ext-jwt-vertx" -Dvertx.version=${VERTX3_LATEST_VER}
 VERTX3_LATEST_RET=$?
 
 echo "Ends testing Vert.x v3"
 
-./mvnw surefire:test -pl zerodep-web-push-java-ext-jwt-vertx -Dvertx.version=${VERTX_VER}
+./mvnw surefire:test -pl "ext-jwt/zerodep-web-push-java-ext-jwt-vertx" -Dvertx.version=${VERTX_VER}
 VERTX_RET=$?
 
 RESULT=`expr ${COMPILE_RESULT} + ${AUTH0_RET} + ${FUSION_AUTH_RET} + ${JJWT_RET} + ${JOSE4J_RET} + ${NIMBUS_JOSE_RET} + ${VERTX3_RET} + ${VERTX3_LATEST_RET} + ${VERTX_RET}`
