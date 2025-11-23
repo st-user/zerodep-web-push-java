@@ -1,12 +1,12 @@
 # zerodep-web-push-java-ext-jwt
 
-Sub-modules for [zerodep-web-push-java](https://github.com/st-user/zerodep-web-push-java) that
+Sub-modules for [zerodep-web-push-java](../core) that
 provide implementations of `com.zerodeplibs.webpush.jwt.VAPIDJWTGenerator` utilizing third-party JWT
 libraries.
 
 ## Versions
 
-This is the branch for v2. The branch for v1 is [here](https://github.com/st-user/zerodep-web-push-java-ext-jwt/tree/main-v1). 
+This is the branch for v2. The branch for v1 is [here](https://github.com/st-user/zerodep-web-push-java/tree/main-v1). 
 
 
 ## [zerodep-web-push-java-ext-jwt-auth0](./zerodep-web-push-java-ext-jwt-auth0/README.md)

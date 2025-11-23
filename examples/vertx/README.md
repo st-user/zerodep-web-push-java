@@ -4,7 +4,7 @@ A [zerodep-web-push-java](https://github.com/st-user/zerodep-web-push-java) exam
 using [Vert.x](https://vertx.io/docs/).
 
 **This is the example for v2. The example for v1
-is [here](https://github.com/st-user/zerodep-web-push-java-example-vertx/tree/main-v1).**
+is [here](https://github.com/st-user/zerodep-web-push-java/tree/main-v1).**
 
 ## Requirements
 
@@ -18,8 +18,8 @@ is [here](https://github.com/st-user/zerodep-web-push-java-example-vertx/tree/ma
 1. Set up and run the application.
 
    ```
-   git clone https://github.com/st-user/zerodep-web-push-java-example-vertx.git
-   cd zerodep-web-push-java-example-vertx
+   git clone https://github.com/st-user/zerodep-web-push-java.git
+   cd examples/vertx
    mkdir .keys
    cd .keys
    openssl ecparam -genkey -name prime256v1 -noout -out my-private.pem
@@ -82,9 +82,4 @@ For example:
 - [Push API - Web APIs | MDN](https://developer.mozilla.org/en-US/docs/Web/API/Push_API)
 - [Web Push Notifications: Timely, Relevant, and Precise](https://developers.google.com/web/fundamentals/push-notifications)
 
-## See also
-
-- [zerodep-web-push-java-ext-jwt](https://github.com/st-user/zerodep-web-push-java-ext-jwt)
-- [zerodep-web-push-java-example](https://github.com/st-user/zerodep-web-push-java-example)
-- [zerodep-web-push-java-example-webflux](https://github.com/st-user/zerodep-web-push-java-example-webflux)
 
