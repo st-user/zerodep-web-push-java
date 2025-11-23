@@ -1,6 +1,6 @@
 #!/bin/sh
 
-./mvnw clean test
+./mvnw clean test -pl ":zerodep-web-push-java"
 COMPILE_RESULT=$?
 
 ##
@@ -21,7 +21,7 @@ VERTX3_LATEST_VER=3.9.16
 
 echo "Starts tests for the older versions."
 
-./mvnw surefire:test \
+./mvnw surefire:test -pl ":zerodep-web-push-java" \
     -Dokhttp.version=${OKHTTP_VER} \
     -Dapache.http.client.version=${APACHE_HTTP_CLIENT_VER} \
     -Djetty.client.version=${JETTY_VER} \
@@ -29,32 +29,32 @@ echo "Starts tests for the older versions."
     -Dtest="com/zerodeplibs/webpush/httpclient/*"
 TEST_RESULT=$?
 
-./mvnw surefire:test \
+./mvnw surefire:test -pl ":zerodep-web-push-java" \
     -Djetty.client.version=${JETTY10_VER} \
     -Dtest=JettyHttpClientRequestPreparerTests
 TEST_RESULT_JETTY10=$?
 
-./mvnw surefire:test \
+./mvnw surefire:test -pl ":zerodep-web-push-java" \
     -Djetty.client.version=${JETTY10_LATEST_VER} \
     -Dtest=JettyHttpClientRequestPreparerTests
 TEST_RESULT_JETTY10_LATEST=$?
 
-./mvnw surefire:test \
+./mvnw surefire:test -pl ":zerodep-web-push-java" \
     -Djetty.client.version=${JETTY11_VER} \
     -Dtest=JettyHttpClientRequestPreparerTests
 TEST_RESULT_JETTY11=$?
 
-./mvnw surefire:test \
+./mvnw surefire:test -pl ":zerodep-web-push-java" \
     -Djetty.client.version=${JETTY11_LATEST_VER} \
     -Dtest=JettyHttpClientRequestPreparerTests
 TEST_RESULT_JETTY11_LATEST=$?
 
-./mvnw surefire:test \
+./mvnw surefire:test -pl ":zerodep-web-push-java" \
     -Dvertx.version=${VERTX3_VER} \
     -Dtest=VertxWebClientRequestPreparerTests
 TEST_RESULT_VERTX3=$?
 
-./mvnw surefire:test \
+./mvnw surefire:test -pl ":zerodep-web-push-java" \
     -Dvertx.version=${VERTX3_LATEST_VER} \
     -Dtest=VertxWebClientRequestPreparerTests
 TEST_RESULT_VERTX3_LATEST=$?

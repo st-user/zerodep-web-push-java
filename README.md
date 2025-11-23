@@ -126,7 +126,7 @@ The following is a typical flow to send push notifications with this library.
 
 ### Spring Boot (MVC)
 
-Source code and usage: [zerodep-web-push-java-example](https://github.com/st-user/zerodep-web-push-java-example)
+Source code and usage: [examples/basic](./examples/basic)
 
 <details>
     <summary><b>Controller for VAPID and Message Encryption</b></summary>
@@ -246,11 +246,11 @@ public class BasicExample {
 
 ### Spring Boot (WebFlux)
 
-Source code and usage: [zerodep-web-push-java-example-webflux](https://github.com/st-user/zerodep-web-push-java-example-webflux)
+Source code and usage: [examples/webflux](./examples/webflux)
 
 ### Vert.x
 
-Source code and usage: [zerodep-web-push-java-example-vertx](https://github.com/st-user/zerodep-web-push-java-example-vertx)
+Source code and usage: [examples/vertx](./examples/vertx)
 
 <details>
     <summary><b>Standalone application for VAPID and Message Encryption</b></summary>
@@ -473,7 +473,7 @@ In order to allow you to choose the way suitable for your application, this libr
 your application to have dependencies on specifics libraries. Instead, this library
 
 - Provides the functionality of JWT for VAPID
-  with [sub-modules](https://github.com/st-user/zerodep-web-push-java-ext-jwt)
+  with [sub-modules](./ext-jwt)
 - Also, provides the functionality of JWT for VAPID out of the box(without any third-party library)
 - Provides optional components helping applications use HTTP Client libraries
 - Utilizes
@@ -494,7 +494,7 @@ A JWT library is used to generate JSON Web Token (JWT)
 for [VAPID](https://datatracker.ietf.org/doc/html/rfc8292).
 
 Sub-modules for this functionality are available
-from [zerodep-web-push-java-ext-jwt](https://github.com/st-user/zerodep-web-push-java-ext-jwt).
+from [ext-jwt](./ext-jwt).
 
 These sub-modules are optional.
 
@@ -539,7 +539,7 @@ third-party HTTP Client library. Supported libraries are listed below.
   - [Spring WebFlux (WebClient)](https://docs.spring.io/spring-framework/docs/current/reference/html/web-reactive.html#webflux-client)
   - [Reactor Netty HTTP Client](https://projectreactor.io/docs/netty/release/reference/index.html#http-client)
 
-  Please see [zerodep-web-push-java-example-webflux](https://github.com/st-user/zerodep-web-push-java-example-webflux) for more information.
+  Please see [examples/webflux](./examples/webflux) for more information.
 
 
 </details>

@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.7.18</version>
+        <relativePath/>
+    </parent>
+
+    <groupId>com.zerodeplibs</groupId>
+    <artifactId>zerodep-web-push-java-example</artifactId>
+    <version>1.6.2</version>
+
+    <name>zerodep-web-push-java-example</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!--
+            JDK8+ is required.
+        -->
+        <java.version>8</java.version>
+
+        <jetty.version>9.4.54.v20240208</jetty.version>
+        <zerodeplibs.version>${project.version}</zerodeplibs.version>
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.zerodeplibs</groupId>
+            <artifactId>zerodep-web-push-java</artifactId>
+            <version>${zerodeplibs.version}</version>
+        </dependency>
+
+
+
+        <!--
+
+            ////// Optional sub-module for JWT library /////
+
+            [Java JWT - auth0](https://github.com/auth0/java-jwt).
+
+            <dependency>
+                <groupId>com.zerodeplibs</groupId>
+                <artifactId>zerodep-web-push-java-ext-jwt-auth0</artifactId>
+                <version>${zerodeplibs.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+
+
+            If you want to explicitly specify the version:
+
+            <dependency>
+                <groupId>com.auth0</groupId>
+                <artifactId>java-jwt</artifactId>
+                <version>${your.auth0.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+        -->
+
+        <!--
+
+            ////// Optional sub-module for JWT library /////
+
+            [FusionAuth JWT](https://github.com/fusionauth/fusionauth-jwt).
+
+            <dependency>
+                <groupId>com.zerodeplibs</groupId>
+                <artifactId>zerodep-web-push-java-ext-jwt-fusionauth</artifactId>
+                <version>${zerodeplibs.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+
+            If you want to explicitly specify the version:
+            <dependency>
+                <groupId>io.fusionauth</groupId>
+                <artifactId>fusionauth-jwt</artifactId>
+                <version>${your.fusionauth.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+        -->
+
+        <!--
+
+            ////// Optional sub-module for JWT library /////
+
+            Java JWT](https://github.com/jwtk/jjwt).
+
+            <dependency>
+                <groupId>com.zerodeplibs</groupId>
+                <artifactId>zerodep-web-push-java-ext-jwt-jjwt</artifactId>
+                <version>${zerodeplibs.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-api</artifactId>
+                <version>${your.jjwt.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+
+            Java JWT's runtime dependencies.
+            (see https://github.com/jwtk/jjwt#jdk-projects).
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-impl</artifactId>
+                <version>${your.jjwt.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-jackson</artifactId> or jjwt-gson if Gson is preferred
+                <version>${your.jjwt.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+        -->
+
+        <!--
+
+            ////// Optional sub-module for JWT library /////
+
+            [jose4j](https://bitbucket.org/b_c/jose4j/wiki/Home).
+
+            <dependency>
+                <groupId>com.zerodeplibs</groupId>
+                <artifactId>zerodep-web-push-java-ext-jwt-jose4j</artifactId>
+                <version>${zerodeplibs.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+
+            If you want to explicitly specify the version:
+
+            <dependency>
+                <groupId>org.bitbucket.b_c</groupId>
+                <artifactId>jose4j</artifactId>
+                <version>${your.jose4j.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+        -->
+
+        <!--
+
+            ////// Optional sub-module for JWT library /////
+
+            [Nimbus JOSE + JWT](https://connect2id.com/products/nimbus-jose-jwt).
+
+            <dependency>
+                <groupId>com.zerodeplibs</groupId>
+                <artifactId>zerodep-web-push-java-ext-jwt-nimbus-jose</artifactId>
+                <version>${zerodeplibs.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+
+            If you want to explicitly specify the version:
+
+            <dependency>
+                <groupId>com.nimbusds</groupId>
+                <artifactId>nimbus-jose-jwt</artifactId>
+                <version>${your.nimbus.jose.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+        -->
+
+
+
+
+
+
+
+        <!--
+
+            ////// Optional HTTP Client library /////
+
+            [OkHttp](https://square.github.io/okhttp/):
+        -->
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>4.12.0</version>
+        </dependency>
+
+        <!--
+
+            ////// Optional HTTP Client library /////
+
+            [Apache HTTP Client](https://hc.apache.org/httpcomponents-client-5.1.x/):
+        <dependency>
+            <groupId>org.apache.httpcomponents.client5</groupId>
+            <artifactId>httpclient5</artifactId>
+            <version>5.3.1</version>
+        </dependency>
+        -->
+
+        <!--
+
+            ////// Optional HTTP Client library /////
+
+            [Jetty Client](https://www.eclipse.org/jetty/documentation/jetty-11/programming-guide/index.html#pg-client):
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-client</artifactId>
+        </dependency>
+        -->
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>

@@ -13,7 +13,10 @@ jobs:
                   java-version: '11'
                   distribution: 'corretto'
 
-            - name: Unit Test
+            - name: Unit Test Core
               run:
-                  sh ./scripts/test-with-older-versions.sh
+                  sh ./scripts/test-core.sh
 
+            - name: Unit Test Ext
+              run:
+                  sh ./scripts/test-ext.sh
