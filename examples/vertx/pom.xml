@@ -9,7 +9,6 @@
     <version>1.6.2</version>
 
     <name>zerodep-web-push-java-example-vertx</name>
-    <url>https://github.com/st-user/zerodep-web-push-java-example-vertx</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

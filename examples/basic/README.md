@@ -3,7 +3,7 @@
 A [zerodep-web-push-java](https://github.com/st-user/zerodep-web-push-java) example
 using [Spring Boot](https://spring.io/projects/spring-boot).
 
-**This is the example for v1. The example for v2 is [here](https://github.com/st-user/zerodep-web-push-java-example).**
+**This is the example for v1. The example for v2 is [here](https://github.com/st-user/zerodep-web-push-java).**
 
 ## Requirements
 
@@ -17,8 +17,8 @@ such as Google Chrome, Microsoft Edge and Firefox
 1. Set up and run the application.
 
    ```
-   git clone https://github.com/st-user/zerodep-web-push-java-example.git
-   cd zerodep-web-push-java-example
+   git clone https://github.com/st-user/zerodep-web-push-java.git
+   cd zerodep-web-push-java/examples/basic
    git switch main-v1
    mkdir .keys
    cd .keys
@@ -83,9 +83,3 @@ For example:
 
 - [Push API - Web APIs | MDN](https://developer.mozilla.org/en-US/docs/Web/API/Push_API)
 - [Web Push Notifications: Timely, Relevant, and Precise](https://developers.google.com/web/fundamentals/push-notifications)
-
-## See also
-
-- [zerodep-web-push-java-ext-jwt](https://github.com/st-user/zerodep-web-push-java-ext-jwt)
-- [zerodep-web-push-java-example-vertx](https://github.com/st-user/zerodep-web-push-java-example-vertx)
-- [zerodep-web-push-java-example-webflux](https://github.com/st-user/zerodep-web-push-java-example-webflux)

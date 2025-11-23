@@ -7,12 +7,12 @@ Also, this example demonstrates how to work
 with [Reactor Netty HTTP Client](https://projectreactor.io/docs/netty/release/reference/index.html#http-client)
 
 This example is sightly more complex but practical compared
-to [zerodep-web-push-java-example](https://github.com/st-user/zerodep-web-push-java-example)
-and [zerodep-web-push-java-example-vertx](https://github.com/st-user/zerodep-web-push-java-example-vertx).
+to [basic](../basic)
+and [vertx](../vertx).
 
 In this example, we demonstrate the error handling on requesting the delivery of push notifications.
 
-**This is the example for v1. The example for v2 is [here](https://github.com/st-user/zerodep-web-push-java-example-webflux).**
+**This is the example for v1. The example for v2 is [here](https://github.com/st-user/zerodep-web-push-java).**
 
 ## Requirements
 
@@ -26,8 +26,8 @@ In this example, we demonstrate the error handling on requesting the delivery of
 1. Set up and run the application.
 
    ```
-   git clone https://github.com/st-user/zerodep-web-push-java-example-webflux.git
-   cd zerodep-web-push-java-example-webflux
+   git clone https://github.com/st-user/zerodep-web-push-java.git
+   cd zerodep-web-push-java/examples/webflux
    git switch main-v1
    mkdir .keys
    cd .keys
