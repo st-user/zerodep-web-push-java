@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.zerodeplibs</groupId>
+        <artifactId>zerodep-web-push-java-ext-jwt</artifactId>
+        <version>2.1.2</version>
+    </parent>
+
+    <packaging>jar</packaging>
+
+    <artifactId>zerodep-web-push-java-ext-jwt-nimbus-jose</artifactId>
+    <name>${project.groupId}:${project.artifactId}</name>
+    <description>A sub-module for zerodep-web-push-java. This module provides the JSON Web Token(JWT) generator
+        used for VAPID utilizing [Nimbus JOSE + JWT].
+    </description>
+
+    <properties>
+        <nimbus.jose.version>9.37.3</nimbus.jose.version>
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.zerodeplibs</groupId>
+            <artifactId>zerodep-web-push-java</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.nimbusds</groupId>
+            <artifactId>nimbus-jose-jwt</artifactId>
+            <version>${nimbus.jose.version}</version>
+        </dependency>
+
+        <!--
+            Dependencies for testing.
+        -->
+        <dependency>
+            <groupId>org.bitbucket.b_c</groupId>
+            <artifactId>jose4j</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest</artifactId>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <argLine>
+                        --add-modules com.nimbusds.jose.jwt --add-opens com.zerodeplibs.webpush.ext.jwt.nimbusjose/com.zerodeplibs.webpush.ext.jwt.nimbusjose=com.nimbusds.jose.jwt
+                    </argLine>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

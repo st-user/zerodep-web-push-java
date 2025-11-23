@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.example</groupId>
+    <artifactId>zerodep-web-push-java-example-vertx</artifactId>
+    <version>2.1.2</version>
+
+    <name>zerodep-web-push-java-example-vertx</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!--
+            JDK11+ is required.
+        -->
+        <maven.compiler.release>11</maven.compiler.release>
+        <zerodeplibs.version>${project.version}</zerodeplibs.version>
+        <vertx.version>4.5.8</vertx.version>
+        <!--
+            Also Vert.x 3 is available.
+            See also the 'maven-compiler-plugin' configuration below.
+            <vertx.version>3.9.16</vertx.version>
+         -->
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.zerodeplibs</groupId>
+            <artifactId>zerodep-web-push-java</artifactId>
+            <version>${zerodeplibs.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.zerodeplibs</groupId>
+            <artifactId>zerodep-web-push-java-ext-jwt-vertx</artifactId>
+            <version>${zerodeplibs.version}</version>
+        </dependency>
+
+        <!--
+            For version consistency,
+            the dependency on vertx-auth-jwt must be explicitly specified.
+        -->
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-auth-jwt</artifactId>
+            <version>${vertx.version}</version>
+        </dependency>
+
+        <!--
+            Dependencies for Vert.x
+        -->
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-web</artifactId>
+            <version>${vertx.version}</version>
+        </dependency>
+
+        <!--
+            To send HTTP requests to push services,
+            we utilize the Vert.x's HTTP client library.
+        -->
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-web-client</artifactId>
+            <version>${vertx.version}</version>
+        </dependency>
+
+        <!--
+            To map between Vert.x's JSON objects and Java objects
+            (e.g. JsonObject to PushSubscription),
+            we have to use jackson-databind.
+
+            Also, if you want to use additional claims
+            with 'VAPIDJWTParam.getBuilder#additionalClaim)',
+            This dependency is required.
+        -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.17.1</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>3.3.2</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.3.1</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.13.0</version>
+                    <!--
+                        When having a 'module-info.java' and using Vert.x '3',
+                        you have to add the following 'add-reads' argument
+                        in order for 'com.zerodeplibs.webpush' to read the Vert.x's module.
+                    -->
+                    <!--
+                    <configuration>
+                        <compilerArgs>
+                            <arg>&#45;&#45;add-reads</arg>
+                            <arg>com.zerodeplibs.webpush=vertx.web.client</arg>
+                        </compilerArgs>
+                    </configuration>
+                    -->
+
+                </plugin>
+                <plugin>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>3.2.5</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>3.4.1</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>3.1.2</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>3.1.2</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>3.12.1</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-project-info-reports-plugin</artifactId>
+                    <version>3.0.0</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>3.2.0</version>
+                    <configuration>
+                        <mainClass>org.example.Example</mainClass>
+                    </configuration>
+                </plugin>
+
+            </plugins>
+        </pluginManagement>
+    </build>
+
+</project>

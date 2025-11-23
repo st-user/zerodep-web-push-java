@@ -1,0 +1,8 @@
+target/
+zerodep-web-push-java-ext-jwt-auth0/target/
+zerodep-web-push-java-ext-jwt-fusionauth/target/
+zerodep-web-push-java-ext-jwt-jjwt/target/
+zerodep-web-push-java-ext-jwt-jose4j/target/
+zerodep-web-push-java-ext-jwt-nimbus-jose/target/
+zerodep-web-push-java-ext-jwt-vertx/target/
+
