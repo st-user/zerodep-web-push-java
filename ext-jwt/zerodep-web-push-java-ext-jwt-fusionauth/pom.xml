@@ -20,7 +20,7 @@
     </description>
 
     <properties>
-        <fusionauth.version>5.3.2</fusionauth.version>
+        <fusionauth.version>5.3.3</fusionauth.version>
     </properties>
 
     <dependencies>
