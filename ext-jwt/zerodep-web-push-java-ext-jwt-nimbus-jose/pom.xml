@@ -20,7 +20,7 @@
     </description>
 
     <properties>
-        <nimbus.jose.version>9.37.3</nimbus.jose.version>
+        <nimbus.jose.version>10.6</nimbus.jose.version>
     </properties>
 
     <dependencies>
