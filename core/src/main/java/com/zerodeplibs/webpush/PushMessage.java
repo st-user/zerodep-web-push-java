@@ -5,11 +5,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 /**
- * <p>
  * This class represents a push message to be encrypted.
- * </p>
  *
  * <div><b>Thread Safety:</b></div>
+ *
  * <p>
  * Instances of this class are immutable. So they are thread-safe.
  * </p>

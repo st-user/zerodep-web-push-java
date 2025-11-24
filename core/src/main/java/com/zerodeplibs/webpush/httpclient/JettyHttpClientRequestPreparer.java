@@ -10,11 +10,10 @@ import org.eclipse.jetty.client.api.Request;
 import org.eclipse.jetty.client.util.BytesContentProvider;
 
 /**
- * <p>
  * The "Preparer" used to utilize <a href="https://www.eclipse.org/jetty/documentation/jetty-11/programming-guide/index.html#pg-client">Eclipse Jetty Client Libraries</a>.
- * </p>
  *
  * <div><b>Thread Safety:</b></div>
+ *
  * <p>
  * Instances of this class are immutable. So they can be accessed safely from multiple threads.
  * </p>
