@@ -7,11 +7,10 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 
 /**
- * <p>
  * The "Preparer" used to utilize <a href="https://square.github.io/okhttp/">OkHttp</a>.
- * </p>
  *
  * <div><b>Thread Safety:</b></div>
+ *
  * <p>
  * Instances of this class are immutable. So they can be accessed safely from multiple threads.
  * </p>

@@ -4,9 +4,7 @@ import com.zerodeplibs.webpush.internal.WebPushPreConditions;
 import java.util.concurrent.TimeUnit;
 
 /**
- * <p>
  * The utility class used for setting the <a href="https://datatracker.ietf.org/doc/html/rfc8030#section-5.2">TTL</a> header field.
- * </p>
  *
  * <div><b>Example:</b></div>
  * <pre class="code">

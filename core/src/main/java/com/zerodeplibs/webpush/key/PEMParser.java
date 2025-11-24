@@ -1,9 +1,7 @@
 package com.zerodeplibs.webpush.key;
 
 /**
- * <p>
  * Implementations of this interface provide the functionality for parsing PEM format.
- * </p>
  *
  * <p>
  * Usually, an instance of this interface
@@ -11,6 +9,7 @@ package com.zerodeplibs.webpush.key;
  * </p>
  *
  * <div><b>WARNING:</b></div>
+ *
  * <p>
  * Implementations of this interface are intended to parse PEM-encoded texts originated
  * from trusted sources(e.g. a PEM file created by yourself).
@@ -18,6 +17,7 @@ package com.zerodeplibs.webpush.key;
  * </p>
  *
  * <div><b>Thread Safety:</b></div>
+ *
  * <p>
  * Depends on implementations. See {@link PEMParsers}.
  * </p>

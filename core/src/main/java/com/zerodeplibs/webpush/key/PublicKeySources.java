@@ -8,9 +8,7 @@ import java.nio.file.Path;
 import java.security.interfaces.ECPublicKey;
 
 /**
- * <p>
  * Static factory methods used to create instances of {@link PublicKeySource}.
- * </p>
  *
  * <p>
  * {@link PublicKeySource}s created by the static factory methods
@@ -19,6 +17,7 @@ import java.security.interfaces.ECPublicKey;
  * </p>
  *
  * <div><b>Examples:</b></div>
+ *
  * <p>
  * The following is an example of commands that uses OpenSSL
  * to generate a file that can be handled with {@link PublicKeySource}s.
@@ -55,6 +54,7 @@ import java.security.interfaces.ECPublicKey;
  * </pre>
  *
  * <div><b>Thread Safety:</b></div>
+ *
  * <p>
  * Instances obtained through a factory method of this class are <b>NOT</b> thread-safe.
  * </p>
@@ -98,10 +98,8 @@ public class PublicKeySources {
     }
 
     /**
-     * <p>
      * Creates a new {@link PublicKeySource} with the given PEM-encoded text.
      * The underlying octet sequence is assumed to be encoded according to the X.509 standard.
-     * </p>
      *
      * <p>
      * The PEM-encoded text is assumed to contain a public key data
@@ -121,11 +119,9 @@ public class PublicKeySources {
     }
 
     /**
-     * <p>
      * Creates a new {@link PublicKeySource} with the given PEM-encoded text
      * and the given {@link PEMParser}.
      * The underlying octet sequence is assumed to be encoded according to the X.509 standard.
-     * </p>
      *
      * <p>
      * The PEM-encoded text is parsed by the given {@link PEMParser}.
@@ -144,11 +140,9 @@ public class PublicKeySources {
     }
 
     /**
-     * <p>
      * Creates a new {@link PublicKeySource} with the PEM formatted file specified
      * by the given path.
      * The underlying octet sequence is assumed to be encoded according to the X.509 standard.
-     * </p>
      *
      * <p>
      * The PEM formatted file is assumed to contain a public key data
@@ -167,11 +161,9 @@ public class PublicKeySources {
     }
 
     /**
-     * <p>
      * Creates a new {@link PublicKeySource} with the PEM formatted file specified
      * by the given path.
      * The underlying octet sequence is assumed to be encoded according to the X.509 standard.
-     * </p>
      *
      * <p>
      * The content of the PEM file is parsed by the given {@link PEMParser}.

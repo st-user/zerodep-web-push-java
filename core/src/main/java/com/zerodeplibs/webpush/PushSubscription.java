@@ -3,9 +3,7 @@ package com.zerodeplibs.webpush;
 import java.util.Objects;
 
 /**
- * <p>
  * This class represents a <a href="https://www.w3.org/TR/push-api/#push-subscription">push subscription</a> described in the <a href="https://www.w3.org/TR/push-api/">Push API - W3C</a> specification.
- * </p>
  *
  * <p>
  * This class is used as if it was a simple "JavaBean"
@@ -48,6 +46,7 @@ import java.util.Objects;
  * </p>
  *
  * <div><b>Thread Safety:</b></div>
+ *
  * <p>
  * Instances of this class are mutable.
  * So use them carefully if they are accessed from multiple threads.
@@ -81,11 +80,10 @@ public class PushSubscription {
     }
 
     /**
-     * <p>
      * This class represents a '<a href="https://www.w3.org/TR/push-api/#pushsubscription-interface">keys</a>' field for a <a href="https://www.w3.org/TR/push-api/#push-subscription">push subscription</a>.
-     * </p>
      *
      * <div><b>Thread Safety:</b></div>
+     *
      * <p>
      * Instances of this class are mutable.
      * So use them carefully if they are accessed from multiple threads.

@@ -7,9 +7,7 @@ import java.net.URI;
 import java.net.http.HttpRequest;
 
 /**
- * <p>
  * The "Preparer" used to utilize {@link java.net.http.HttpClient}.
- * </p>
  *
  * <div><b>Example:</b></div>
  * <pre class="code">
@@ -29,6 +27,7 @@ import java.net.http.HttpRequest;
  * </pre>
  *
  * <div><b>Thread Safety:</b></div>
+ *
  * <p>
  * Instances of this class are immutable. So they can be accessed safely from multiple threads.
  * </p>

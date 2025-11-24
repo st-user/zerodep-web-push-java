@@ -11,15 +11,14 @@ import java.util.Base64;
 import java.util.Objects;
 
 /**
- * <p>
  * This class represents keys of a user agent used for encrypting push messages.
- * </p>
  *
  * <p>
  * Typically, an instance of this class is created from a '<a href="https://www.w3.org/TR/push-api/#pushsubscription-interface">keys</a>' field of a <a href="https://www.w3.org/TR/push-api/#push-subscription">push subscription</a>.
  * </p>
  *
  * <div><b>Thread Safety:</b></div>
+ *
  * <p>
  * Instances of this class are thread-safe.
  * </p>
@@ -63,10 +62,8 @@ public class UserAgentMessageEncryptionKeyInfo {
     }
 
     /**
-     * <p>
      * Creates a new {@link UserAgentMessageEncryptionKeyInfo}
      * with the given p256dh and auth.
-     * </p>
      *
      * <p>
      * It is assumed that the p256dh and the auth are base64-url encoded
@@ -94,10 +91,8 @@ public class UserAgentMessageEncryptionKeyInfo {
     }
 
     /**
-     * <p>
      * Creates a new {@link UserAgentMessageEncryptionKeyInfo}
      * with the given p256dh and the auth.
-     * </p>
      *
      * <p>
      * This method is a byte array version

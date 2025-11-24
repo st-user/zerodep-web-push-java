@@ -6,10 +6,8 @@ import com.zerodeplibs.webpush.key.PrivateKeySource;
 import com.zerodeplibs.webpush.key.PublicKeySource;
 
 /**
- * <p>
  * This interface represents a signing key pair
  * for the Voluntary Application Server Identification (VAPID) described in <a href="https://datatracker.ietf.org/doc/html/rfc8292">RFC8292</a>.
- * </p>
  *
  * <p>
  * Usually, an instance of this interface
@@ -44,6 +42,7 @@ import com.zerodeplibs.webpush.key.PublicKeySource;
  * </p>
  *
  * <div><b>Thread Safety:</b></div>
+ *
  * <p>
  * Depends on implementations. See {@link VAPIDKeyPairs}.
  * </p>
@@ -58,10 +57,8 @@ import com.zerodeplibs.webpush.key.PublicKeySource;
 public interface VAPIDKeyPair {
 
     /**
-     * <p>
      * Extracts the octet sequence of the public key in uncompressed form
      * (65-byte array starting with 0x04).
-     * </p>
      *
      * <p>
      * Typically, the extracted octet sequence is sent to browsers
@@ -76,10 +73,8 @@ public interface VAPIDKeyPair {
     byte[] extractPublicKeyInUncompressedForm();
 
     /**
-     * <p>
      * Extracts the public key in uncompressed form
      * (65-byte array starting with 0x04) encoded using base64url without padding.
-     * </p>
      *
      * <p>
      * Typically, the extracted text is sent to browsers
