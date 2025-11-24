@@ -3,6 +3,7 @@ package com.zerodeplibs.webpush.jwt;
 import com.zerodeplibs.webpush.VAPIDKeyPairs;
 import com.zerodeplibs.webpush.key.PrivateKeySource;
 import com.zerodeplibs.webpush.key.PublicKeySource;
+
 import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
 
@@ -22,7 +23,7 @@ import java.security.interfaces.ECPublicKey;
  * the default implementation({@link DefaultVAPIDJWTGeneratorFactory}) is automatically used.
  * </li>
  * <li>
- * If you have dependencies on one or more of the sub-modules(<a href="https://github.com/st-user/zerodep-web-push-java-ext-jwt">zerodep-web-push-java-ext-jwt</a>),
+ * If you have dependencies on one or more of the sub-modules(<a href="https://github.com/st-user/zerodep-web-push-java/tree/main/ext-jwt">zerodep-web-push-java-ext-jwt</a>),
  * the instance of {@link VAPIDJWTGeneratorFactory}
  * can be loaded via {@link java.util.ServiceLoader}.
  * </li>
@@ -32,7 +33,7 @@ import java.security.interfaces.ECPublicKey;
  * <p>
  * Depends on implementations.
  * The default implementation({@link DefaultVAPIDJWTGeneratorFactory}) and
- * all of the implementations provided by <a href="https://github.com/st-user/zerodep-web-push-java-ext-jwt">zerodep-web-push-java-ext-jwt</a>
+ * all of the implementations provided by <a href="https://github.com/st-user/zerodep-web-push-java/tree/main/ext-jwt">zerodep-web-push-java-ext-jwt</a>
  * are thread-safe.
  * </p>
  *

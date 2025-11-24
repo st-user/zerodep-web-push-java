@@ -19,7 +19,7 @@ import com.zerodeplibs.webpush.key.PublicKeySource;
  * </p>
  *
  * <p>
- * If you have dependencies on one or more sub-modules for {@link VAPIDJWTGenerator}(<a href="https://github.com/st-user/zerodep-web-push-java-ext-jwt">zerodep-web-push-java-ext-jwt</a>),
+ * If you have dependencies on one or more sub-modules for {@link VAPIDJWTGenerator}(<a href="https://github.com/st-user/zerodep-web-push-java/tree/main/ext-jwt">zerodep-web-push-java-ext-jwt</a>),
  * the implementation can be provided by the sub-module(s).
  * </p>
  *
@@ -51,7 +51,7 @@ import com.zerodeplibs.webpush.key.PublicKeySource;
  * <p>
  * Depends on implementations.
  * The implementation provided through {@link DefaultVAPIDJWTGeneratorFactory} is thread-safe.
- * Most of the implementations provided by <a href="https://github.com/st-user/zerodep-web-push-java-ext-jwt">zerodep-web-push-java-ext-jwt</a>
+ * Most of the implementations provided by <a href="https://github.com/st-user/zerodep-web-push-java/tree/main/ext-jwt">zerodep-web-push-java-ext-jwt</a>
  * are thread-safe. For more information, see its README.
  * </p>
  *
