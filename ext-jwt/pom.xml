@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.zerodeplibs</groupId>
         <artifactId>zerodep-web-push-java-root</artifactId>
-        <version>1.6.2</version>
+        <version>1.6.3</version>
     </parent>
 
     <artifactId>zerodep-web-push-java-ext-jwt</artifactId>
@@ -34,7 +34,7 @@
             <dependency>
                 <groupId>com.zerodeplibs</groupId>
                 <artifactId>zerodep-web-push-java</artifactId>
-                <version>1.6.2</version>
+                <version>1.6.3</version>
             </dependency>
 
         </dependencies>

@@ -7,7 +7,7 @@
 
     <groupId>com.zerodeplibs</groupId>
     <artifactId>zerodep-web-push-java-root</artifactId>
-    <version>1.6.2</version>
+    <version>1.6.3</version>
 
     <name>${project.groupId}:${project.artifactId}</name>
     <description>The root pom for Java Web Push server-side library that can easily be integrated with various
