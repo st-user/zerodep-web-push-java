@@ -2,6 +2,7 @@ version: 2
 updates:
     - package-ecosystem: "maven"
       directory: "/"
+      target-branch: dev
       schedule:
           interval: "weekly"
       ignore:
@@ -21,5 +22,6 @@ updates:
 
     - package-ecosystem: "github-actions"
       directory: "/"
+      target-branch: dev
       schedule:
           interval: "weekly"
