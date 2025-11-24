@@ -19,6 +19,9 @@ updates:
           - dependency-name: "com.fasterxml.jackson.core:jackson-core"
           - dependency-name: "com.fasterxml.jackson.core:jackson-annotations"
           - dependency-name: "com.fasterxml.jackson.core:jackson-databind"
+          # https://github.com/st-user/zerodep-web-push-java/issues/110
+          - dependency-name: "io.vertx:vertx-web-client"
+          - dependency-name: "io.vertx:vertx-auth-jwt"
 
     - package-ecosystem: "github-actions"
       directory: "/"
