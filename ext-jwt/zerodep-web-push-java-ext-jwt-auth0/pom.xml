@@ -8,7 +8,7 @@
     <parent>
         <groupId>com.zerodeplibs</groupId>
         <artifactId>zerodep-web-push-java-ext-jwt</artifactId>
-        <version>1.6.2</version>
+        <version>1.6.3</version>
     </parent>
 
     <packaging>jar</packaging>
@@ -20,7 +20,7 @@
     </description>
 
     <properties>
-        <auth0.version>4.4.0</auth0.version>
+        <auth0.version>4.5.0</auth0.version>
     </properties>
 
     <dependencies>

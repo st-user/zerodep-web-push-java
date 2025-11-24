@@ -7,11 +7,15 @@
     <parent>
         <groupId>com.zerodeplibs</groupId>
         <artifactId>zerodep-web-push-java-root</artifactId>
-        <version>1.6.2</version>
+        <version>1.6.3</version>
     </parent>
 
     <artifactId>zerodep-web-push-java-ext-jwt</artifactId>
 
+    <name>${project.groupId}:${project.artifactId}</name>
+    <description>The root pom for the submodules for zerodep-web-push-java that provide the JSON Web Token(JWT) generator
+        used for VAPID utilizing various third party libraries.
+    </description>
 
     <modules>
         <module>zerodep-web-push-java-ext-jwt-auth0</module>
@@ -30,7 +34,7 @@
             <dependency>
                 <groupId>com.zerodeplibs</groupId>
                 <artifactId>zerodep-web-push-java</artifactId>
-                <version>1.6.2</version>
+                <version>1.6.3</version>
             </dependency>
 
         </dependencies>
@@ -46,5 +50,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
