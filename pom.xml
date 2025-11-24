@@ -7,7 +7,7 @@
 
     <groupId>com.zerodeplibs</groupId>
     <artifactId>zerodep-web-push-java-root</artifactId>
-    <version>2.1.2</version>
+    <version>2.1.3</version>
 
     <url>https://github.com/st-user/zerodep-web-push-java</url>
 
@@ -43,10 +43,12 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>11</maven.compiler.release>
+        <vertx.version>4.5.22</vertx.version>
         <!-- dependencies for unit test -->
-        <jackson.version>2.17.1</jackson.version>
-        <junit.version>5.10.2</junit.version>
+        <jackson.version>2.19.4</jackson.version>
+        <junit.version>5.12.2</junit.version>
         <jose4j.version>0.9.6</jose4j.version>
+        <hamcrest.version>3.0</hamcrest.version>
     </properties>
 
     <dependencyManagement>
@@ -100,7 +102,7 @@
             <dependency>
                 <groupId>org.hamcrest</groupId>
                 <artifactId>hamcrest</artifactId>
-                <version>2.2</version>
+                <version>${hamcrest.version}</version>
                 <scope>test</scope>
             </dependency>
 
@@ -113,7 +115,7 @@
             <plugins>
                 <plugin>
                     <artifactId>maven-clean-plugin</artifactId>
-                    <version>3.3.2</version>
+                    <version>3.5.0</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-resources-plugin</artifactId>
@@ -121,7 +123,7 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.13.0</version>
+                    <version>3.14.1</version>
                     <configuration>
                         <failOnError>true</failOnError>
                         <failOnWarning>true</failOnWarning>
@@ -129,39 +131,39 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.2.5</version>
+                    <version>3.5.4</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-jar-plugin</artifactId>
-                    <version>3.4.1</version>
+                    <version>3.5.0</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-install-plugin</artifactId>
-                    <version>3.1.2</version>
+                    <version>3.1.4</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-deploy-plugin</artifactId>
-                    <version>3.1.2</version>
+                    <version>3.1.4</version>
                 </plugin>
 
                 <plugin>
                     <artifactId>maven-site-plugin</artifactId>
-                    <version>3.12.1</version>
+                    <version>3.21.0</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-project-info-reports-plugin</artifactId>
-                    <version>3.5.0</version>
+                    <version>3.9.0</version>
                 </plugin>
 
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-checkstyle-plugin</artifactId>
-                    <version>3.3.1</version>
+                    <version>3.6.0</version>
                     <dependencies>
                         <dependency>
                             <groupId>com.puppycrawl.tools</groupId>
                             <artifactId>checkstyle</artifactId>
-                            <version>10.17.0</version>
+                            <version>12.1.2</version>
                         </dependency>
                     </dependencies>
                     <configuration>
@@ -192,7 +194,33 @@
                     <skip>true</skip>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>2.20.0</version>
+            </plugin>
+            <plugin>
+                <groupId>com.amashchenko.maven.plugin</groupId>
+                <artifactId>gitflow-maven-plugin</artifactId>
+                <version>1.21.0</version>
+                <configuration>
+                    <verbose>true</verbose>
+                    <installProject>false</installProject>
+                    <commitDevelopmentVersionAtStart>true</commitDevelopmentVersionAtStart>
+                    <versionDigitToIncrement>1</versionDigitToIncrement>
+                    <gitFlowConfig>
+                        <productionBranch>main</productionBranch>
+                        <developmentBranch>dev</developmentBranch>
+                        <featureBranchPrefix>feature-</featureBranchPrefix>
+                        <releaseBranchPrefix>release-</releaseBranchPrefix>
+                        <hotfixBranchPrefix>hotfix-</hotfixBranchPrefix>
+                        <versionTagPrefix>v</versionTagPrefix>
+                        <origin>origin</origin>
+                    </gitFlowConfig>
+                </configuration>
+            </plugin>
         </plugins>
+
     </build>
 
     <profiles>
@@ -245,7 +273,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.6.3</version>
+                        <version>3.12.0</version>
                         <executions>
                             <execution>
                                 <id>attach-javadoc</id>
@@ -259,7 +287,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>3.2.4</version>
+                        <version>3.2.8</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
@@ -282,4 +310,5 @@
 
         </profile>
     </profiles>
+
 </project>

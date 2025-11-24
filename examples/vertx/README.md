@@ -19,7 +19,7 @@ is [here](https://github.com/st-user/zerodep-web-push-java/tree/main-v1).**
 
    ```
    git clone https://github.com/st-user/zerodep-web-push-java.git
-   cd examples/vertx
+   cd zerodep-web-push-java/examples/vertx
    mkdir .keys
    cd .keys
    openssl ecparam -genkey -name prime256v1 -noout -out my-private.pem

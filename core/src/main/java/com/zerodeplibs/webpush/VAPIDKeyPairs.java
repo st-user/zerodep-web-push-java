@@ -7,6 +7,7 @@ import com.zerodeplibs.webpush.jwt.VAPIDJWTGeneratorFactory;
 import com.zerodeplibs.webpush.key.InvalidECPublicKeyException;
 import com.zerodeplibs.webpush.key.PrivateKeySource;
 import com.zerodeplibs.webpush.key.PublicKeySource;
+
 import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
 import java.util.Iterator;
@@ -31,7 +32,7 @@ import java.util.function.BiFunction;
  * Because the default implementation of {@link VAPIDJWTGenerator} is thread-safe.
  * </li>
  * <li>
- * If you use {@link #of(PrivateKeySource, PublicKeySource)} with a sub-module provided by <a href="https://github.com/st-user/zerodep-web-push-java-ext-jwt">zerodep-web-push-java-ext-jwt</a>,
+ * If you use {@link #of(PrivateKeySource, PublicKeySource)} with a sub-module provided by <a href="https://github.com/st-user/zerodep-web-push-java/tree/main/ext-jwt">zerodep-web-push-java-ext-jwt</a>,
  * obtained instances are thread-safe.
  * </li>
  * </ul>
@@ -72,7 +73,7 @@ public class VAPIDKeyPairs {
      * <p>
      * The implementation of {@link VAPIDJWTGenerator} can be provided
      * by one of the sub-modules
-     * (<a href="https://github.com/st-user/zerodep-web-push-java-ext-jwt">zerodep-web-push-java-ext-jwt</a>)
+     * (<a href="https://github.com/st-user/zerodep-web-push-java/tree/main/ext-jwt">zerodep-web-push-java-ext-jwt</a>)
      * on your classpath.
      * If such sub-modules don't exist, the default implementation
      * (created by {@link com.zerodeplibs.webpush.jwt.DefaultVAPIDJWTGeneratorFactory}) is used.

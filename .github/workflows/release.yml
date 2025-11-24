@@ -9,7 +9,7 @@ jobs:
         environment: OSSHR Release
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v4
             - name: Set up Maven Central Repository
               uses: actions/setup-java@v4
               with: #https://github.com/actions/setup-java/blob/main/docs/advanced-usage.md#Publishing-using-Apache-Maven
