@@ -27,7 +27,7 @@ In this example, we demonstrate the error handling on requesting the delivery of
 
    ```
    git clone https://github.com/st-user/zerodep-web-push-java.git
-   cd examples/webflux
+   cd zerodep-web-push-java/examples/webflux
    mkdir .keys
    cd .keys
    openssl ecparam -genkey -name prime256v1 -noout -out my-private.pem

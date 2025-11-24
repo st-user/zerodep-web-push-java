@@ -18,7 +18,7 @@ such as Google Chrome, Microsoft Edge and Firefox
 
    ```
    git clone https://github.com/st-user/zerodep-web-push-java.git
-   cd examples/basic
+   cd zerodep-web-push-java/examples/basic
    mkdir .keys
    cd .keys
    openssl ecparam -genkey -name prime256v1 -noout -out my-private.pem
