@@ -2,6 +2,7 @@ package com.example;
 
 import com.zerodeplibs.webpush.PushSubscription;
 import com.zerodeplibs.webpush.VAPIDKeyPair;
+
 import java.time.Duration;
 import java.util.Comparator;
 import java.util.Map;
@@ -10,9 +11,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +68,7 @@ public class BasicExample {
     public Mono<ResponseEntity<RequestResultResponse>> sendMessage(
         @RequestBody MyMessage myMessage) {
 
-        String message = myMessage.getMessage() == null ? "" : myMessage.getMessage();
+        String message = myMessage.message() == null ? "" : myMessage.message();
         RequestResultResponse resultResponse = new RequestResultResponse();
         WebClient client = WebClient.builder().build();
 
@@ -204,7 +202,7 @@ public class BasicExample {
     public Mono<ResponseEntity<RequestResultResponse>> sendMessageWithReactorNetty(
         @RequestBody MyMessage myMessage) {
 
-        String message = myMessage.getMessage() == null ? "" : myMessage.getMessage();
+        String message = myMessage.message() == null ? "" : myMessage.message();
         RequestResultResponse resultResponse = new RequestResultResponse();
         HttpClient client = HttpClient.create();
 
@@ -359,10 +357,9 @@ public class BasicExample {
 
     private Mono<Boolean> sendAlertToMonitoringSystem(Throwable e) {
         return Mono.fromCallable(() -> {
-            if (e instanceof RequestException) {
+            if (e instanceof RequestException re) {
 
-                RequestException re = (RequestException) e;
-                logger.error(String.format("%s from %s", e.getMessage(), re.shortUrl()));
+                logger.error("{} from {}", e.getMessage(), re.shortUrl());
 
                 return true;
 
@@ -379,12 +376,9 @@ public class BasicExample {
     private final Logger logger = LoggerFactory.getLogger(BasicExample.class);
     private final Map<String, PushSubscription> subscriptionMap = new ConcurrentHashMap<>();
 
-    @Data
-    static class MyMessage {
-        private String message;
+    public record MyMessage(String message) {
     }
 
-    @Getter
     private static class RequestException extends RuntimeException {
 
         private static final Pattern SHORT_URL_PATTERN = Pattern.compile("(https?://.*?/.{0,10})");
@@ -413,16 +407,10 @@ public class BasicExample {
         }
     }
 
-    @Data
-    private static class RequestResult {
-        private final boolean isSuccess;
-        private final String message;
+    record RequestResult(boolean isSuccess, String message) {
     }
 
-    @Getter
-    @Setter
-    // VisibleForTesting
-    static class RequestResultResponse {
+    public static class RequestResultResponse {
         private int totalSuccess;
         private int totalFailure;
 
@@ -433,5 +421,14 @@ public class BasicExample {
                 this.totalFailure++;
             }
         }
+
+        public int getTotalSuccess() {
+            return totalSuccess;
+        }
+
+        public int getTotalFailure() {
+            return totalFailure;
+        }
+
     }
 }
