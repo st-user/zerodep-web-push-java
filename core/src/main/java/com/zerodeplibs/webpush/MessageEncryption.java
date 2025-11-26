@@ -1,9 +1,7 @@
 package com.zerodeplibs.webpush;
 
 /**
- * <p>
  * Implementations of this interface provide the functionality of <a href="https://datatracker.ietf.org/doc/html/rfc8291">Message Encryption for Web Push</a>.
- * </p>
  *
  * <p>
  * Usually, an instance of this interface
@@ -11,6 +9,7 @@ package com.zerodeplibs.webpush;
  * </p>
  *
  * <div><b>Thread Safety:</b></div>
+ *
  * <p>
  * Depends on implementations.
  * Typically, an implementation of this interface is not thread-safe.

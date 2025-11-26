@@ -3,9 +3,7 @@ package com.zerodeplibs.webpush.key;
 import java.security.interfaces.ECPrivateKey;
 
 /**
- * <p>
  * Implementations of this interface represent a source of an {@link ECPrivateKey}.
- * </p>
  *
  * <p>
  * Typically, to create a PrivateKeySource,
@@ -13,6 +11,7 @@ import java.security.interfaces.ECPrivateKey;
  * </p>
  *
  * <div><b>Thread Safety:</b></div>
+ *
  * <p>
  * Depends on implementations. See {@link PrivateKeySources}.
  * </p>

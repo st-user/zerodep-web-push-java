@@ -5,11 +5,9 @@ import com.zerodeplibs.webpush.key.PrivateKeySource;
 import com.zerodeplibs.webpush.key.PublicKeySource;
 
 /**
- * <p>
  * The interface to a generator that generates JSON Web Token (JWT) used
  * for the Voluntary Application Server Identification
  * (<a href="https://datatracker.ietf.org/doc/html/rfc8292">VAPID</a>).
- * </p>
  *
  * <p>
  * Typically, you don't have to implement this interface by yourself.
@@ -48,6 +46,7 @@ import com.zerodeplibs.webpush.key.PublicKeySource;
  * </pre>
  *
  * <div><b>Thread Safety:</b></div>
+ *
  * <p>
  * Depends on implementations.
  * The implementation provided through {@link DefaultVAPIDJWTGeneratorFactory} is thread-safe.

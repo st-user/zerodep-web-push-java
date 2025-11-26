@@ -7,7 +7,6 @@ import com.zerodeplibs.webpush.jwt.VAPIDJWTGeneratorFactory;
 import com.zerodeplibs.webpush.key.InvalidECPublicKeyException;
 import com.zerodeplibs.webpush.key.PrivateKeySource;
 import com.zerodeplibs.webpush.key.PublicKeySource;
-
 import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
 import java.util.Iterator;
@@ -15,9 +14,7 @@ import java.util.ServiceLoader;
 import java.util.function.BiFunction;
 
 /**
- * <p>
  * Static factory methods used to create instances of {@link VAPIDKeyPair}.
- * </p>
  *
  * <div><b>Thread Safety:</b></div>
  * <ul>
@@ -65,10 +62,8 @@ public class VAPIDKeyPairs {
     }
 
     /**
-     * <p>
      * Creates a new {@link VAPIDKeyPair} with the given private key source and
      * the given public key source.
-     * </p>
      *
      * <p>
      * The implementation of {@link VAPIDJWTGenerator} can be provided

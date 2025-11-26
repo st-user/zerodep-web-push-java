@@ -21,9 +21,7 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 /**
- * <p>
  * The builder class of "Preparer".
- * </p>
  *
  * <p>
  * "Preparer"s are the components which are used
@@ -259,11 +257,9 @@ public abstract class PreparerBuilder<T> {
     }
 
     /**
-     * <p>
      * Creates a new "Preparer"
      * by constructing a {@link RequestPreparationInfo}
      * and then calling {@link #buildInternal(RequestPreparationInfo)}.
-     * </p>
      *
      * <p>
      * To do that, this method internally
@@ -351,10 +347,8 @@ public abstract class PreparerBuilder<T> {
     protected abstract T buildInternal(RequestPreparationInfo requestPreparationInfo);
 
     /**
-     * <p>
      * Represents information which is required
      * for an application to request the delivery of a push message.
-     * </p>
      *
      * <p>
      * Instances of this class are constructed with (and therefore hold)
@@ -363,6 +357,7 @@ public abstract class PreparerBuilder<T> {
      * </p>
      *
      * <div><b>Thread Safety:</b></div>
+     *
      * <p>
      * Instances of this class are immutable. So they are thread-safe.
      * </p>

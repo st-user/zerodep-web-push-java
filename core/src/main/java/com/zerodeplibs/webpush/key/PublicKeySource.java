@@ -4,9 +4,7 @@ import java.security.interfaces.ECPublicKey;
 import java.util.Base64;
 
 /**
- * <p>
  * Implementations of this interface represent a source of an {@link ECPublicKey}.
- * </p>
  *
  * <p>
  * A PublicKeySource validates the extracted public key depending on its implementation.
@@ -18,6 +16,7 @@ import java.util.Base64;
  * </p>
  *
  * <div><b>Thread Safety:</b></div>
+ *
  * <p>
  * Depends on implementations.
  * Typically, an implementation of this interface is not thread-safe.
