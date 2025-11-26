@@ -7,7 +7,7 @@
 
     <groupId>com.zerodeplibs</groupId>
     <artifactId>zerodep-web-push-java-root</artifactId>
-    <version>1.6.3</version>
+    <version>1.6.4</version>
 
     <name>${project.groupId}:${project.artifactId}</name>
     <description>The root pom for Java Web Push server-side library that can easily be integrated with various
@@ -187,7 +187,7 @@
                         <dependency>
                             <groupId>com.puppycrawl.tools</groupId>
                             <artifactId>checkstyle</artifactId>
-                            <version>10.26.1</version>
+                            <version>12.1.2</version>
                         </dependency>
                     </dependencies>
                     <configuration>
@@ -212,6 +212,10 @@
         </pluginManagement>
 
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+            </plugin>
             <plugin>
                 <artifactId>maven-deploy-plugin</artifactId>
                 <configuration>

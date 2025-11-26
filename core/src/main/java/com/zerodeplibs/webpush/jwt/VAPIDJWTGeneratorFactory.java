@@ -3,15 +3,12 @@ package com.zerodeplibs.webpush.jwt;
 import com.zerodeplibs.webpush.VAPIDKeyPairs;
 import com.zerodeplibs.webpush.key.PrivateKeySource;
 import com.zerodeplibs.webpush.key.PublicKeySource;
-
 import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
 
 /**
- * <p>
  * Implementations of this interface provide the functionality
  * for creating {@link VAPIDJWTGenerator}.
- * </p>
  *
  * <p>
  * Typically, an implementation of this interface is provided automatically.
@@ -30,6 +27,7 @@ import java.security.interfaces.ECPublicKey;
  * </ul>
  *
  * <div><b>Thread Safety:</b></div>
+ *
  * <p>
  * Depends on implementations.
  * The default implementation({@link DefaultVAPIDJWTGeneratorFactory}) and

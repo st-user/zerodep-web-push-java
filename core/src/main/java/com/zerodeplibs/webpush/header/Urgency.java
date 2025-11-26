@@ -1,9 +1,7 @@
 package com.zerodeplibs.webpush.header;
 
 /**
- * <p>
  * The utility class used for setting the <a href="https://datatracker.ietf.org/doc/html/rfc8030#section-5.3">Urgency</a> header field.
- * </p>
  *
  * <div><b>Example:</b></div>
  * <pre class="code">

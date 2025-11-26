@@ -1,11 +1,10 @@
 package com.zerodeplibs.webpush;
 
 /**
- * <p>
  * Implementations of this interface represent an encrypted push message.
- * </p>
  *
  * <div><b>Thread Safety:</b></div>
+ *
  * <p>
  * Depends on implementations.
  * Typically, an implementation of this interface is thread-safe.
@@ -25,9 +24,7 @@ public interface EncryptedPushMessage {
     byte[] toBytes();
 
     /**
-     * <p>
      * Returns the length of this encrypted push message.
-     * </p>
      *
      * <p>
      * Typically, the returned value is used to set the "Content-Length" HTTP header field.
@@ -38,10 +35,8 @@ public interface EncryptedPushMessage {
     int length();
 
     /**
-     * <p>
      * Returns the content encoding of this encrypted push message
      * (e.g. "aes128gcm").
-     * </p>
      *
      * <p>
      * Typically, the returned value is used to set the "Content-Encoding" HTTP header field.
@@ -52,10 +47,8 @@ public interface EncryptedPushMessage {
     String contentEncoding();
 
     /**
-     * <p>
      * Returns the media type of this encrypted push message
      * (e.g. "application/octet-stream").
-     * </p>
      *
      * <p>
      * Typically, the returned value is used to set the "Content-Type" HTTP header field.

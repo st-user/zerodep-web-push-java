@@ -3,11 +3,10 @@ package com.zerodeplibs.webpush.key;
 import com.zerodeplibs.webpush.internal.WebPushPreConditions;
 
 /**
- * <p>
  * Static factory methods used to create instances of {@link PEMParser}.
- * </p>
  *
  * <div><b>Thread Safety:</b></div>
+ *
  * <p>
  * Instances obtained through a factory method of this class are immutable and thread-safe.
  * </p>
@@ -20,9 +19,7 @@ public class PEMParsers {
     }
 
     /**
-     * <p>
      * Creates a new {@link PEMParser} with the given type label.
-     * </p>
      *
      * <p>
      * In order to extract the content between '-----BEGIN PRIVATE KEY-----'

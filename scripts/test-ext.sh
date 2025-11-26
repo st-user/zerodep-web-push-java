@@ -10,6 +10,7 @@ COMPILE_RESULT=$?
 ##
 
 echo "Starts tests for the older versions."
+./mvnw clean deploy
 
 AUTH0_VER=3.17.0
 FUSION_AUTH_VER=4.0.0

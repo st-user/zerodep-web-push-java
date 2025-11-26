@@ -19,12 +19,12 @@ You can use this sub-module by adding the dependency to your pom.xml.
 <dependency>
     <groupId>com.zerodeplibs</groupId>
     <artifactId>zerodep-web-push-java</artifactId>
-    <version>1.6.3</version>
+    <version>1.6.4</version>
 </dependency>
 <dependency>
     <groupId>com.zerodeplibs</groupId>
     <artifactId>zerodep-web-push-java-ext-jwt-jose4j</artifactId>
-    <version>1.6.3</version>
+    <version>1.6.4</version>
     <scope>runtime</scope>
 </dependency>
 ```

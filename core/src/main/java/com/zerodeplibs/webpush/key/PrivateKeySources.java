@@ -8,11 +8,10 @@ import java.nio.file.Path;
 import java.security.interfaces.ECPrivateKey;
 
 /**
- * <p>
  * Static factory methods used to create instances of {@link PrivateKeySource}.
- * </p>
  *
  * <div><b>Examples:</b></div>
+ *
  * <p>
  * The following is an example of commands that uses OpenSSL
  * to generate a file that can be handled with {@link PrivateKeySource}s.
@@ -50,6 +49,7 @@ import java.security.interfaces.ECPrivateKey;
  * </pre>
  *
  * <div><b>Thread Safety:</b></div>
+ *
  * <p>
  * Instances obtained through a factory method of this class are thread-safe.
  * </p>

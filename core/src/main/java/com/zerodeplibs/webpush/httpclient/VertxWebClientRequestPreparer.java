@@ -17,11 +17,10 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 /**
- * <p>
  * The "Preparer" used to utilize <a href="https://vertx.io/docs/vertx-web-client/java/">Vert.x Web Client</a>.
- * </p>
  *
  * <div><b>Thread Safety:</b></div>
+ *
  * <p>
  * Instances of this class are immutable. So they can be accessed safely from multiple threads.
  * </p>
@@ -40,10 +39,8 @@ public class VertxWebClientRequestPreparer {
     }
 
     /**
-     * <p>
      * Send a request with the given <code>webClient</code>.
      * The <code>handler</code> will receive the response as an {@link HttpResponse}.
-     * </p>
      *
      * <p>
      * In order to construct the request object with arbitrary parameters,
@@ -100,11 +97,9 @@ public class VertxWebClientRequestPreparer {
     }
 
     /**
-     * <p>
      * Send a request with the given <code>webClient</code>.
      * If the request succeeds, the response is available as an {@link HttpResponse}
      * through the returned {@link Future}.
-     * </p>
      *
      * <p>
      * In order to construct the request object with arbitrary parameters,
