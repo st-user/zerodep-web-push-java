@@ -22,13 +22,13 @@ see https://github.com/jwtk/jjwt#jdk-projects).
 <dependency>
     <groupId>com.zerodeplibs</groupId>
     <artifactId>zerodep-web-push-java</artifactId>
-    <version>2.1.3</version>
+    <version>2.1.4</version>
 </dependency>
 <!-- Currently zerodep-web-push-java-ext-jwt-jjwt depends on jjwt v0.11.2 -->
 <dependency>
     <groupId>com.zerodeplibs</groupId>
     <artifactId>zerodep-web-push-java-ext-jwt-jjwt</artifactId>
-    <version>2.1.3</version>
+    <version>2.1.4</version>
     <scope>runtime</scope>
 </dependency>
 
