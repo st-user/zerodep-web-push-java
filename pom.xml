@@ -7,7 +7,7 @@
 
     <groupId>com.zerodeplibs</groupId>
     <artifactId>zerodep-web-push-java-root</artifactId>
-    <version>2.1.4</version>
+    <version>2.1.5</version>
 
     <name>${project.groupId}:${project.artifactId}</name>
     <description>The root pom for Java Web Push server-side library that can easily be integrated with various
@@ -123,7 +123,7 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-resources-plugin</artifactId>
-                    <version>3.3.1</version>
+                    <version>3.4.0</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
@@ -167,7 +167,7 @@
                         <dependency>
                             <groupId>com.puppycrawl.tools</groupId>
                             <artifactId>checkstyle</artifactId>
-                            <version>12.1.2</version>
+                            <version>12.3.0</version>
                         </dependency>
                     </dependencies>
                     <configuration>
@@ -205,7 +205,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
-                <version>2.20.0</version>
+                <version>2.20.1</version>
             </plugin>
             <plugin>
                 <groupId>com.amashchenko.maven.plugin</groupId>
@@ -256,7 +256,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
-                        <version>3.3.1</version>
+                        <version>3.4.0</version>
                         <executions>
                             <execution>
                                 <id>attach-sources</id>
