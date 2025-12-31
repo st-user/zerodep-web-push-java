@@ -26,7 +26,6 @@ updates:
           # https://github.com/st-user/zerodep-web-push-java/issues/110
           - dependency-name: "io.vertx:vertx-web-client"
           - dependency-name: "io.vertx:vertx-auth-jwt"
-
           # Ignore major updates for production dependencies
           - dependency-name: "org.apache.httpcomponents.client5:httpclient5"
             update-types: [ "version-update:semver-major" ]
